@@ -396,7 +396,7 @@ export default function MaintenanceManagement({ user }: MaintenanceManagementPro
 
       {/* Assign Tech Pop-up Overlay Card */}
       {activeRequestForTech && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-400 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[400] flex items-center justify-center p-4">
           <div className="erp-card w-full max-w-sm space-y-4">
             <h3 className="text-sm font-semibold text-(--fg)">Assign Technician</h3>
             <div className="flex flex-col space-y-3">
@@ -444,7 +444,7 @@ export default function MaintenanceManagement({ user }: MaintenanceManagementPro
 
       {/* Resolution Notes Pop-up Overlay Card */}
       {activeRequestForResolve && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-400 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[400] flex items-center justify-center p-4">
           <div className="erp-card w-full max-w-sm space-y-4">
             <h3 className="text-sm font-semibold text-(--fg)">Submit Resolution Details</h3>
             <div className="flex flex-col space-y-3">

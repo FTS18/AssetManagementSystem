@@ -37,7 +37,7 @@ export function CustomSelect({ value, onChange, options, className = "", placeho
       </button>
 
       {isOpen && (
-        <div className="absolute z-999 top-full left-0 w-full mt-1 bg-(--surface) border border-(--border) rounded-sm shadow-lg overflow-hidden animate-in fade-in zoom-in-95 duration-100">
+        <div className="absolute z-[999] top-full left-0 w-full mt-1 bg-(--surface) border border-(--border) rounded-sm shadow-lg overflow-hidden animate-in fade-in zoom-in-95 duration-100">
           <ul className="max-h-60 overflow-y-auto py-1 scrollbar-thin">
             {options.map((opt) => (
               <li

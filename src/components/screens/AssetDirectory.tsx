@@ -807,7 +807,7 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
       
       {/* Slide-out Advanced Filters Drawer */}
       {showAdvFilters && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-400 flex justify-end">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[400] flex justify-end">
           <div className="w-full max-w-sm bg-(--surface) border-l border-(--border) p-6 overflow-y-auto flex flex-col h-full text-(--foreground)">
             <div className="flex justify-between items-center border-b border-(--border) pb-4 mb-4">
               <h3 className="text-sm font-semibold text-(--fg)">Advanced Filters</h3>
@@ -843,7 +843,7 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
 
 
       {selectedAsset && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-400 flex justify-end">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[400] flex justify-end">
           <div className="w-full max-w-lg bg-(--surface) border-l border-(--border) p-6 overflow-y-auto flex flex-col h-full text-(--foreground)">
             <div className="flex justify-between items-center border-b border-(--border) pb-4 mb-4">
               <div>
@@ -963,7 +963,7 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
 
       {/* QR Code Scanner Simulation Pop-up Modal */}
       {showScanSim && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-500 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[500] flex items-center justify-center p-4">
           <div className="erp-card w-full max-w-sm space-y-4">
             <div className="flex justify-between items-center border-b border-(--border) pb-2">
               <h3 className="text-sm font-semibold text-(--fg)">QR Code Scanner Simulator</h3>

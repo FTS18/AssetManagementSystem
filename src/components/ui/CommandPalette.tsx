@@ -59,7 +59,7 @@ export function CommandPalette({ setActiveScreen, userRole }: CommandPaletteProp
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-1000 flex items-start justify-center pt-[15vh] p-4 animate-in fade-in duration-200">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[1000] flex items-start justify-center pt-[15vh] p-4 animate-in fade-in duration-200">
       <div 
         className="w-full max-w-lg bg-(--surface) border border-(--border) rounded-xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}

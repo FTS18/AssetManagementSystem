@@ -419,7 +419,7 @@ export default function DashboardOverview({ user, setActiveScreen }: DashboardOv
 
       {/* QR Code Scanner Simulator Modal */}
       {showScanner && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-400 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[400] flex items-center justify-center p-4">
           <div className="erp-card w-full max-w-md space-y-4">
             <div className="flex justify-between items-center border-b border-(--border) pb-2">
               <h3 className="text-sm font-semibold text-(--fg)">Scan Asset QR Code</h3>

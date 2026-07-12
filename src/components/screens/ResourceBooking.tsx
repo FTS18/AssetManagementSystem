@@ -541,8 +541,8 @@ export default function ResourceBooking({ user }: ResourceBookingProps) {
 
       {/* Reschedule Modal popup */}
       {reschedulingBooking && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-500 flex items-center justify-center p-4">
-          <div className="erp-card w-full max-w-sm space-y-4 bg-(--surface) z-500">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[500] flex items-center justify-center p-4">
+          <div className="erp-card w-full max-w-sm space-y-4 bg-(--surface) z-[500]">
             <div className="flex justify-between items-center border-b border-(--border) pb-2">
               <h3 className="text-sm font-semibold text-(--fg)">Reschedule Booking</h3>
               <button onClick={() => setReschedulingBooking(null)} className="text-xs text-(--muted) hover:text-(--foreground)">

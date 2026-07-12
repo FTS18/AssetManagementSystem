@@ -220,7 +220,7 @@ export default function MainLayout({
       {/* Mobile overlay */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 z-200 md:hidden"
+          className="fixed inset-0 z-[200] md:hidden"
           style={{ background: "oklch(0% 0 0 / 0.5)" }}
           onClick={() => setMobileOpen(false)}
         />
@@ -229,7 +229,7 @@ export default function MainLayout({
       {/* Sidebar */}
       <aside
         className={[
-          "fixed top-0 left-0 z-300 h-screen w-64 flex flex-col",
+          "fixed top-0 left-0 z-[300] h-screen w-64 flex flex-col",
           "md:translate-x-0 md:static md:z-auto",
           mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
         ].join(" ")}
@@ -272,7 +272,7 @@ export default function MainLayout({
 
       {/* Notification Center Pop-up Modal */}
       {showNotifs && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-500 flex items-center justify-center p-4 animate-fade-in">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[500] flex items-center justify-center p-4 animate-fade-in">
           <div className="erp-card w-full max-w-md space-y-4 max-h-[85vh] flex flex-col bg-(--surface) border border-(--border)">
             <div className="flex justify-between items-center border-b border-(--border) pb-3">
               <div className="flex items-center gap-2">

@@ -688,7 +688,7 @@ export default function OrgSetup({ user }: OrgSetupProps) {
 
       {/* Department Edit Dialog Popup */}
       {editingDept && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-400 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[400] flex items-center justify-center p-4">
           <div className="erp-card w-full max-w-md space-y-4">
             <div className="flex justify-between items-center border-b border-(--border) pb-2">
               <h3 className="text-sm font-semibold text-(--fg)">Edit Department</h3>
@@ -769,7 +769,7 @@ export default function OrgSetup({ user }: OrgSetupProps) {
 
       {/* Employee Edit Dialog Popup */}
       {editingEmp && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-400 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[400] flex items-center justify-center p-4">
           <div className="erp-card w-full max-w-md space-y-4">
             <div className="flex justify-between items-center border-b border-(--border) pb-2">
               <h3 className="text-sm font-semibold text-(--fg)">Edit Employee Directory Record</h3>
