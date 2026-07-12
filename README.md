@@ -314,10 +314,13 @@ cp .env.example .env
 Open `.env` and set the following:
 
 ```env
-# Database configuration (Turso URL or local SQLite)
+# Database configuration (Local SQLite fallback)
 DATABASE_URL="file:./dev.db"
 
-# Turso Auth Token (Required if using Turso, leave blank for local SQLite)
+# Turso Database URL (Required if using Turso)
+TURSO_DATABASE_URL="libsql://your-turso-db-url.turso.io"
+
+# Turso Auth Token (Required if using Turso)
 TURSO_AUTH_TOKEN="your-turso-auth-token-here"
 
 # JWT Auth Secret for signing session cookies / tokens
