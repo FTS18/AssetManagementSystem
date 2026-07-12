@@ -385,7 +385,7 @@ A role switcher in the UI lets you jump between accounts without re-entering cre
 
 ## Design
 
-The UI is built around a dark glassmorphism design system — deep slate surfaces (`#161d30`) on a rich dark background (`#0b0f19`), with indigo and mint accents for state indicators. Navigation adapts in real time based on the authenticated user's role. Analytics are rendered with Chart.js, including a booking heatmap and utilization breakdowns.
+The UI is built around a modern, flat, high-density ERP design layout. It uses solid dark charcoal surfaces (`#121214`) on a deep dark zinc background (`#09090b`), separated by clean 1px solid dark gray borders (`#27272a`). All glassmorphism, transparent elements, backdrop blurs, and background gradients are avoided. Main navigation adjusts dynamically based on the user's role, and data tables use compact padding for high scannability. Analytics are rendered with clean, high-contrast layouts.
 
 ---
 

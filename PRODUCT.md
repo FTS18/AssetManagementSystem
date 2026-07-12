@@ -13,34 +13,42 @@ This document registers the design tokens, product rules, and anti-references fo
 
 ### Colors (OKLCH)
 
-We use a premium, dark glassmorphism system with high-contrast indicator highlights.
+We use a modern, flat, high-density enterprise ERP theme with solid backgrounds and crisp 1px borders.
 
-- **Background**: `oklch(15.24% 0.015 258.2)` (Deep dark slate background, `#0b0f19` fallback)
-- **Surface**: `oklch(22.68% 0.024 254.9)` (Translucent slate panels, `#161d30` fallback)
-- **Border**: `oklch(28.4% 0.024 254.9 / 40%)` (Subtle glassmorphic border separator)
-- **Ink (Primary Text)**: `oklch(96.12% 0.008 254.5)` (Near white, highly readable)
-- **Muted (Secondary Text)**: `oklch(74.5% 0.015 254.5)` (Slightly dimmed grey for secondary details)
-- **Accent (Indigo)**: `oklch(58.62% 0.175 268.4)` (Used for active navigation links, highlights, and primary actions)
-- **Success (Mint/Green)**: `oklch(76.12% 0.125 160.2)` (Used for Available, Approved, and Resolved states)
-- **Warning (Orange/Yellow)**: `oklch(81.24% 0.152 75.4)` (Used for Reserved and Under Maintenance states)
-- **Danger (Red)**: `oklch(62.45% 0.198 28.5)` (Used for Overdue allocations, Lost assets, and Discrepancies)
+- **Background**: `oklch(10% 0 0)` (Flat deep dark zinc background, `#09090b` fallback)
+- **Surface**: `oklch(15% 0 0)` (Solid dark charcoal container surface, `#121214` fallback)
+- **Border**: `oklch(25% 0 0)` (Sharp 1px solid dark gray line separator, `#27272a` fallback)
+- **Ink (Primary Text)**: `oklch(98% 0 0)` (Crisp off-white, highly readable)
+- **Muted (Secondary Text)**: `oklch(70% 0 0)` (Mid-tone gray for table headers and secondary details)
+- **Accent (Zinc/White)**: `oklch(100% 0 0)` (Pure white for active indicators, primary buttons, and selected states)
+- **Success (Available / Approved / Resolved)**:
+  - Text: `oklch(62% 0.16 150)` (Solid emerald text)
+  - Background: `oklch(20% 0.05 150 / 20%)` (Subtle dark emerald tint background)
+- **Warning (Reserved / Under Maintenance)**:
+  - Text: `oklch(75% 0.15 75)` (Solid amber text)
+  - Background: `oklch(22% 0.05 75 / 20%)` (Subtle dark amber tint background)
+- **Danger (Overdue / Lost)**:
+  - Text: `oklch(60% 0.18 28)` (Solid crimson text)
+  - Background: `oklch(18% 0.06 28 / 20%)` (Subtle dark crimson tint background)
 
 ### Typography
 
-- **System Font**: Inter, system-ui, sans-serif
-- **Code Font**: JetBrains Mono, monospace
+- **Primary Font**: Inter, system-ui, sans-serif
+- **Mono Font**: JetBrains Mono, SF Mono, monospace (used for asset tags, serial numbers, timestamps, and cost fields)
 - **Body Line Length**: 65-75ch
-- **Text Wrap**: `text-wrap: balance` for display titles; `text-wrap: pretty` for descriptions.
+- **Text Wrap**: `text-wrap: balance` for headers; `text-wrap: pretty` for long lists/descriptions.
 
-### Spatial Scale & Grid
+### Spatial Scale & Layout Density
 
-- **Layout Grid**: Responsive flexbox / CSS grid matching `repeat(auto-fit, minmax(280px, 1fr))` for list items.
-- **Base Padding**: `1.5rem` (`24px`) for card interiors; `1rem` (`16px`) for mobile viewports.
-- **Gap Scale**: `0.75rem`, `1rem`, `1.5rem`, `2rem` (never arbitrary spacing).
+- **Density**: High-density spacing for maximum scannability. Compact tables, dense grids, and tight padding.
+- **Base Padding**: `0.75rem` (`12px`) for table cells and minor panels; `1.25rem` (`20px`) for major screen margins.
+- **Layout Grid**: Flexbox for single-direction layouts; CSS Grid `repeat(auto-fit, minmax(280px, 1fr))` for list collections.
 
 ## Anti-References (What NOT to do)
 
-- **No generic purple-to-blue SaaS gradients**: Keep panels flat, dark slate, or subtly translucent with backdrop blur.
-- **No nested cards**: Never place a card directly inside another card. Use clean list tables or key-value structures instead.
-- **No arbitrary z-indices**: Adhere strictly to the z-index scale: dropdown (100) -> sticky navigation (200) -> modal backdrop (300) -> modal (400) -> toast alert (500) -> tooltips (600).
-- **No low-contrast text**: Body text must hit a minimum of 4.5:1 against its background. Do not use very light gray on white or dark gray on slate.
+- **No Glassmorphism**: Avoid transparent backgrounds, backdrop blurs (`backdrop-filter`), and floating panels.
+- **No Drop Shadows**: Keep panels flat and flush. Use 1px solid borders for visual separation instead of depth shadows.
+- **No Saturated Blue/Purple SaaS Gradients**: Backgrounds and containers must remain solid neutral zinc/gray.
+- **No Nested Cards**: Do not nest visual card containers. Present layered data using clean tables or flat grid sections.
+- **No Arbitrary z-indices**: Adhere strictly to: dropdown (100) -> sticky navigation (200) -> modal backdrop (300) -> modal (400) -> toast alert (500) -> tooltips (600).
+- **No Low-Contrast Text**: Ensure all text elements exceed a contrast ratio of 4.5:1 against their container surfaces.

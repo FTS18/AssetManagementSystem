@@ -26,5 +26,6 @@ This file contains instructions for AI coding assistants working on the AssetFlo
 
 ### Design & Aesthetics (No Emojis)
 - Follow the design system outlined in PRODUCT.md.
-- Maintain a dark glassmorphism theme using slate panels, clean backdrops, and high-contrast state colors.
+- Maintain a flat, high-density ERP layout using solid zinc surfaces (`#121214` containers on `#09090b` main backgrounds) separated by crisp 1px solid borders (`#27272a`).
+- Avoid all glassmorphism, transparent blurs, drop shadows, and background gradients.
 - Do not use emojis in UI text, code, or documentation (including commit messages). Keep the vocabulary professional.
