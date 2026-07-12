@@ -17,23 +17,96 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // 1. Asset status counts
-    const statusCounts = await db.asset.groupBy({
-      by: ["status"],
-      _count: { _all: true },
-    });
+    // Execute all 14 database queries concurrently to minimize HTTP network round-trips to Turso
+    const [
+      statusCounts,
+      deptAllocations,
+      departments,
+      bookingCounts,
+      assets,
+      maintenanceCounts,
+      allAssets,
+      allBookings,
+      portfolioByCat,
+      allCategories,
+      portfolioByStatus,
+      maintenanceToday,
+      pendingTransfers,
+      upcomingReturns
+    ] = await Promise.all([
+      db.asset.groupBy({
+        by: ["status"],
+        _count: { _all: true },
+      }),
+      db.allocation.groupBy({
+        by: ["departmentId"],
+        where: { status: "Active", departmentId: { not: null } },
+        _count: { _all: true },
+      }),
+      db.department.findMany({
+        select: { id: true, name: true },
+      }),
+      db.resourceBooking.groupBy({
+        by: ["assetId"],
+        _count: { _all: true },
+      }),
+      db.asset.findMany({
+        select: { id: true, name: true, tag: true },
+      }),
+      db.maintenanceRequest.groupBy({
+        by: ["priority"],
+        _count: { _all: true },
+      }),
+      db.asset.findMany({
+        include: {
+          category: { select: { name: true } },
+          _count: {
+            select: { allocations: true, bookings: true },
+          },
+        },
+      }),
+      db.resourceBooking.findMany({
+        where: { status: { in: ["Upcoming", "Ongoing", "Completed"] } },
+      }),
+      db.asset.groupBy({
+        by: ["categoryId"],
+        _sum: { acquisitionCost: true },
+        _count: { _all: true },
+      }),
+      db.assetCategory.findMany({
+        select: { id: true, name: true },
+      }),
+      db.asset.groupBy({
+        by: ["status"],
+        _sum: { acquisitionCost: true },
+        _count: { _all: true },
+      }),
+      db.maintenanceRequest.count({
+        where: {
+          status: { in: ["Approved", "InProgress"] },
+        },
+      }),
+      db.transferRequest.count({
+        where: {
+          status: "Pending",
+        },
+      }),
+      db.allocation.count({
+        where: {
+          status: "Active",
+          expectedReturnDate: {
+            gte: new Date(),
+            lte: (() => {
+              const d = new Date();
+              d.setDate(d.getDate() + 3);
+              return d;
+            })(),
+          },
+        },
+      })
+    ]);
 
-    // 2. Department-wise allocations
-    const deptAllocations = await db.allocation.groupBy({
-      by: ["departmentId"],
-      where: { status: "Active", departmentId: { not: null } },
-      _count: { _all: true },
-    });
-
-    const departments = await db.department.findMany({
-      select: { id: true, name: true },
-    });
-
+    // Process Department-wise allocations
     const deptStats = deptAllocations.map((item) => {
       const deptName = departments.find((d) => d.id === item.departmentId)?.name || "Unknown";
       return {
@@ -42,16 +115,7 @@ export async function GET() {
       };
     });
 
-    // 3. Resource booking frequencies
-    const bookingCounts = await db.resourceBooking.groupBy({
-      by: ["assetId"],
-      _count: { _all: true },
-    });
-
-    const assets = await db.asset.findMany({
-      select: { id: true, name: true, tag: true },
-    });
-
+    // Process Resource booking frequencies
     const bookingStats = bookingCounts.map((item) => {
       const asset = assets.find((a) => a.id === item.assetId);
       return {
@@ -60,27 +124,13 @@ export async function GET() {
       };
     });
 
-    // 4. Maintenance requests priorities
-    const maintenanceCounts = await db.maintenanceRequest.groupBy({
-      by: ["priority"],
-      _count: { _all: true },
-    });
-
+    // Process Maintenance requests priorities
     const maintenanceStats = maintenanceCounts.map((item) => ({
       priority: item.priority,
       count: item._count._all,
     }));
 
-    // 5. Utilization Trends (Most Used vs Idle Assets)
-    const allAssets = await db.asset.findMany({
-      include: {
-        category: { select: { name: true } },
-        _count: {
-          select: { allocations: true, bookings: true },
-        },
-      },
-    });
-
+    // Process Utilization Trends (Most Used vs Idle Assets)
     const utilization = allAssets.map((a) => ({
       tag: a.tag,
       name: a.name,
@@ -90,7 +140,7 @@ export async function GET() {
     const mostUsed = [...utilization].sort((a, b) => b.count - a.count).slice(0, 5);
     const idle = [...utilization].sort((a, b) => a.count - b.count).slice(0, 5);
 
-    // 6. Assets Nearing Retirement
+    // Process Assets Nearing Retirement
     const now = new Date();
     const nearingRetirement = allAssets
       .map((a) => {
@@ -118,11 +168,7 @@ export async function GET() {
       .sort((a, b) => a.monthsRemaining - b.monthsRemaining)
       .slice(0, 8);
 
-    // 7. Booking Heatmap (by UTC Hour)
-    const allBookings = await db.resourceBooking.findMany({
-      where: { status: { in: ["Upcoming", "Ongoing", "Completed"] } },
-    });
-
+    // Process Booking Heatmap (by UTC Hour)
     const hourlyCounts = Array(24).fill(0);
     allBookings.forEach((b) => {
       const hour = new Date(b.startDate).getUTCHours();
@@ -134,28 +180,12 @@ export async function GET() {
       count,
     }));
 
-    // 8. Portfolio / Book Value by Category
-    const portfolioByCat = await db.asset.groupBy({
-      by: ["categoryId"],
-      _sum: { acquisitionCost: true },
-      _count: { _all: true },
-    });
-
-    const allCategories = await db.assetCategory.findMany({
-      select: { id: true, name: true },
-    });
-
+    // Process Portfolio / Book Value by Category
     const portfolioByCategory = portfolioByCat.map((item) => ({
       category: allCategories.find((c) => c.id === item.categoryId)?.name || "Unknown",
       totalValue: item._sum.acquisitionCost ?? 0,
       assetCount: item._count._all,
     }));
-
-    const portfolioByStatus = await db.asset.groupBy({
-      by: ["status"],
-      _sum: { acquisitionCost: true },
-      _count: { _all: true },
-    });
 
     const portfolioByStatusMapped = portfolioByStatus.map((item) => ({
       status: item.status,
@@ -167,31 +197,6 @@ export async function GET() {
       (sum, item) => sum + item.totalValue,
       0
     );
-
-    // 9. Dashboard KPIs: Maintenance Today, Pending Transfers, Upcoming Returns
-    const maintenanceToday = await db.maintenanceRequest.count({
-      where: {
-        status: { in: ["Approved", "InProgress"] },
-      },
-    });
-
-    const pendingTransfers = await db.transferRequest.count({
-      where: {
-        status: "Pending",
-      },
-    });
-
-    const threeDaysFromNow = new Date();
-    threeDaysFromNow.setDate(threeDaysFromNow.getDate() + 3);
-    const upcomingReturns = await db.allocation.count({
-      where: {
-        status: "Active",
-        expectedReturnDate: {
-          gte: new Date(),
-          lte: threeDaysFromNow,
-        },
-      },
-    });
 
     return NextResponse.json({
       statusCounts: statusCounts.map((item) => ({
