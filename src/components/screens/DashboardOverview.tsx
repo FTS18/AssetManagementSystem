@@ -97,8 +97,8 @@ export default function DashboardOverview({ user, setActiveScreen }: DashboardOv
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-px" style={{ background: "var(--border)", border: "1px solid var(--border)", borderRadius: "var(--radius-md)", overflow: "hidden" }}>
           {[...Array(5)].map((_, i) => (
             <div key={i} className="px-5 py-5 animate-pulse" style={{ background: "var(--surface)" }}>
-              <div className="h-3 w-16 rounded mb-3" style={{ background: "var(--surface-2)" }} />
-              <div className="h-8 w-10 rounded" style={{ background: "var(--surface-2)" }} />
+              <div className="h-3 w-16 rounded-(--radius-sm) mb-3" style={{ background: "var(--surface-2)" }} />
+              <div className="h-8 w-10 rounded-(--radius-sm)" style={{ background: "var(--surface-2)" }} />
             </div>
           ))}
         </div>
@@ -164,7 +164,7 @@ export default function DashboardOverview({ user, setActiveScreen }: DashboardOv
             {loading ? (
               <div className="space-y-2">
                 {[...Array(3)].map((_, i) => (
-                  <div key={i} className="h-10 rounded animate-pulse" style={{ background: "var(--surface-2)" }} />
+                  <div key={i} className="h-10 rounded-(--radius-sm) animate-pulse" style={{ background: "var(--surface-2)" }} />
                 ))}
               </div>
             ) : overdueItems.length === 0 ? (
@@ -218,7 +218,7 @@ export default function DashboardOverview({ user, setActiveScreen }: DashboardOv
             {loading ? (
               <div className="space-y-3">
                 {[...Array(4)].map((_, i) => (
-                  <div key={i} className="h-10 rounded animate-pulse" style={{ background: "var(--surface-2)" }} />
+                  <div key={i} className="h-10 rounded-(--radius-sm) animate-pulse" style={{ background: "var(--surface-2)" }} />
                 ))}
               </div>
             ) : (

@@ -243,13 +243,13 @@ erDiagram
 
 | Layer | Technology |
 |---|---|
-| **Framework** | Next.js (App Router, React Server Components, Server Actions) |
+| **Framework** | Next.js 16 (Turbopack, App Router, React Server Components, Server Actions) |
 | **Language** | TypeScript / JavaScript ES6+ |
-| **Database ORM** | Prisma ORM |
+| **Database ORM** | Prisma ORM (with `@libsql/client` Driver Adapter) |
 | **Database** | SQLite (for simple, file-based setup) or PostgreSQL (for production) |
 | **Auth & Security** | `jsonwebtoken`, `bcryptjs` |
 | **Validation** | `zod` schema validation |
-| **Styling** | Tailwind CSS (Modern dark-mode, glassmorphism, responsive grid) |
+| **Styling** | Tailwind CSS (High-density solid dark theme, responsive grid) |
 | **Charts** | Chart.js or Recharts |
 
 ---
@@ -290,22 +290,58 @@ cd AssetManagementSystem
 npm install
 ```
 
-### 2. Set Up Database
+### 2. Configure Environment Variables
 
-Run the database schema setup using Prisma (generates a local SQLite file automatically):
+Copy the example environment file and fill in your values:
+
+```bash
+cp .env.example .env
+```
+
+Open `.env` and set the following:
+
+```env
+# Database — keep this as-is for local SQLite development
+DATABASE_URL="file:./dev.db"
+
+# JWT secret — replace with a secure random string for any non-local environment
+# Generate one with: node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+JWT_SECRET="your-secure-random-secret-here"
+```
+
+> **Note**: The `DATABASE_URL` must use the `file:./dev.db` path (relative to the project root). Do not change this to `file:./prisma/dev.db` — Prisma CLI automatically resolves paths relative to the `prisma/` directory.
+
+### 3. Set Up the Database
+
+Push the schema to create the local SQLite database file:
 
 ```bash
 npx prisma db push
 ```
 
-To view or edit the database directly through a GUI:
+Then seed it with demo departments, employees, assets, and bookings:
+
+```bash
+node prisma/seed.js
+```
+
+To visually browse or edit the database:
+
 ```bash
 npx prisma studio
 ```
 
-### 3. Start the Server
+### 4. Generate the Prisma Client
 
-Start the development server with hot-reloading:
+If you ever update `prisma/schema.prisma`, regenerate the client. Also run this after a fresh `npm install`:
+
+```bash
+npx prisma generate
+```
+
+> **Important**: Stop the dev server before running `prisma generate`. The Turbopack engine locks the Prisma query engine binary, and running `generate` while the server is live will fail with a permission error.
+
+### 5. Start the Dev Server
 
 ```bash
 npm run dev

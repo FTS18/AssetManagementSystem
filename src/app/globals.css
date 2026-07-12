@@ -48,9 +48,9 @@
   --duration-base: 200ms;
 
   /* Radii */
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
 }
 
 /* ─── Tailwind bridge ──────────────────────────────────────────── */

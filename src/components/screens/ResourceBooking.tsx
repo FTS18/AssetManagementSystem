@@ -134,7 +134,7 @@ export default function ResourceBooking({ user }: ResourceBookingProps) {
 
       {/* Select Resource Selector */}
       <div className="erp-card bg-(--surface) p-4 flex flex-col md:flex-row items-center gap-3">
-        <span className="text-xs font-bold uppercase tracking-wider text-(--muted)">Active Resource:</span>
+        <span className="text-xs font-semibold text-(--muted)">Active Resource:</span>
         <select
           value={selectedAssetId}
           onChange={(e) => setSelectedAssetId(e.target.value)}
@@ -156,8 +156,8 @@ export default function ResourceBooking({ user }: ResourceBookingProps) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Bookings Timeline Column */}
         <div className="lg:col-span-2 space-y-4">
-          <h2 className="text-xs font-bold uppercase tracking-wider text-(--muted)">Schedule Calendar</h2>
-          <div className="overflow-x-auto border border-(--border) bg-(--surface)">
+          <h2 className="text-xs font-semibold text-(--muted)">Schedule Calendar</h2>
+          <div className="overflow-x-auto border border-(--border) bg-(--surface) rounded-(--radius-md) overflow-hidden">
             <table className="erp-table">
               <thead>
                 <tr>
@@ -213,11 +213,11 @@ export default function ResourceBooking({ user }: ResourceBookingProps) {
         {/* Schedule Form Column */}
         <div>
           <div className="erp-card space-y-4">
-            <h3 className="text-xs font-bold uppercase tracking-wider">Book Time Slot</h3>
+            <h3 className="text-sm font-semibold text-(--fg)">Book Time Slot</h3>
             <form onSubmit={handleBook} className="space-y-4">
               <div className="grid grid-cols-2 gap-2">
                 <div className="flex flex-col space-y-1">
-                  <label className="text-[10px] uppercase font-bold text-(--muted)">Start Date</label>
+                  <label className="text-[10px] font-semibold text-(--muted)">Start Date</label>
                   <input
                     type="date"
                     required
@@ -227,7 +227,7 @@ export default function ResourceBooking({ user }: ResourceBookingProps) {
                   />
                 </div>
                 <div className="flex flex-col space-y-1">
-                  <label className="text-[10px] uppercase font-bold text-(--muted)">Start Time</label>
+                  <label className="text-[10px] font-semibold text-(--muted)">Start Time</label>
                   <input
                     type="time"
                     required
@@ -240,7 +240,7 @@ export default function ResourceBooking({ user }: ResourceBookingProps) {
 
               <div className="grid grid-cols-2 gap-2">
                 <div className="flex flex-col space-y-1">
-                  <label className="text-[10px] uppercase font-bold text-(--muted)">End Date</label>
+                  <label className="text-[10px] font-semibold text-(--muted)">End Date</label>
                   <input
                     type="date"
                     required
@@ -250,7 +250,7 @@ export default function ResourceBooking({ user }: ResourceBookingProps) {
                   />
                 </div>
                 <div className="flex flex-col space-y-1">
-                  <label className="text-[10px] uppercase font-bold text-(--muted)">End Time</label>
+                  <label className="text-[10px] font-semibold text-(--muted)">End Time</label>
                   <input
                     type="time"
                     required

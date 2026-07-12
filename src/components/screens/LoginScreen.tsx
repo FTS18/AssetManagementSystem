@@ -121,7 +121,7 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
             <img
               src="/assetflow_logo_transparent_black.png"
               alt="AssetFlow Logo"
-              className="h-9 w-9 rounded-xl bg-[var(--surface-2)] p-1 object-contain shrink-0"
+              className="h-9 w-9 rounded-xl bg-(--surface-2) p-1 object-contain shrink-0"
             />
             <span className="font-semibold text-(--fg) text-sm">AssetFlow</span>
           </div>
@@ -136,7 +136,7 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
           </p>
 
           {error && (
-            <div className="mb-4 px-3.5 py-2.5 rounded-sm bg-(--danger-bg) border border-[oklch(from_var(--danger)_l_c_h/0.2)] text-(--danger) text-sm">
+            <div className="mb-4 px-3.5 py-2.5 rounded-(--radius-sm) bg-(--danger-bg) border border-[oklch(from_var(--danger)_l_c_h/0.2)] text-(--danger) text-sm">
               {error}
             </div>
           )}
@@ -214,7 +214,7 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
                   key={u.email}
                   disabled={loading}
                   onClick={() => handleDevSwitch(u.email)}
-                  className="w-full flex items-center justify-between px-3 py-2.5 rounded-sm border border-(--border) bg-(--surface) hover:bg-(--surface-2) hover:border-(--accent) transition-colors duration-(--duration-fast) text-left"
+                  className="w-full flex items-center justify-between px-3 py-2.5 rounded-(--radius-sm) border border-(--border) bg-(--surface) hover:bg-(--surface-2) hover:border-(--accent) transition-colors duration-(--duration-fast) text-left"
                 >
                   <div>
                     <p className="text-sm font-medium text-(--fg)">{u.name}</p>

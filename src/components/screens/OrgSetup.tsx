@@ -148,7 +148,7 @@ export default function OrgSetup({ user }: OrgSetupProps) {
           <button
             key={tab.id}
             onClick={() => { setActiveTab(tab.id); setError(""); setSuccess(""); }}
-            className={`px-3 py-2 text-sm font-medium border-b-2 mb-[-1px] transition-colors duration-(--duration-fast) ${
+            className={`px-3 py-2 text-sm font-medium border-b-2 -mb-px transition-colors duration-(--duration-fast) ${
               activeTab === tab.id
                 ? "border-(--accent) text-(--accent)"
                 : "border-transparent text-(--muted) hover:text-(--fg)"
@@ -160,12 +160,12 @@ export default function OrgSetup({ user }: OrgSetupProps) {
       </div>
 
       {error && (
-        <div className="px-3.5 py-2.5 rounded-sm text-sm" style={{ background: "var(--danger-bg)", color: "var(--danger)" }}>
+        <div className="px-3.5 py-2.5 rounded-(--radius-sm) text-sm" style={{ background: "var(--danger-bg)", color: "var(--danger)" }}>
           {error}
         </div>
       )}
       {success && (
-        <div className="px-3.5 py-2.5 rounded-sm text-sm" style={{ background: "var(--success-bg)", color: "var(--success)" }}>
+        <div className="px-3.5 py-2.5 rounded-(--radius-sm) text-sm" style={{ background: "var(--success-bg)", color: "var(--success)" }}>
           {success}
         </div>
       )}
@@ -175,7 +175,7 @@ export default function OrgSetup({ user }: OrgSetupProps) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-4">
             <h2 className="text-sm font-semibold text-(--fg)">Registered departments</h2>
-            <div className="overflow-x-auto border border-(--border) bg-(--surface)">
+            <div className="overflow-x-auto border border-(--border) bg-(--surface) rounded-(--radius-md) overflow-hidden">
               <table className="erp-table">
                 <thead>
                   <tr>
@@ -271,7 +271,7 @@ export default function OrgSetup({ user }: OrgSetupProps) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-4">
             <h2 className="text-sm font-semibold text-(--fg)">Asset categories</h2>
-            <div className="overflow-x-auto border border-(--border) bg-(--surface)">
+            <div className="overflow-x-auto border border-(--border) bg-(--surface) rounded-(--radius-md) overflow-hidden">
               <table className="erp-table">
                 <thead>
                   <tr>
@@ -329,7 +329,7 @@ export default function OrgSetup({ user }: OrgSetupProps) {
       {activeTab === "employees" && (
         <div className="space-y-4">
           <h2 className="text-sm font-semibold text-(--fg)">Employee directory</h2>
-          <div className="overflow-x-auto border border-(--border) bg-(--surface)">
+          <div className="overflow-x-auto border border-(--border) bg-(--surface) rounded-(--radius-md) overflow-hidden">
             <table className="erp-table">
               <thead>
                 <tr>

@@ -108,10 +108,10 @@ export default function MaintenanceManagement({ user }: MaintenanceManagementPro
   const renderKanbanColumn = (columnTitle: string, statusKeys: string[]) => {
     const colRequests = requests.filter((r) => statusKeys.includes(r.status));
     return (
-      <div className="flex-1 min-w-[260px] bg-(--surface) border border-(--border) flex flex-col h-[550px]">
+      <div className="flex-1 min-w-[260px] bg-(--surface) border border-(--border) flex flex-col h-[550px] rounded-(--radius-md) overflow-hidden">
         <div className="p-3 border-b border-(--border) bg-(--background) flex justify-between items-center">
-          <span className="text-xs font-bold uppercase tracking-wider text-(--muted)">{columnTitle}</span>
-          <span className="tech-code text-[10px] px-2 py-0.5 border border-(--border)">{colRequests.length}</span>
+          <span className="text-xs font-semibold text-(--muted)">{columnTitle}</span>
+          <span className="tech-code text-[10px] px-2 py-0.5 border border-(--border) rounded-(--radius-sm)">{colRequests.length}</span>
         </div>
         <div className="p-3 flex-1 overflow-y-auto space-y-3">
           {colRequests.length === 0 ? (
@@ -214,14 +214,14 @@ export default function MaintenanceManagement({ user }: MaintenanceManagementPro
       {showForm && (
         <div className="erp-card space-y-4">
           <div className="flex justify-between items-center border-b border-(--border) pb-2">
-            <h3 className="text-xs font-bold uppercase tracking-wider">Raise Maintenance Request</h3>
+            <h3 className="text-sm font-semibold text-(--fg)">Raise Maintenance Request</h3>
             <button onClick={() => setShowForm(false)} className="text-xs text-(--muted) hover:text-(--foreground)">
               Cancel
             </button>
           </div>
           <form onSubmit={handleRaiseRequest} className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="flex flex-col space-y-1">
-              <label className="text-[10px] uppercase font-bold text-(--muted)">Select Asset</label>
+              <label className="text-[10px] font-semibold text-(--muted)">Select Asset</label>
               <select
                 required
                 value={selectedAssetId}
@@ -238,7 +238,7 @@ export default function MaintenanceManagement({ user }: MaintenanceManagementPro
             </div>
 
             <div className="flex flex-col space-y-1">
-              <label className="text-[10px] uppercase font-bold text-(--muted)">Priority Level</label>
+              <label className="text-[10px] font-semibold text-(--muted)">Priority Level</label>
               <select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value as any)}
@@ -252,7 +252,7 @@ export default function MaintenanceManagement({ user }: MaintenanceManagementPro
             </div>
 
             <div className="md:col-span-3 flex flex-col space-y-1">
-              <label className="text-[10px] uppercase font-bold text-(--muted)">Problem Description</label>
+              <label className="text-[10px] font-semibold text-(--muted)">Problem Description</label>
               <textarea
                 required
                 value={description}
@@ -283,7 +283,7 @@ export default function MaintenanceManagement({ user }: MaintenanceManagementPro
       {activeRequestForTech && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-400 flex items-center justify-center p-4">
           <div className="erp-card w-full max-w-sm space-y-4">
-            <h3 className="text-xs font-bold uppercase tracking-wider">Assign Technician</h3>
+            <h3 className="text-sm font-semibold text-(--fg)">Assign Technician</h3>
             <div className="flex flex-col space-y-3">
               <input
                 type="text"
@@ -325,7 +325,7 @@ export default function MaintenanceManagement({ user }: MaintenanceManagementPro
       {activeRequestForResolve && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-400 flex items-center justify-center p-4">
           <div className="erp-card w-full max-w-sm space-y-4">
-            <h3 className="text-xs font-bold uppercase tracking-wider">Submit Resolution Details</h3>
+            <h3 className="text-sm font-semibold text-(--fg)">Submit Resolution Details</h3>
             <div className="flex flex-col space-y-3">
               <textarea
                 required

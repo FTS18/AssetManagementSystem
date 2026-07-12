@@ -61,7 +61,7 @@ export default function MainLayout({
         <img
           src="/assetflow_logo_transparent_white.png"
           alt="AssetFlow Logo"
-          className="h-10 w-10 rounded-xl bg-white/5 p-1 object-contain shrink-0"
+          className="h-10 w-10 rounded-(--radius-md) bg-white/5 p-1 object-contain shrink-0"
         />
         <span
           className="font-semibold text-sm tracking-tight"
@@ -79,7 +79,7 @@ export default function MainLayout({
             <button
               key={item.id}
               onClick={() => { setActiveScreen(item.id); setMobileOpen(false); }}
-              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-left transition-colors"
+              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-(--radius-sm) text-sm font-medium text-left transition-colors"
               style={{
                 background:  isActive ? "var(--sidebar-active-bg)"   : "transparent",
                 color:       isActive ? "var(--sidebar-active)"       : "var(--sidebar-muted)",
@@ -116,7 +116,7 @@ export default function MainLayout({
         </div>
         <button
           onClick={onLogout}
-          className="w-full text-left text-xs px-1 py-1 rounded transition-colors"
+          className="w-full text-left text-xs px-1 py-1 rounded-(--radius-sm) transition-colors"
           style={{ color: "var(--sidebar-muted)" }}
           onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "var(--danger)"; }}
           onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "var(--sidebar-muted)"; }}
@@ -132,7 +132,7 @@ export default function MainLayout({
       {/* Mobile overlay */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 z-[200] md:hidden"
+          className="fixed inset-0 z-200 md:hidden"
           style={{ background: "oklch(0% 0 0 / 0.5)" }}
           onClick={() => setMobileOpen(false)}
         />
@@ -141,7 +141,7 @@ export default function MainLayout({
       {/* Sidebar */}
       <aside
         className={[
-          "fixed top-0 left-0 z-[300] h-screen w-64 flex flex-col",
+          "fixed top-0 left-0 z-300 h-screen w-64 flex flex-col",
           "md:translate-x-0 md:static md:z-auto",
           mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
         ].join(" ")}
@@ -162,7 +162,7 @@ export default function MainLayout({
         >
           <button
             onClick={() => setMobileOpen(true)}
-            className="p-1.5 rounded"
+            className="p-1.5 rounded-(--radius-sm)"
             style={{ color: "var(--sidebar-muted)" }}
             aria-label="Open menu"
           >
@@ -176,7 +176,7 @@ export default function MainLayout({
             <img
               src="/assetflow_logo_transparent_white.png"
               alt="AssetFlow Logo"
-              className="h-8 w-8 rounded-lg bg-white/5 p-1 object-contain shrink-0"
+              className="h-8 w-8 rounded-(--radius-sm) bg-white/5 p-1 object-contain shrink-0"
             />
             <span className="text-sm font-semibold tracking-tight" style={{ color: "var(--sidebar-fg)" }}>AssetFlow</span>
           </div>

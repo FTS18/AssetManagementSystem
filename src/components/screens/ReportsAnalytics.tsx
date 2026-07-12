@@ -50,7 +50,7 @@ export default function ReportsAnalytics() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Status Distribution */}
         <div className="erp-card space-y-4">
-          <h2 className="text-xs font-bold uppercase tracking-wider text-(--muted)">Asset Status Breakdown</h2>
+          <h2 className="text-xs font-semibold text-(--muted)">Asset Status Breakdown</h2>
           <div className="space-y-3">
             {data.statusCounts.length === 0 ? (
               <p className="text-xs text-(--muted)">No asset records registered.</p>
@@ -62,7 +62,7 @@ export default function ReportsAnalytics() {
                     <span>{item.count} items</span>
                   </div>
                   {/* CSS Progress Bar */}
-                  <div className="w-full h-2 bg-(--background) border border-(--border)">
+                  <div className="w-full h-2 bg-(--background) border border-(--border) rounded-full overflow-hidden">
                     <div
                       className={`h-full ${
                         item.status === "Available"
@@ -84,7 +84,7 @@ export default function ReportsAnalytics() {
 
         {/* Department Allocations */}
         <div className="erp-card space-y-4">
-          <h2 className="text-xs font-bold uppercase tracking-wider text-(--muted)">Active Department Allocations</h2>
+          <h2 className="text-xs font-semibold text-(--muted)">Active Department Allocations</h2>
           <div className="space-y-3">
             {data.departmentAllocations.length === 0 ? (
               <p className="text-xs text-(--muted)">No active allocations to departments.</p>
@@ -97,7 +97,7 @@ export default function ReportsAnalytics() {
                       <span>{item.department}</span>
                       <span>{item.count} active</span>
                     </div>
-                    <div className="w-full h-2 bg-(--background) border border-(--border)">
+                    <div className="w-full h-2 bg-(--background) border border-(--border) rounded-full overflow-hidden">
                       <div
                         className="h-full bg-(--accent)"
                         style={{ width: `${percentage}%` }}
@@ -112,7 +112,7 @@ export default function ReportsAnalytics() {
 
         {/* Resource Bookings frequency */}
         <div className="erp-card space-y-4">
-          <h2 className="text-xs font-bold uppercase tracking-wider text-(--muted)">Resource Booking Frequency</h2>
+          <h2 className="text-xs font-semibold text-(--muted)">Resource Booking Frequency</h2>
           <div className="space-y-3">
             {data.resourceBookings.length === 0 ? (
               <p className="text-xs text-(--muted)">No resources have been booked yet.</p>
@@ -125,7 +125,7 @@ export default function ReportsAnalytics() {
                       <span>{item.assetName}</span>
                       <span>{item.count} bookings</span>
                     </div>
-                    <div className="w-full h-2 bg-(--background) border border-(--border)">
+                    <div className="w-full h-2 bg-(--background) border border-(--border) rounded-full overflow-hidden">
                       <div
                         className="h-full bg-(--success-text)"
                         style={{ width: `${percentage}%` }}
@@ -140,7 +140,7 @@ export default function ReportsAnalytics() {
 
         {/* Maintenance Priority */}
         <div className="erp-card space-y-4">
-          <h2 className="text-xs font-bold uppercase tracking-wider text-(--muted)">Maintenance Priority Rates</h2>
+          <h2 className="text-xs font-semibold text-(--muted)">Maintenance Priority Rates</h2>
           <div className="space-y-3">
             {data.maintenanceRequests.length === 0 ? (
               <p className="text-xs text-(--muted)">No maintenance tickets resolved or raised.</p>
@@ -151,7 +151,7 @@ export default function ReportsAnalytics() {
                     <span>{item.priority} Priority</span>
                     <span>{item.count} requests</span>
                   </div>
-                  <div className="w-full h-2 bg-(--background) border border-(--border)">
+                  <div className="w-full h-2 bg-(--background) border border-(--border) rounded-full overflow-hidden">
                     <div
                       className={`h-full ${
                         item.priority === "Critical"

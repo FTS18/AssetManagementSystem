@@ -229,7 +229,7 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
       {/* Allocation Conflict Shield / Transfer Trigger Form */}
       {conflictAlloc && (
         <div className="erp-card border-(--danger-text) bg-red-950/5 space-y-4">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-(--danger-text)">Double Allocation Shield Triggered</h3>
+          <h3 className="text-sm font-semibold text-(--danger-text)">Double Allocation Shield Triggered</h3>
           <p className="text-xs text-(--muted)">
             Asset <span className="font-semibold text-(--foreground)">{conflictAlloc.assetTag}</span> cannot be allocated directly. It is currently held by <span className="font-semibold text-(--foreground)">{conflictAlloc.employee?.name || conflictAlloc.department?.name}</span>. 
             You can submit a **Transfer Request** to routing approvals instead.
@@ -273,8 +273,8 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
         <div className="lg:col-span-2 space-y-6">
           {/* Active Handouts List */}
           <div className="space-y-3">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-(--muted)">Active Handovers</h2>
-            <div className="overflow-x-auto border border-(--border) bg-(--surface)">
+            <h2 className="text-xs font-semibold text-(--muted)">Active Handovers</h2>
+            <div className="overflow-x-auto border border-(--border) bg-(--surface) rounded-(--radius-md) overflow-hidden">
               <table className="erp-table">
                 <thead>
                   <tr>
@@ -326,8 +326,8 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
           {/* Transfer Requests approvals list (visible to Managers/Admins) */}
           {canManage && (
             <div className="space-y-3">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-(--muted)">Pending Transfer Requests</h2>
-              <div className="overflow-x-auto border border-(--border) bg-(--surface)">
+              <h2 className="text-xs font-semibold text-(--muted)">Pending Transfer Requests</h2>
+              <div className="overflow-x-auto border border-(--border) bg-(--surface) rounded-(--radius-md) overflow-hidden">
                 <table className="erp-table">
                   <thead>
                     <tr>
@@ -389,10 +389,10 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
           {/* New Handover Card */}
           {canManage && (
             <div className="erp-card space-y-4">
-              <h3 className="text-xs font-bold uppercase tracking-wider">Allocate Asset</h3>
+              <h3 className="text-sm font-semibold text-(--fg)">Allocate Asset</h3>
               <form onSubmit={handleAllocate} className="space-y-4">
                 <div className="flex flex-col space-y-1">
-                  <label className="text-[10px] uppercase font-bold text-(--muted)">Select Asset</label>
+                  <label className="text-[10px] font-semibold text-(--muted)">Select Asset</label>
                   <select
                     required
                     value={selectedAssetId}
@@ -433,7 +433,7 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
 
                 {assigneeType === "employee" ? (
                   <div className="flex flex-col space-y-1">
-                    <label className="text-[10px] uppercase font-bold text-(--muted)">Target Employee</label>
+                    <label className="text-[10px] font-semibold text-(--muted)">Target Employee</label>
                     <select
                       required
                       value={targetEmployeeId}
@@ -450,7 +450,7 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
                   </div>
                 ) : (
                   <div className="flex flex-col space-y-1">
-                    <label className="text-[10px] uppercase font-bold text-(--muted)">Target Department</label>
+                    <label className="text-[10px] font-semibold text-(--muted)">Target Department</label>
                     <select
                       required
                       value={targetDepartmentId}
@@ -468,7 +468,7 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
                 )}
 
                 <div className="flex flex-col space-y-1">
-                  <label className="text-[10px] uppercase font-bold text-(--muted)">Expected Return Date</label>
+                  <label className="text-[10px] font-semibold text-(--muted)">Expected Return Date</label>
                   <input
                     type="date"
                     value={expectedReturnDate}
@@ -488,7 +488,7 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
           {selectedAllocForReturn && (
             <div className="erp-card border-(--accent) space-y-4">
               <div className="flex justify-between items-center border-b border-(--border) pb-2">
-                <h3 className="text-xs font-bold uppercase tracking-wider">Asset Check-In Return</h3>
+                <h3 className="text-sm font-semibold text-(--fg)">Asset Check-In Return</h3>
                 <button
                   type="button"
                   onClick={() => setSelectedAllocForReturn(null)}
@@ -502,7 +502,7 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
                   Asset check-in for <span className="font-semibold text-(--foreground)">{selectedAllocForReturn.assetName} ({selectedAllocForReturn.assetTag})</span>.
                 </p>
                 <div className="flex flex-col space-y-1">
-                  <label className="text-[10px] uppercase font-bold text-(--muted)">Check-in condition notes</label>
+                  <label className="text-[10px] font-semibold text-(--muted)">Check-in condition notes</label>
                   <textarea
                     required
                     value={checkInNotes}

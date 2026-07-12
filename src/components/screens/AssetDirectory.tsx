@@ -169,14 +169,14 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
       {showRegForm && (
         <div className="erp-card space-y-4">
           <div className="flex justify-between items-center border-b border-(--border) pb-2">
-            <h3 className="text-xs font-bold uppercase tracking-wider">Register New Asset</h3>
+            <h3 className="text-sm font-semibold text-(--fg)">Register New Asset</h3>
             <button onClick={() => setShowRegForm(false)} className="text-xs text-(--muted) hover:text-(--foreground)">
               Cancel
             </button>
           </div>
           <form onSubmit={handleRegister} className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="flex flex-col space-y-1">
-              <label className="text-[10px] uppercase font-bold text-(--muted)">Asset Name</label>
+              <label className="text-[10px] font-semibold text-(--muted)">Asset Name</label>
               <input
                 type="text"
                 required
@@ -188,7 +188,7 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
             </div>
 
             <div className="flex flex-col space-y-1">
-              <label className="text-[10px] uppercase font-bold text-(--muted)">Serial Number</label>
+              <label className="text-[10px] font-semibold text-(--muted)">Serial Number</label>
               <input
                 type="text"
                 required
@@ -200,7 +200,7 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
             </div>
 
             <div className="flex flex-col space-y-1">
-              <label className="text-[10px] uppercase font-bold text-(--muted)">Category</label>
+              <label className="text-[10px] font-semibold text-(--muted)">Category</label>
               <select
                 required
                 value={categoryId}
@@ -217,7 +217,7 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
             </div>
 
             <div className="flex flex-col space-y-1">
-              <label className="text-[10px] uppercase font-bold text-(--muted)">Acquisition Cost (USD)</label>
+              <label className="text-[10px] font-semibold text-(--muted)">Acquisition Cost (USD)</label>
               <input
                 type="number"
                 step="0.01"
@@ -230,7 +230,7 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
             </div>
 
             <div className="flex flex-col space-y-1">
-              <label className="text-[10px] uppercase font-bold text-(--muted)">Initial Condition</label>
+              <label className="text-[10px] font-semibold text-(--muted)">Initial Condition</label>
               <select
                 value={condition}
                 onChange={(e) => setCondition(e.target.value as any)}
@@ -244,7 +244,7 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
             </div>
 
             <div className="flex flex-col space-y-1">
-              <label className="text-[10px] uppercase font-bold text-(--muted)">Primary Location</label>
+              <label className="text-[10px] font-semibold text-(--muted)">Primary Location</label>
               <input
                 type="text"
                 required
@@ -315,7 +315,7 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
       </div>
 
       {/* Directory Table */}
-      <div className="overflow-x-auto border border-(--border) bg-(--surface)">
+      <div className="overflow-x-auto border border-(--border) bg-(--surface) rounded-(--radius-md) overflow-hidden">
         <table className="erp-table">
           <thead>
             <tr>
@@ -370,7 +370,7 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
           <div className="w-full max-w-lg bg-(--surface) border-l border-(--border) p-6 overflow-y-auto flex flex-col h-full text-(--foreground)">
             <div className="flex justify-between items-center border-b border-(--border) pb-4 mb-4">
               <div>
-                <h3 className="text-sm font-bold uppercase tracking-wider">Asset Lifecycle Timeline</h3>
+                <h3 className="text-sm font-semibold text-(--fg)">Asset Lifecycle Timeline</h3>
                 <p className="text-xs text-(--muted)">History logs for {selectedAsset.name} ({selectedAsset.tag})</p>
               </div>
               <button

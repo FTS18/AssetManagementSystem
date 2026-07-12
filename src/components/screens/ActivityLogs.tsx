@@ -75,7 +75,7 @@ export default function ActivityLogs() {
         {loading ? (
           <div className="space-y-3">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="h-14 rounded-lg animate-pulse" style={{ background: "var(--surface-2)" }} />
+              <div key={i} className="h-14 rounded-(--radius-sm) animate-pulse" style={{ background: "var(--surface-2)" }} />
             ))}
           </div>
         ) : logs.length === 0 ? (

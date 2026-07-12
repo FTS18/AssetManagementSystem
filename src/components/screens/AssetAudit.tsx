@@ -153,14 +153,14 @@ export default function AssetAudit({ user }: AssetAuditProps) {
       {showCreateForm && (
         <div className="erp-card space-y-4">
           <div className="flex justify-between items-center border-b border-(--border) pb-2">
-            <h3 className="text-xs font-bold uppercase tracking-wider">Initialize Audit Cycle</h3>
+            <h3 className="text-sm font-semibold text-(--fg)">Initialize Audit Cycle</h3>
             <button onClick={() => setShowCreateForm(false)} className="text-xs text-(--muted) hover:text-(--foreground)">
               Cancel
             </button>
           </div>
           <form onSubmit={handleCreateCycle} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="flex flex-col space-y-1">
-              <label className="text-[10px] uppercase font-bold text-(--muted)">Cycle Name</label>
+              <label className="text-[10px] font-semibold text-(--muted)">Cycle Name</label>
               <input
                 type="text"
                 required
@@ -171,7 +171,7 @@ export default function AssetAudit({ user }: AssetAuditProps) {
               />
             </div>
             <div className="flex flex-col space-y-1">
-              <label className="text-[10px] uppercase font-bold text-(--muted)">Start Date</label>
+              <label className="text-[10px] font-semibold text-(--muted)">Start Date</label>
               <input
                 type="date"
                 required
@@ -181,7 +181,7 @@ export default function AssetAudit({ user }: AssetAuditProps) {
               />
             </div>
             <div className="flex flex-col space-y-1">
-              <label className="text-[10px] uppercase font-bold text-(--muted)">End Date</label>
+              <label className="text-[10px] font-semibold text-(--muted)">End Date</label>
               <input
                 type="date"
                 required
@@ -191,7 +191,7 @@ export default function AssetAudit({ user }: AssetAuditProps) {
               />
             </div>
             <div className="flex flex-col space-y-1">
-              <label className="text-[10px] uppercase font-bold text-(--muted)">Assigned Auditor</label>
+              <label className="text-[10px] font-semibold text-(--muted)">Assigned Auditor</label>
               <select
                 required
                 value={auditorId}
@@ -217,7 +217,7 @@ export default function AssetAudit({ user }: AssetAuditProps) {
 
       {/* Select active audit selector */}
       <div className="erp-card bg-(--surface) p-4 flex flex-col md:flex-row items-center gap-3">
-        <span className="text-xs font-bold uppercase tracking-wider text-(--muted)">Active Cycle:</span>
+        <span className="text-xs font-semibold text-(--muted)">Active Cycle:</span>
         <select
           value={selectedCycleId}
           onChange={(e) => setSelectedCycleId(e.target.value)}
@@ -242,7 +242,7 @@ export default function AssetAudit({ user }: AssetAuditProps) {
           {/* Main check-off checklist */}
           <div className="lg:col-span-2 space-y-4">
             <div className="flex justify-between items-center">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-(--muted)">Verification Checklist</h2>
+              <h2 className="text-xs font-semibold text-(--muted)">Verification Checklist</h2>
               {activeCycle.status === "Active" && canManage && (
                 <button
                   onClick={handleCloseCycle}
@@ -254,7 +254,7 @@ export default function AssetAudit({ user }: AssetAuditProps) {
               )}
             </div>
 
-            <div className="overflow-x-auto border border-(--border) bg-(--surface)">
+            <div className="overflow-x-auto border border-(--border) bg-(--surface) rounded-(--radius-md) overflow-hidden">
               <table className="erp-table">
                 <thead>
                   <tr>
@@ -289,7 +289,7 @@ export default function AssetAudit({ user }: AssetAuditProps) {
                           <div className="flex gap-1">
                             <button
                               onClick={() => handleCheckItem(item.id, "Verified")}
-                              className="text-[10px] px-2 py-0.5 border border-(--border) hover:bg-(--background) font-medium"
+                              className="text-[10px] px-2 py-0.5 border border-(--border) hover:bg-(--background) font-medium rounded-(--radius-sm)"
                             >
                               Verify
                             </button>
@@ -318,7 +318,7 @@ export default function AssetAudit({ user }: AssetAuditProps) {
           {/* Discrepancy stats card */}
           <div>
             <div className="erp-card space-y-4">
-              <h3 className="text-xs font-bold uppercase tracking-wider">Discrepancy Report</h3>
+              <h3 className="text-sm font-semibold text-(--fg)">Discrepancy Report</h3>
               <div className="space-y-3">
                 <div className="flex justify-between items-center text-xs">
                   <span className="text-(--muted)">Total Scoped Assets:</span>
