@@ -11,21 +11,21 @@ interface MainLayoutProps {
 }
 
 const menuItems = [
-  { id: "dashboard",   label: "Dashboard",                roles: ["Admin","AssetManager","DeptHead","Employee"] },
-  { id: "org-setup",   label: "Organization",             roles: ["Admin"] },
-  { id: "assets",      label: "Asset directory",          roles: ["Admin","AssetManager","DeptHead","Employee"] },
-  { id: "allocations", label: "Allocations & transfers",  roles: ["Admin","AssetManager","DeptHead","Employee"] },
-  { id: "bookings",    label: "Resource booking",         roles: ["Admin","AssetManager","DeptHead","Employee"] },
-  { id: "maintenance", label: "Maintenance",              roles: ["Admin","AssetManager","DeptHead","Employee"] },
-  { id: "audits",      label: "Asset audits",             roles: ["Admin","AssetManager","DeptHead","Employee"] },
-  { id: "reports",     label: "Reports & analytics",      roles: ["Admin","AssetManager","DeptHead"] },
-  { id: "logs",        label: "Activity logs",            roles: ["Admin","AssetManager","DeptHead","Employee"] },
+  { id: "dashboard",   label: "Dashboard"               },
+  { id: "org-setup",   label: "Organization",  adminOnly: true },
+  { id: "assets",      label: "Asset directory"         },
+  { id: "allocations", label: "Allocations"             },
+  { id: "bookings",    label: "Resource booking"        },
+  { id: "maintenance", label: "Maintenance"             },
+  { id: "audits",      label: "Audits"                  },
+  { id: "reports",     label: "Reports",       managerOnly: true },
+  { id: "logs",        label: "Activity logs"           },
 ];
 
 const roleLabel: Record<string, string> = {
   Admin:        "Admin",
   AssetManager: "Asset manager",
-  DeptHead:     "Department head",
+  DeptHead:     "Dept. head",
   Employee:     "Employee",
 };
 
@@ -37,54 +37,90 @@ export default function MainLayout({
   setActiveScreen,
 }: MainLayoutProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const filtered = menuItems.filter(m => m.roles.includes(user.role));
 
-  const NavContent = () => (
-    <div className="flex flex-col h-full">
+  const isManager = user.role === "Admin" || user.role === "AssetManager";
+  const filtered = menuItems.filter(m => {
+    if (m.adminOnly && user.role !== "Admin") return false;
+    if (m.managerOnly && !isManager) return false;
+    return true;
+  });
+
+  const SidebarContent = () => (
+    <div
+      className="sidebar-grain flex flex-col h-full"
+      style={{
+        background: "var(--sidebar-bg)",
+        borderRight: "1px solid var(--sidebar-border)",
+      }}
+    >
       {/* Brand */}
-      <div className="px-5 py-4 border-b border-[var(--border)]">
-        <div className="flex items-center gap-2.5">
-          <div className="h-7 w-7 rounded-md bg-[var(--accent)] flex items-center justify-center flex-shrink-0">
-            <span className="text-[var(--accent-fg)] font-bold text-sm leading-none">A</span>
-          </div>
-          <span className="font-semibold text-[var(--fg)] text-sm tracking-tight">AssetFlow</span>
+      <div
+        className="px-5 py-5 flex items-center gap-3"
+        style={{ borderBottom: "1px solid var(--sidebar-border)" }}
+      >
+        <div
+          className="h-8 w-8 rounded-lg flex items-center justify-center flex-shrink-0 font-bold text-sm"
+          style={{ background: "var(--accent)", color: "var(--accent-fg)" }}
+        >
+          A
         </div>
+        <span
+          className="font-semibold text-sm tracking-tight"
+          style={{ color: "var(--sidebar-fg)" }}
+        >
+          AssetFlow
+        </span>
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 px-3 py-3 space-y-0.5 overflow-y-auto">
-        {filtered.map(item => (
-          <button
-            key={item.id}
-            onClick={() => { setActiveScreen(item.id); setMobileOpen(false); }}
-            className={[
-              "w-full flex items-center gap-2.5 px-2.5 py-2 rounded-[var(--radius-sm)] text-sm font-medium transition-colors duration-[var(--duration-fast)] text-left",
-              activeScreen === item.id
-                ? "bg-[var(--accent-subtle)] text-[var(--accent)]"
-                : "text-[var(--muted)] hover:text-[var(--fg)] hover:bg-[var(--surface-2)]",
-            ].join(" ")}
-          >
-            {item.label}
-          </button>
-        ))}
+      <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
+        {filtered.map(item => {
+          const isActive = activeScreen === item.id;
+          return (
+            <button
+              key={item.id}
+              onClick={() => { setActiveScreen(item.id); setMobileOpen(false); }}
+              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-left transition-colors"
+              style={{
+                background:  isActive ? "var(--sidebar-active-bg)"   : "transparent",
+                color:       isActive ? "var(--sidebar-active)"       : "var(--sidebar-muted)",
+              }}
+              onMouseEnter={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = "var(--sidebar-hover)"; (e.currentTarget as HTMLElement).style.color = "var(--sidebar-fg)"; }}
+              onMouseLeave={e => { if (!isActive) { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.color = "var(--sidebar-muted)"; } }}
+            >
+              {item.label}
+            </button>
+          );
+        })}
       </nav>
 
-      {/* User / logout */}
-      <div className="px-3 py-3 border-t border-[var(--border)]">
-        <div className="flex items-center gap-2.5 px-2.5 py-2 rounded-[var(--radius-sm)] bg-[var(--surface-2)]">
-          <div className="h-7 w-7 rounded-full bg-[var(--accent-subtle)] flex items-center justify-center flex-shrink-0">
-            <span className="text-[var(--accent)] font-semibold text-xs leading-none">
-              {user.name?.[0]?.toUpperCase() ?? "?"}
-            </span>
+      {/* User footer */}
+      <div
+        className="px-4 py-4"
+        style={{ borderTop: "1px solid var(--sidebar-border)" }}
+      >
+        <div className="flex items-center gap-2.5 mb-2">
+          <div
+            className="h-8 w-8 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-semibold"
+            style={{ background: "var(--sidebar-active-bg)", color: "var(--sidebar-active)" }}
+          >
+            {user.name?.[0]?.toUpperCase() ?? "?"}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-[var(--fg)] truncate">{user.name}</p>
-            <p className="text-xs text-[var(--muted)] truncate">{roleLabel[user.role] ?? user.role}</p>
+            <p className="text-sm font-medium truncate" style={{ color: "var(--sidebar-fg)" }}>
+              {user.name}
+            </p>
+            <p className="text-xs truncate" style={{ color: "var(--sidebar-muted)" }}>
+              {roleLabel[user.role] ?? user.role}
+            </p>
           </div>
         </div>
         <button
           onClick={onLogout}
-          className="mt-1.5 w-full text-left px-2.5 py-1.5 text-xs text-[var(--muted)] hover:text-[var(--danger)] rounded-[var(--radius-sm)] hover:bg-[var(--danger-bg)] transition-colors duration-[var(--duration-fast)]"
+          className="w-full text-left text-xs px-1 py-1 rounded transition-colors"
+          style={{ color: "var(--sidebar-muted)" }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "var(--danger)"; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "var(--sidebar-muted)"; }}
         >
           Sign out
         </button>
@@ -93,11 +129,12 @@ export default function MainLayout({
   );
 
   return (
-    <div className="min-h-screen flex bg-[var(--bg)] text-[var(--fg)]">
-      {/* Mobile sidebar overlay */}
+    <div className="min-h-screen flex" style={{ background: "var(--bg)" }}>
+      {/* Mobile overlay */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 z-[200] bg-black/40 md:hidden"
+          className="fixed inset-0 z-[200] md:hidden"
+          style={{ background: "oklch(0% 0 0 / 0.5)" }}
           onClick={() => setMobileOpen(false)}
         />
       )}
@@ -105,31 +142,41 @@ export default function MainLayout({
       {/* Sidebar */}
       <aside
         className={[
-          "fixed top-0 left-0 z-[300] h-screen w-56 border-r border-[var(--border)] bg-[var(--surface)] flex flex-col transition-transform duration-200",
-          "md:translate-x-0 md:static md:z-auto md:flex",
+          "fixed top-0 left-0 z-[300] h-screen w-56 flex flex-col",
+          "md:translate-x-0 md:static md:z-auto",
           mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
         ].join(" ")}
+        style={{ transition: "transform 200ms var(--ease-out)" }}
       >
-        <NavContent />
+        <SidebarContent />
       </aside>
 
       {/* Main */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Mobile topbar */}
-        <header className="md:hidden flex items-center gap-3 px-4 py-3 border-b border-[var(--border)] bg-[var(--surface)]">
+        <header
+          className="md:hidden flex items-center gap-3 px-4 py-3"
+          style={{
+            background: "var(--sidebar-bg)",
+            borderBottom: "1px solid var(--sidebar-border)",
+          }}
+        >
           <button
             onClick={() => setMobileOpen(true)}
-            className="p-1.5 rounded-[var(--radius-sm)] hover:bg-[var(--surface-2)] text-[var(--muted)]"
+            className="p-1.5 rounded"
+            style={{ color: "var(--sidebar-muted)" }}
             aria-label="Open menu"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <line x1="3" y1="12" x2="21" y2="12"/>
+              <line x1="3" y1="18" x2="21" y2="18"/>
             </svg>
           </button>
-          <span className="text-sm font-semibold text-[var(--fg)]">AssetFlow</span>
+          <span className="text-sm font-semibold" style={{ color: "var(--sidebar-fg)" }}>AssetFlow</span>
         </header>
 
-        <main className="flex-1 p-6 lg:p-8 overflow-y-auto max-w-7xl w-full mx-auto">
+        <main className="flex-1 p-6 lg:p-8 overflow-y-auto mesh-bg" style={{ maxWidth: "1280px", width: "100%", margin: "0 auto" }}>
           {children}
         </main>
       </div>
