@@ -39,7 +39,7 @@ Signup creates an Employee account — no role selection at registration. Admins
 
 ### Dashboard & KPI Overview
 
-Every role sees a real-time operational snapshot when they log in:
+Every role sees a real-time operational snapshot  when they log in:
 
 - **KPI cards**: Assets Available, Assets Allocated, Maintenance Today, Active Bookings, Pending Transfers, Upcoming Returns
 - Overdue returns (past Expected Return Date) are surfaced separately and highlighted
@@ -47,7 +47,7 @@ Every role sees a real-time operational snapshot when they log in:
 
 ### Organization Setup (Admin)
 
-Three-tab master data management for everything else in the system to depend on:
+Three-tab master data management for everything  else in the system to depend on:
 
 **Departments** — Create, edit, and deactivate departments. Assign Department Heads and optionally nest departments under parent departments to reflect your org structure.
 
