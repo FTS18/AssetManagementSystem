@@ -81,10 +81,15 @@ export async function POST(request: Request) {
 
       const transferReq = await db.transferRequest.findUnique({
         where: { id: parseInt(id) },
+        include: { toEmployee: true },
       });
 
       if (!transferReq || transferReq.status !== "Pending") {
         return NextResponse.json({ error: "Transfer request not found or already processed" }, { status: 404 });
+      }
+
+      if (user.role === "DeptHead" && transferReq.toEmployee.departmentId !== user.departmentId) {
+        return NextResponse.json({ error: "Forbidden: DeptHead can only approve transfers to employees within their department" }, { status: 403 });
       }
 
       if (action === "reject") {

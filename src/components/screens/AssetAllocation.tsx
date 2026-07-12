@@ -205,7 +205,7 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
     }
   };
 
-  const canManage = user.role === "AssetManager" || user.role === "Admin";
+  const canManage = user.role === "AssetManager" || user.role === "Admin" || user.role === "DeptHead";
 
   return (
     <div className="space-y-6 animate-slide-up">

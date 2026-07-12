@@ -36,14 +36,12 @@ export async function GET() {
     });
 
     for (const booking of upcomingBookings) {
-      const title = `Booking Reminder`;
-      const detailsPrefix = `Your booking for ${booking.asset.name} (${booking.asset.tag})`;
+      const messagePrefix = `Your booking for ${booking.asset.name} (${booking.asset.tag})`;
       
       const existing = await db.notification.findFirst({
         where: {
           employeeId: user.id,
-          title,
-          details: { contains: detailsPrefix },
+          message: { startsWith: messagePrefix },
         },
       });
 
@@ -52,8 +50,7 @@ export async function GET() {
         await db.notification.create({
           data: {
             employeeId: user.id,
-            title,
-            details: `${detailsPrefix} starts in ${minutesLeft} minutes.`,
+            message: `${messagePrefix} starts in ${minutesLeft} minutes.`,
             type: "Reminder",
             isRead: false,
           },
@@ -76,14 +73,12 @@ export async function GET() {
     });
 
     for (const alloc of overdueAllocations) {
-      const title = `Overdue Return Alert`;
-      const detailsPrefix = `Your handover for ${alloc.asset.name} (${alloc.asset.tag})`;
+      const messagePrefix = `Your handover for ${alloc.asset.name} (${alloc.asset.tag})`;
       
       const existing = await db.notification.findFirst({
         where: {
           employeeId: user.id,
-          title,
-          details: { contains: detailsPrefix },
+          message: { startsWith: messagePrefix },
         },
       });
 
@@ -92,8 +87,7 @@ export async function GET() {
         await db.notification.create({
           data: {
             employeeId: user.id,
-            title,
-            details: `${detailsPrefix} is overdue by ${daysOverdue} days. Please return the asset or request a transfer.`,
+            message: `${messagePrefix} is overdue by ${daysOverdue} days. Please return the asset or request a transfer.`,
             type: "Alert",
             isRead: false,
           },

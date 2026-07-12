@@ -14,8 +14,8 @@ async function getAuthUser() {
 export async function POST(request: Request) {
   try {
     const user = await getAuthUser();
-    if (!user || (user.role !== "AssetManager" && user.role !== "Admin")) {
-      return NextResponse.json({ error: "Forbidden: Asset Manager or Admin privileges required" }, { status: 403 });
+    if (!user || (user.role !== "AssetManager" && user.role !== "Admin" && user.role !== "DeptHead")) {
+      return NextResponse.json({ error: "Forbidden: Management or DeptHead privileges required" }, { status: 403 });
     }
 
     const body = await request.json();
@@ -32,6 +32,18 @@ export async function POST(request: Request) {
      * race conditions where two managers assign the same asset at the same time.
      */
     const allocation = await db.$transaction(async (tx) => {
+      if (user.role === "DeptHead") {
+        if (departmentId && departmentId !== user.departmentId) {
+          throw new Error("DeptHead can only allocate assets to their own department");
+        }
+        if (employeeId) {
+          const emp = await tx.employee.findUnique({ where: { id: employeeId } });
+          if (!emp || emp.departmentId !== user.departmentId) {
+            throw new Error("DeptHead can only allocate assets to employees within their department");
+          }
+        }
+      }
+
       const asset = await tx.asset.findUnique({
         where: { id: assetId },
       });

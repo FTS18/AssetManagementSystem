@@ -13,8 +13,8 @@ async function getAuthUser() {
 export async function GET() {
   try {
     const user = await getAuthUser();
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!user || (user.role !== "Admin" && user.role !== "AssetManager")) {
+      return NextResponse.json({ error: "Forbidden: Admin or AssetManager privileges required to view system analytics" }, { status: 403 });
     }
 
     // Execute all 14 database queries concurrently to minimize HTTP network round-trips to Turso
