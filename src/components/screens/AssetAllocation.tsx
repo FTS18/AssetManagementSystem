@@ -212,26 +212,26 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
       {/* Header */}
       <div>
         <h1 className="text-xl font-bold tracking-tight mb-1">Asset Allocation & Transfers</h1>
-        <p className="text-xs text-[var(--muted)]">Manage handovers, process return check-ins, and approve transfers between personnel.</p>
+        <p className="text-xs text-(--muted)">Manage handovers, process return check-ins, and approve transfers between personnel.</p>
       </div>
 
       {error && (
-        <div className="p-3 text-xs font-medium border border-red-950/20 bg-red-950/10 text-[var(--danger-text)]">
+        <div className="p-3 text-xs font-medium border border-red-950/20 bg-red-950/10 text-(--danger-text)">
           {error}
         </div>
       )}
       {success && (
-        <div className="p-3 text-xs font-medium border border-emerald-950/20 bg-emerald-950/10 text-[var(--success-text)]">
+        <div className="p-3 text-xs font-medium border border-emerald-950/20 bg-emerald-950/10 text-(--success-text)">
           {success}
         </div>
       )}
 
       {/* Allocation Conflict Shield / Transfer Trigger Form */}
       {conflictAlloc && (
-        <div className="erp-card border-[var(--danger-text)] bg-red-950/5 space-y-4">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-[var(--danger-text)]">Double Allocation Shield Triggered</h3>
-          <p className="text-xs text-[var(--muted)]">
-            Asset <span className="font-semibold text-[var(--foreground)]">{conflictAlloc.assetTag}</span> cannot be allocated directly. It is currently held by <span className="font-semibold text-[var(--foreground)]">{conflictAlloc.employee?.name || conflictAlloc.department?.name}</span>. 
+        <div className="erp-card border-(--danger-text) bg-red-950/5 space-y-4">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-(--danger-text)">Double Allocation Shield Triggered</h3>
+          <p className="text-xs text-(--muted)">
+            Asset <span className="font-semibold text-(--foreground)">{conflictAlloc.assetTag}</span> cannot be allocated directly. It is currently held by <span className="font-semibold text-(--foreground)">{conflictAlloc.employee?.name || conflictAlloc.department?.name}</span>. 
             You can submit a **Transfer Request** to routing approvals instead.
           </p>
           <form onSubmit={handleRaiseTransfer} className="flex flex-col sm:flex-row gap-3">
@@ -253,7 +253,7 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
               required
               value={transferReason}
               onChange={(e) => setTransferReason(e.target.value)}
-              className="erp-input flex-[2]"
+              className="erp-input flex-2"
               placeholder="Provide reason for transfer request..."
             />
             <div className="flex gap-2">
@@ -273,8 +273,8 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
         <div className="lg:col-span-2 space-y-6">
           {/* Active Handouts List */}
           <div className="space-y-3">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-[var(--muted)]">Active Handovers</h2>
-            <div className="overflow-x-auto border border-[var(--border)] bg-[var(--surface)]">
+            <h2 className="text-xs font-bold uppercase tracking-wider text-(--muted)">Active Handovers</h2>
+            <div className="overflow-x-auto border border-(--border) bg-(--surface)">
               <table className="erp-table">
                 <thead>
                   <tr>
@@ -288,7 +288,7 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
                 <tbody>
                   {activeAllocations.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="text-center py-4 text-xs text-[var(--muted)]">
+                      <td colSpan={5} className="text-center py-4 text-xs text-(--muted)">
                         No active asset handovers.
                       </td>
                     </tr>
@@ -309,7 +309,7 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
                           {canManage && (
                             <button
                               onClick={() => setSelectedAllocForReturn(alloc)}
-                              className="text-xs text-[var(--muted)] hover:text-[var(--foreground)] underline font-semibold"
+                              className="text-xs text-(--muted) hover:text-(--foreground) underline font-semibold"
                             >
                               Check-In Return
                             </button>
@@ -326,8 +326,8 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
           {/* Transfer Requests approvals list (visible to Managers/Admins) */}
           {canManage && (
             <div className="space-y-3">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-[var(--muted)]">Pending Transfer Requests</h2>
-              <div className="overflow-x-auto border border-[var(--border)] bg-[var(--surface)]">
+              <h2 className="text-xs font-bold uppercase tracking-wider text-(--muted)">Pending Transfer Requests</h2>
+              <div className="overflow-x-auto border border-(--border) bg-(--surface)">
                 <table className="erp-table">
                   <thead>
                     <tr>
@@ -342,7 +342,7 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
                   <tbody>
                     {transfers.filter((t) => t.status === "Pending").length === 0 ? (
                       <tr>
-                        <td colSpan={6} className="text-center py-4 text-xs text-[var(--muted)]">
+                        <td colSpan={6} className="text-center py-4 text-xs text-(--muted)">
                           No pending transfer requests.
                         </td>
                       </tr>
@@ -354,7 +354,7 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
                             <td className="font-semibold">{t.asset.name}</td>
                             <td className="text-xs">{t.fromEmployee.name}</td>
                             <td className="text-xs">{t.toEmployee.name}</td>
-                            <td className="text-xs text-[var(--muted)]">{t.reason}</td>
+                            <td className="text-xs text-(--muted)">{t.reason}</td>
                             <td>
                               <span className="badge badge-warning">Pending</span>
                             </td>
@@ -362,13 +362,13 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
                               <div className="flex gap-2">
                                 <button
                                   onClick={() => handleProcessTransfer(t.id, "approve")}
-                                  className="text-xs text-[var(--success-text)] font-bold hover:underline"
+                                  className="text-xs text-(--success-text) font-bold hover:underline"
                                 >
                                   Approve
                                 </button>
                                 <button
                                   onClick={() => handleProcessTransfer(t.id, "reject")}
-                                  className="text-xs text-[var(--danger-text)] font-bold hover:underline"
+                                  className="text-xs text-(--danger-text) font-bold hover:underline"
                                 >
                                   Reject
                                 </button>
@@ -392,7 +392,7 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
               <h3 className="text-xs font-bold uppercase tracking-wider">Allocate Asset</h3>
               <form onSubmit={handleAllocate} className="space-y-4">
                 <div className="flex flex-col space-y-1">
-                  <label className="text-[10px] uppercase font-bold text-[var(--muted)]">Select Asset</label>
+                  <label className="text-[10px] uppercase font-bold text-(--muted)">Select Asset</label>
                   <select
                     required
                     value={selectedAssetId}
@@ -433,7 +433,7 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
 
                 {assigneeType === "employee" ? (
                   <div className="flex flex-col space-y-1">
-                    <label className="text-[10px] uppercase font-bold text-[var(--muted)]">Target Employee</label>
+                    <label className="text-[10px] uppercase font-bold text-(--muted)">Target Employee</label>
                     <select
                       required
                       value={targetEmployeeId}
@@ -450,7 +450,7 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
                   </div>
                 ) : (
                   <div className="flex flex-col space-y-1">
-                    <label className="text-[10px] uppercase font-bold text-[var(--muted)]">Target Department</label>
+                    <label className="text-[10px] uppercase font-bold text-(--muted)">Target Department</label>
                     <select
                       required
                       value={targetDepartmentId}
@@ -468,7 +468,7 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
                 )}
 
                 <div className="flex flex-col space-y-1">
-                  <label className="text-[10px] uppercase font-bold text-[var(--muted)]">Expected Return Date</label>
+                  <label className="text-[10px] uppercase font-bold text-(--muted)">Expected Return Date</label>
                   <input
                     type="date"
                     value={expectedReturnDate}
@@ -486,23 +486,23 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
 
           {/* Return check-in modal card */}
           {selectedAllocForReturn && (
-            <div className="erp-card border-[var(--accent)] space-y-4">
-              <div className="flex justify-between items-center border-b border-[var(--border)] pb-2">
+            <div className="erp-card border-(--accent) space-y-4">
+              <div className="flex justify-between items-center border-b border-(--border) pb-2">
                 <h3 className="text-xs font-bold uppercase tracking-wider">Asset Check-In Return</h3>
                 <button
                   type="button"
                   onClick={() => setSelectedAllocForReturn(null)}
-                  className="text-xs text-[var(--muted)] hover:text-[var(--foreground)]"
+                  className="text-xs text-(--muted) hover:text-(--foreground)"
                 >
                   Cancel
                 </button>
               </div>
               <form onSubmit={handleReturnAsset} className="space-y-4">
-                <p className="text-xs text-[var(--muted)]">
-                  Asset check-in for <span className="font-semibold text-[var(--foreground)]">{selectedAllocForReturn.assetName} ({selectedAllocForReturn.assetTag})</span>.
+                <p className="text-xs text-(--muted)">
+                  Asset check-in for <span className="font-semibold text-(--foreground)">{selectedAllocForReturn.assetName} ({selectedAllocForReturn.assetTag})</span>.
                 </p>
                 <div className="flex flex-col space-y-1">
-                  <label className="text-[10px] uppercase font-bold text-[var(--muted)]">Check-in condition notes</label>
+                  <label className="text-[10px] uppercase font-bold text-(--muted)">Check-in condition notes</label>
                   <textarea
                     required
                     value={checkInNotes}

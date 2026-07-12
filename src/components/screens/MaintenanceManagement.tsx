@@ -108,43 +108,43 @@ export default function MaintenanceManagement({ user }: MaintenanceManagementPro
   const renderKanbanColumn = (columnTitle: string, statusKeys: string[]) => {
     const colRequests = requests.filter((r) => statusKeys.includes(r.status));
     return (
-      <div className="flex-1 min-w-[260px] bg-[var(--surface)] border border-[var(--border)] flex flex-col h-[550px]">
-        <div className="p-3 border-b border-[var(--border)] bg-[var(--background)] flex justify-between items-center">
-          <span className="text-xs font-bold uppercase tracking-wider text-[var(--muted)]">{columnTitle}</span>
-          <span className="tech-code text-[10px] px-2 py-0.5 border border-[var(--border)]">{colRequests.length}</span>
+      <div className="flex-1 min-w-[260px] bg-(--surface) border border-(--border) flex flex-col h-[550px]">
+        <div className="p-3 border-b border-(--border) bg-(--background) flex justify-between items-center">
+          <span className="text-xs font-bold uppercase tracking-wider text-(--muted)">{columnTitle}</span>
+          <span className="tech-code text-[10px] px-2 py-0.5 border border-(--border)">{colRequests.length}</span>
         </div>
         <div className="p-3 flex-1 overflow-y-auto space-y-3">
           {colRequests.length === 0 ? (
-            <div className="text-center py-8 text-xs text-[var(--muted)]">No requests in this stage.</div>
+            <div className="text-center py-8 text-xs text-(--muted)">No requests in this stage.</div>
           ) : (
             colRequests.map((req) => (
-              <div key={req.id} className="erp-card bg-[var(--background)] border border-[var(--border)] p-3 space-y-3">
+              <div key={req.id} className="erp-card bg-(--background) border border-(--border) p-3 space-y-3">
                 <div className="flex justify-between items-start">
-                  <span className="tech-code text-[var(--accent)] font-bold">{req.asset.tag}</span>
+                  <span className="tech-code text-(--accent) font-bold">{req.asset.tag}</span>
                   <span className={`badge ${req.priority === "Critical" ? "badge-danger" : req.priority === "High" ? "badge-warning" : "badge-success"}`}>
                     {req.priority}
                   </span>
                 </div>
                 <div className="text-xs font-semibold">{req.asset.name}</div>
-                <p className="text-[11px] text-[var(--muted)] leading-tight">{req.description}</p>
-                <div className="text-[10px] text-[var(--muted)]">
-                  Raised by: {req.employee.name} | Status: <span className="font-semibold text-[var(--foreground)]">{req.status}</span>
+                <p className="text-[11px] text-(--muted) leading-tight">{req.description}</p>
+                <div className="text-[10px] text-(--muted)">
+                  Raised by: {req.employee.name} | Status: <span className="font-semibold text-(--foreground)">{req.status}</span>
                 </div>
 
                 {/* Workflow actions for Managers/Admins */}
                 {canManage && (
-                  <div className="pt-2 border-t border-[var(--border)] flex flex-wrap gap-2">
+                  <div className="pt-2 border-t border-(--border) flex flex-wrap gap-2">
                     {req.status === "Pending" && (
                       <>
                         <button
                           onClick={() => handleUpdateStatus(req.id, "Approved")}
-                          className="text-[10px] text-[var(--success-text)] font-bold hover:underline"
+                          className="text-[10px] text-(--success-text) font-bold hover:underline"
                         >
                           Approve
                         </button>
                         <button
                           onClick={() => handleUpdateStatus(req.id, "Rejected")}
-                          className="text-[10px] text-[var(--danger-text)] font-bold hover:underline"
+                          className="text-[10px] text-(--danger-text) font-bold hover:underline"
                         >
                           Reject
                         </button>
@@ -153,7 +153,7 @@ export default function MaintenanceManagement({ user }: MaintenanceManagementPro
                     {req.status === "Approved" && (
                       <button
                         onClick={() => setActiveRequestForTech(req)}
-                        className="text-[10px] text-[var(--accent)] font-bold hover:underline"
+                        className="text-[10px] text-(--accent) font-bold hover:underline"
                       >
                         Assign Technician
                       </button>
@@ -161,7 +161,7 @@ export default function MaintenanceManagement({ user }: MaintenanceManagementPro
                     {req.status === "Assigned" && (
                       <button
                         onClick={() => handleUpdateStatus(req.id, "InProgress")}
-                        className="text-[10px] text-[var(--warning-text)] font-bold hover:underline"
+                        className="text-[10px] text-(--warning-text) font-bold hover:underline"
                       >
                         Start Repair Work
                       </button>
@@ -169,7 +169,7 @@ export default function MaintenanceManagement({ user }: MaintenanceManagementPro
                     {req.status === "InProgress" && (
                       <button
                         onClick={() => setActiveRequestForResolve(req)}
-                        className="text-[10px] text-[var(--success-text)] font-bold hover:underline"
+                        className="text-[10px] text-(--success-text) font-bold hover:underline"
                       >
                         Mark Resolved
                       </button>
@@ -190,7 +190,7 @@ export default function MaintenanceManagement({ user }: MaintenanceManagementPro
       <div className="flex justify-between items-start">
         <div>
           <h1 className="text-xl font-bold tracking-tight mb-1">Maintenance Management</h1>
-          <p className="text-xs text-[var(--muted)]">Route asset repairs, track technician workflows, and review resolution reports.</p>
+          <p className="text-xs text-(--muted)">Route asset repairs, track technician workflows, and review resolution reports.</p>
         </div>
         {!showForm && (
           <button onClick={() => setShowForm(true)} className="erp-btn-primary text-xs">
@@ -200,12 +200,12 @@ export default function MaintenanceManagement({ user }: MaintenanceManagementPro
       </div>
 
       {error && (
-        <div className="p-3 text-xs font-medium border border-red-950/20 bg-red-950/10 text-[var(--danger-text)]">
+        <div className="p-3 text-xs font-medium border border-red-950/20 bg-red-950/10 text-(--danger-text)">
           {error}
         </div>
       )}
       {success && (
-        <div className="p-3 text-xs font-medium border border-emerald-950/20 bg-emerald-950/10 text-[var(--success-text)]">
+        <div className="p-3 text-xs font-medium border border-emerald-950/20 bg-emerald-950/10 text-(--success-text)">
           {success}
         </div>
       )}
@@ -213,15 +213,15 @@ export default function MaintenanceManagement({ user }: MaintenanceManagementPro
       {/* Raise Request Form Panel */}
       {showForm && (
         <div className="erp-card space-y-4">
-          <div className="flex justify-between items-center border-b border-[var(--border)] pb-2">
+          <div className="flex justify-between items-center border-b border-(--border) pb-2">
             <h3 className="text-xs font-bold uppercase tracking-wider">Raise Maintenance Request</h3>
-            <button onClick={() => setShowForm(false)} className="text-xs text-[var(--muted)] hover:text-[var(--foreground)]">
+            <button onClick={() => setShowForm(false)} className="text-xs text-(--muted) hover:text-(--foreground)">
               Cancel
             </button>
           </div>
           <form onSubmit={handleRaiseRequest} className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="flex flex-col space-y-1">
-              <label className="text-[10px] uppercase font-bold text-[var(--muted)]">Select Asset</label>
+              <label className="text-[10px] uppercase font-bold text-(--muted)">Select Asset</label>
               <select
                 required
                 value={selectedAssetId}
@@ -238,7 +238,7 @@ export default function MaintenanceManagement({ user }: MaintenanceManagementPro
             </div>
 
             <div className="flex flex-col space-y-1">
-              <label className="text-[10px] uppercase font-bold text-[var(--muted)]">Priority Level</label>
+              <label className="text-[10px] uppercase font-bold text-(--muted)">Priority Level</label>
               <select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value as any)}
@@ -252,7 +252,7 @@ export default function MaintenanceManagement({ user }: MaintenanceManagementPro
             </div>
 
             <div className="md:col-span-3 flex flex-col space-y-1">
-              <label className="text-[10px] uppercase font-bold text-[var(--muted)]">Problem Description</label>
+              <label className="text-[10px] uppercase font-bold text-(--muted)">Problem Description</label>
               <textarea
                 required
                 value={description}
@@ -281,7 +281,7 @@ export default function MaintenanceManagement({ user }: MaintenanceManagementPro
 
       {/* Assign Tech Pop-up Overlay Card */}
       {activeRequestForTech && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[400] flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-400 flex items-center justify-center p-4">
           <div className="erp-card w-full max-w-sm space-y-4">
             <h3 className="text-xs font-bold uppercase tracking-wider">Assign Technician</h3>
             <div className="flex flex-col space-y-3">
@@ -323,7 +323,7 @@ export default function MaintenanceManagement({ user }: MaintenanceManagementPro
 
       {/* Resolution Notes Pop-up Overlay Card */}
       {activeRequestForResolve && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[400] flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-400 flex items-center justify-center p-4">
           <div className="erp-card w-full max-w-sm space-y-4">
             <h3 className="text-xs font-bold uppercase tracking-wider">Submit Resolution Details</h3>
             <div className="flex flex-col space-y-3">

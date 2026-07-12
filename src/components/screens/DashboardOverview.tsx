@@ -240,7 +240,7 @@ export default function DashboardOverview({ user, setActiveScreen }: DashboardOv
                       <p className="text-sm font-medium leading-snug" style={{ color: "var(--fg)" }}>
                         {humanizeAction(log.action)}
                       </p>
-                      <span className="text-xs flex-shrink-0 tabular-nums" style={{ color: "var(--muted)" }}>
+                      <span className="text-xs shrink-0 tabular-nums" style={{ color: "var(--muted)" }}>
                         {timeAgo(log.timestamp)}
                       </span>
                     </div>

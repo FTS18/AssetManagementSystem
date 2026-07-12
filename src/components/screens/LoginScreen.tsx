@@ -70,16 +70,18 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
 
   return (
     <div
-      className="min-h-screen flex bg-[var(--bg)]"
+      className="min-h-screen flex bg-(--bg)"
       style={{ fontFamily: "var(--font-sans)" }}
     >
       {/* Left brand panel — visible md+ */}
-      <div className="hidden md:flex flex-col justify-between w-[42%] max-w-md bg-[var(--accent)] px-12 py-14">
+      <div className="hidden md:flex flex-col justify-between w-[42%] max-w-md bg-(--accent) px-12 py-14">
         {/* Logo */}
         <div className="flex items-center gap-2.5">
-          <div className="h-8 w-8 rounded-lg bg-white/20 flex items-center justify-center">
-            <span className="text-white font-bold text-base leading-none">A</span>
-          </div>
+          <img
+            src="/assetflow_logo_transparent_white.png"
+            alt="AssetFlow Logo"
+            className="h-10 w-10 rounded-xl bg-white/10 p-1 object-contain shrink-0"
+          />
           <span className="text-white font-semibold text-base tracking-tight">AssetFlow</span>
         </div>
 
@@ -116,23 +118,25 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
         <div className="w-full max-w-sm">
           {/* Mobile logo */}
           <div className="flex items-center gap-2 mb-8 md:hidden">
-            <div className="h-7 w-7 rounded-md bg-[var(--accent)] flex items-center justify-center">
-              <span className="text-[var(--accent-fg)] font-bold text-sm leading-none">A</span>
-            </div>
-            <span className="font-semibold text-[var(--fg)] text-sm">AssetFlow</span>
+            <img
+              src="/assetflow_logo_transparent_black.png"
+              alt="AssetFlow Logo"
+              className="h-9 w-9 rounded-xl bg-[var(--surface-2)] p-1 object-contain shrink-0"
+            />
+            <span className="font-semibold text-(--fg) text-sm">AssetFlow</span>
           </div>
 
-          <h2 className="text-xl font-semibold text-[var(--fg)] mb-1">
+          <h2 className="text-xl font-semibold text-(--fg) mb-1">
             {isSignup ? "Create an account" : "Sign in"}
           </h2>
-          <p className="text-sm text-[var(--muted)] mb-6">
+          <p className="text-sm text-(--muted) mb-6">
             {isSignup
               ? "You'll start with the Employee role by default."
               : "Enter your credentials to access the dashboard."}
           </p>
 
           {error && (
-            <div className="mb-4 px-3.5 py-2.5 rounded-[var(--radius-sm)] bg-[var(--danger-bg)] border border-[oklch(from_var(--danger)_l_c_h_/_0.2)] text-[var(--danger)] text-sm">
+            <div className="mb-4 px-3.5 py-2.5 rounded-sm bg-(--danger-bg) border border-[oklch(from_var(--danger)_l_c_h/0.2)] text-(--danger) text-sm">
               {error}
             </div>
           )}
@@ -140,7 +144,7 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
           <form onSubmit={handleSubmit} className="space-y-4">
             {isSignup && (
               <div>
-                <label className="block text-sm font-medium text-[var(--fg)] mb-1.5">Full name</label>
+                <label className="block text-sm font-medium text-(--fg) mb-1.5">Full name</label>
                 <input
                   type="text"
                   required
@@ -153,7 +157,7 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
             )}
 
             <div>
-              <label className="block text-sm font-medium text-[var(--fg)] mb-1.5">Email address</label>
+              <label className="block text-sm font-medium text-(--fg) mb-1.5">Email address</label>
               <input
                 type="email"
                 required
@@ -166,9 +170,9 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
 
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-sm font-medium text-[var(--fg)]">Password</label>
+                <label className="block text-sm font-medium text-(--fg)">Password</label>
                 {!isSignup && (
-                  <button type="button" className="text-xs text-[var(--accent)] hover:underline">
+                  <button type="button" className="text-xs text-(--accent) hover:underline">
                     Forgot password?
                   </button>
                 )}
@@ -188,20 +192,20 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
             </button>
           </form>
 
-          <p className="mt-5 text-sm text-center text-[var(--muted)]">
+          <p className="mt-5 text-sm text-center text-(--muted)">
             {isSignup ? "Already have an account? " : "New here? "}
             <button
               onClick={() => { setIsSignup(!isSignup); setError(""); }}
-              className="text-[var(--accent)] hover:underline font-medium"
+              className="text-(--accent) hover:underline font-medium"
             >
               {isSignup ? "Sign in" : "Create account"}
             </button>
           </p>
 
           {/* Dev console */}
-          <div className="mt-8 pt-6 border-t border-[var(--border)]">
-            <p className="text-xs font-medium text-[var(--muted)] mb-3 flex items-center gap-2">
-              <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--warning)]"></span>
+          <div className="mt-8 pt-6 border-t border-(--border)">
+            <p className="text-xs font-medium text-(--muted) mb-3 flex items-center gap-2">
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-(--warning)"></span>
               Dev console — click to sign in instantly
             </p>
             <div className="space-y-1.5">
@@ -210,13 +214,13 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
                   key={u.email}
                   disabled={loading}
                   onClick={() => handleDevSwitch(u.email)}
-                  className="w-full flex items-center justify-between px-3 py-2.5 rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-2)] hover:border-[var(--accent)] transition-colors duration-[var(--duration-fast)] text-left"
+                  className="w-full flex items-center justify-between px-3 py-2.5 rounded-sm border border-(--border) bg-(--surface) hover:bg-(--surface-2) hover:border-(--accent) transition-colors duration-(--duration-fast) text-left"
                 >
                   <div>
-                    <p className="text-sm font-medium text-[var(--fg)]">{u.name}</p>
-                    <p className="text-xs text-[var(--muted)]">{u.role}</p>
+                    <p className="text-sm font-medium text-(--fg)">{u.name}</p>
+                    <p className="text-xs text-(--muted)">{u.role}</p>
                   </div>
-                  <svg className="text-[var(--muted)]" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg className="text-(--muted)" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M9 18l6-6-6-6"/>
                   </svg>
                 </button>

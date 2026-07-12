@@ -102,7 +102,7 @@ export default function ActivityLogs() {
                     {log.employee?.name ? ` — ${log.employee.name}` : ""}
                   </p>
                 </div>
-                <span className="text-xs whitespace-nowrap flex-shrink-0 tabular-nums" style={{ color: "var(--muted)" }}>
+                <span className="text-xs whitespace-nowrap shrink-0 tabular-nums" style={{ color: "var(--muted)" }}>
                   {timeAgo(log.timestamp)}
                 </span>
               </div>

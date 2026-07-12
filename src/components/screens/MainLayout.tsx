@@ -58,12 +58,11 @@ export default function MainLayout({
         className="px-5 py-5 flex items-center gap-3"
         style={{ borderBottom: "1px solid var(--sidebar-border)" }}
       >
-        <div
-          className="h-8 w-8 rounded-lg flex items-center justify-center flex-shrink-0 font-bold text-sm"
-          style={{ background: "var(--accent)", color: "var(--accent-fg)" }}
-        >
-          A
-        </div>
+        <img
+          src="/assetflow_logo_transparent_white.png"
+          alt="AssetFlow Logo"
+          className="h-10 w-10 rounded-xl bg-white/5 p-1 object-contain shrink-0"
+        />
         <span
           className="font-semibold text-sm tracking-tight"
           style={{ color: "var(--sidebar-fg)" }}
@@ -101,7 +100,7 @@ export default function MainLayout({
       >
         <div className="flex items-center gap-2.5 mb-2">
           <div
-            className="h-8 w-8 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-semibold"
+            className="h-8 w-8 rounded-full flex items-center justify-center shrink-0 text-xs font-semibold"
             style={{ background: "var(--sidebar-active-bg)", color: "var(--sidebar-active)" }}
           >
             {user.name?.[0]?.toUpperCase() ?? "?"}
@@ -173,7 +172,14 @@ export default function MainLayout({
               <line x1="3" y1="18" x2="21" y2="18"/>
             </svg>
           </button>
-          <span className="text-sm font-semibold" style={{ color: "var(--sidebar-fg)" }}>AssetFlow</span>
+          <div className="flex items-center gap-2">
+            <img
+              src="/assetflow_logo_transparent_white.png"
+              alt="AssetFlow Logo"
+              className="h-8 w-8 rounded-lg bg-white/5 p-1 object-contain shrink-0"
+            />
+            <span className="text-sm font-semibold tracking-tight" style={{ color: "var(--sidebar-fg)" }}>AssetFlow</span>
+          </div>
         </header>
 
         <main className="flex-1 p-6 lg:p-8 overflow-y-auto mesh-bg" style={{ maxWidth: "1280px", width: "100%", margin: "0 auto" }}>

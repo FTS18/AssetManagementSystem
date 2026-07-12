@@ -35,8 +35,8 @@ export default function Home() {
   };
 
   if (loading) return (
-    <div className="min-h-screen flex items-center justify-center bg-[var(--bg)]">
-      <span className="text-sm text-[var(--muted)]" style={{ fontFamily: "var(--font-sans)" }}>
+    <div className="min-h-screen flex items-center justify-center bg-(--bg)">
+      <span className="text-sm text-(--muted)" style={{ fontFamily: "var(--font-sans)" }}>
         Loading…
       </span>
     </div>

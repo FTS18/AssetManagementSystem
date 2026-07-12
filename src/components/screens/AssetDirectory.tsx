@@ -145,7 +145,7 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
       <div className="flex justify-between items-start">
         <div>
           <h1 className="text-xl font-bold tracking-tight mb-1">Asset Directory</h1>
-          <p className="text-xs text-[var(--muted)]">Register, search, and audit corporate physical inventory and active lifecycles.</p>
+          <p className="text-xs text-(--muted)">Register, search, and audit corporate physical inventory and active lifecycles.</p>
         </div>
         {canRegister && !showRegForm && (
           <button onClick={() => setShowRegForm(true)} className="erp-btn-primary text-xs">
@@ -155,12 +155,12 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
       </div>
 
       {error && (
-        <div className="p-3 text-xs font-medium border border-red-950/20 bg-red-950/10 text-[var(--danger-text)]">
+        <div className="p-3 text-xs font-medium border border-red-950/20 bg-red-950/10 text-(--danger-text)">
           {error}
         </div>
       )}
       {success && (
-        <div className="p-3 text-xs font-medium border border-emerald-950/20 bg-emerald-950/10 text-[var(--success-text)]">
+        <div className="p-3 text-xs font-medium border border-emerald-950/20 bg-emerald-950/10 text-(--success-text)">
           {success}
         </div>
       )}
@@ -168,15 +168,15 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
       {/* Registration Form Panel */}
       {showRegForm && (
         <div className="erp-card space-y-4">
-          <div className="flex justify-between items-center border-b border-[var(--border)] pb-2">
+          <div className="flex justify-between items-center border-b border-(--border) pb-2">
             <h3 className="text-xs font-bold uppercase tracking-wider">Register New Asset</h3>
-            <button onClick={() => setShowRegForm(false)} className="text-xs text-[var(--muted)] hover:text-[var(--foreground)]">
+            <button onClick={() => setShowRegForm(false)} className="text-xs text-(--muted) hover:text-(--foreground)">
               Cancel
             </button>
           </div>
           <form onSubmit={handleRegister} className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="flex flex-col space-y-1">
-              <label className="text-[10px] uppercase font-bold text-[var(--muted)]">Asset Name</label>
+              <label className="text-[10px] uppercase font-bold text-(--muted)">Asset Name</label>
               <input
                 type="text"
                 required
@@ -188,7 +188,7 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
             </div>
 
             <div className="flex flex-col space-y-1">
-              <label className="text-[10px] uppercase font-bold text-[var(--muted)]">Serial Number</label>
+              <label className="text-[10px] uppercase font-bold text-(--muted)">Serial Number</label>
               <input
                 type="text"
                 required
@@ -200,7 +200,7 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
             </div>
 
             <div className="flex flex-col space-y-1">
-              <label className="text-[10px] uppercase font-bold text-[var(--muted)]">Category</label>
+              <label className="text-[10px] uppercase font-bold text-(--muted)">Category</label>
               <select
                 required
                 value={categoryId}
@@ -217,7 +217,7 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
             </div>
 
             <div className="flex flex-col space-y-1">
-              <label className="text-[10px] uppercase font-bold text-[var(--muted)]">Acquisition Cost (USD)</label>
+              <label className="text-[10px] uppercase font-bold text-(--muted)">Acquisition Cost (USD)</label>
               <input
                 type="number"
                 step="0.01"
@@ -230,7 +230,7 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
             </div>
 
             <div className="flex flex-col space-y-1">
-              <label className="text-[10px] uppercase font-bold text-[var(--muted)]">Initial Condition</label>
+              <label className="text-[10px] uppercase font-bold text-(--muted)">Initial Condition</label>
               <select
                 value={condition}
                 onChange={(e) => setCondition(e.target.value as any)}
@@ -244,7 +244,7 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
             </div>
 
             <div className="flex flex-col space-y-1">
-              <label className="text-[10px] uppercase font-bold text-[var(--muted)]">Primary Location</label>
+              <label className="text-[10px] uppercase font-bold text-(--muted)">Primary Location</label>
               <input
                 type="text"
                 required
@@ -263,7 +263,7 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
                 onChange={(e) => setIsBookable(e.target.checked)}
                 className="accent-white h-4 w-4"
               />
-              <label htmlFor="isBookable" className="text-xs font-semibold text-[var(--foreground)]">
+              <label htmlFor="isBookable" className="text-xs font-semibold text-(--foreground)">
                 Flag as a shared bookable resource (e.g. rooms, cars, projectors)
               </label>
             </div>
@@ -278,7 +278,7 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
       )}
 
       {/* Filter and Search Panel */}
-      <div className="erp-card bg-[var(--surface)] p-4 flex flex-col md:flex-row gap-3">
+      <div className="erp-card bg-(--surface) p-4 flex flex-col md:flex-row gap-3">
         <input
           type="text"
           value={searchQuery}
@@ -315,7 +315,7 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
       </div>
 
       {/* Directory Table */}
-      <div className="overflow-x-auto border border-[var(--border)] bg-[var(--surface)]">
+      <div className="overflow-x-auto border border-(--border) bg-(--surface)">
         <table className="erp-table">
           <thead>
             <tr>
@@ -331,20 +331,20 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
           <tbody>
             {assets.length === 0 ? (
               <tr>
-                <td colSpan={7} className="text-center py-4 text-xs text-[var(--muted)]">
+                <td colSpan={7} className="text-center py-4 text-xs text-(--muted)">
                   No assets found.
                 </td>
               </tr>
             ) : (
               assets.map((asset) => (
                 <tr key={asset.id}>
-                  <td className="tech-code font-bold text-[var(--accent)]">{asset.tag}</td>
+                  <td className="tech-code font-bold text-(--accent)">{asset.tag}</td>
                   <td>
                     <div className="font-semibold">{asset.name}</div>
-                    <div className="text-[10px] text-[var(--muted)] tech-code">S/N: {asset.serialNumber}</div>
+                    <div className="text-[10px] text-(--muted) tech-code">S/N: {asset.serialNumber}</div>
                   </td>
                   <td className="text-xs">{asset.category?.name || "Other"}</td>
-                  <td className="text-xs text-[var(--muted)]">{asset.location}</td>
+                  <td className="text-xs text-(--muted)">{asset.location}</td>
                   <td>
                     <span className="text-xs">{asset.condition}</span>
                   </td>
@@ -352,7 +352,7 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
                   <td>
                     <button
                       onClick={() => viewHistory(asset)}
-                      className="text-xs text-[var(--muted)] hover:text-[var(--foreground)] font-semibold underline"
+                      className="text-xs text-(--muted) hover:text-(--foreground) font-semibold underline"
                     >
                       History Timeline
                     </button>
@@ -366,38 +366,38 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
 
       {/* Slide-out History Timeline Drawer */}
       {selectedAsset && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[400] flex justify-end">
-          <div className="w-full max-w-lg bg-[var(--surface)] border-l border-[var(--border)] p-6 overflow-y-auto flex flex-col h-full text-[var(--foreground)]">
-            <div className="flex justify-between items-center border-b border-[var(--border)] pb-4 mb-4">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-400 flex justify-end">
+          <div className="w-full max-w-lg bg-(--surface) border-l border-(--border) p-6 overflow-y-auto flex flex-col h-full text-(--foreground)">
+            <div className="flex justify-between items-center border-b border-(--border) pb-4 mb-4">
               <div>
                 <h3 className="text-sm font-bold uppercase tracking-wider">Asset Lifecycle Timeline</h3>
-                <p className="text-xs text-[var(--muted)]">History logs for {selectedAsset.name} ({selectedAsset.tag})</p>
+                <p className="text-xs text-(--muted)">History logs for {selectedAsset.name} ({selectedAsset.tag})</p>
               </div>
               <button
                 onClick={() => setSelectedAsset(null)}
-                className="text-xs text-[var(--muted)] hover:text-[var(--foreground)]"
+                className="text-xs text-(--muted) hover:text-(--foreground)"
               >
                 Close Drawer
               </button>
             </div>
 
             {/* Timeline List */}
-            <div className="relative border-l border-[var(--border)] pl-4 ml-2 space-y-6 flex-1">
+            <div className="relative border-l border-(--border) pl-4 ml-2 space-y-6 flex-1">
               {assetHistory.length === 0 ? (
-                <p className="text-xs text-[var(--muted)] py-4">No historical records found for this asset.</p>
+                <p className="text-xs text-(--muted) py-4">No historical records found for this asset.</p>
               ) : (
                 assetHistory.map((item, index) => (
                   <div key={index} className="relative">
                     {/* Circle marker on timeline */}
-                    <div className="absolute -left-[21px] top-1 h-3.5 w-3.5 bg-[var(--background)] border border-[var(--border)] rounded-full flex items-center justify-center">
-                      <div className="h-1.5 w-1.5 bg-[var(--accent)] rounded-full"></div>
+                    <div className="absolute left-[-21px] top-1 h-3.5 w-3.5 bg-(--background) border border-(--border) rounded-full flex items-center justify-center">
+                      <div className="h-1.5 w-1.5 bg-(--accent) rounded-full"></div>
                     </div>
                     <div>
-                      <div className="text-[10px] text-[var(--muted)] tech-code">
+                      <div className="text-[10px] text-(--muted) tech-code">
                         {new Date(item.date).toLocaleDateString()} at {new Date(item.date).toLocaleTimeString()}
                       </div>
                       <div className="text-xs font-semibold mt-1">{item.details}</div>
-                      {item.notes && <div className="text-xs text-[var(--muted)] mt-1">{item.notes}</div>}
+                      {item.notes && <div className="text-xs text-(--muted) mt-1">{item.notes}</div>}
                       <div className="mt-1">{getStatusBadge(item.status)}</div>
                     </div>
                   </div>

@@ -129,7 +129,7 @@ export default function AssetAudit({ user }: AssetAuditProps) {
       <div className="flex justify-between items-start">
         <div>
           <h1 className="text-xl font-bold tracking-tight mb-1">Asset Audits</h1>
-          <p className="text-xs text-[var(--muted)]">Initiate audit verification cycles, check off asset states, and lock discrepancy registers.</p>
+          <p className="text-xs text-(--muted)">Initiate audit verification cycles, check off asset states, and lock discrepancy registers.</p>
         </div>
         {canManage && !showCreateForm && (
           <button onClick={() => setShowCreateForm(true)} className="erp-btn-primary text-xs">
@@ -139,12 +139,12 @@ export default function AssetAudit({ user }: AssetAuditProps) {
       </div>
 
       {error && (
-        <div className="p-3 text-xs font-medium border border-red-950/20 bg-red-950/10 text-[var(--danger-text)]">
+        <div className="p-3 text-xs font-medium border border-red-950/20 bg-red-950/10 text-(--danger-text)">
           {error}
         </div>
       )}
       {success && (
-        <div className="p-3 text-xs font-medium border border-emerald-950/20 bg-emerald-950/10 text-[var(--success-text)]">
+        <div className="p-3 text-xs font-medium border border-emerald-950/20 bg-emerald-950/10 text-(--success-text)">
           {success}
         </div>
       )}
@@ -152,15 +152,15 @@ export default function AssetAudit({ user }: AssetAuditProps) {
       {/* Create Audit Form */}
       {showCreateForm && (
         <div className="erp-card space-y-4">
-          <div className="flex justify-between items-center border-b border-[var(--border)] pb-2">
+          <div className="flex justify-between items-center border-b border-(--border) pb-2">
             <h3 className="text-xs font-bold uppercase tracking-wider">Initialize Audit Cycle</h3>
-            <button onClick={() => setShowCreateForm(false)} className="text-xs text-[var(--muted)] hover:text-[var(--foreground)]">
+            <button onClick={() => setShowCreateForm(false)} className="text-xs text-(--muted) hover:text-(--foreground)">
               Cancel
             </button>
           </div>
           <form onSubmit={handleCreateCycle} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="flex flex-col space-y-1">
-              <label className="text-[10px] uppercase font-bold text-[var(--muted)]">Cycle Name</label>
+              <label className="text-[10px] uppercase font-bold text-(--muted)">Cycle Name</label>
               <input
                 type="text"
                 required
@@ -171,7 +171,7 @@ export default function AssetAudit({ user }: AssetAuditProps) {
               />
             </div>
             <div className="flex flex-col space-y-1">
-              <label className="text-[10px] uppercase font-bold text-[var(--muted)]">Start Date</label>
+              <label className="text-[10px] uppercase font-bold text-(--muted)">Start Date</label>
               <input
                 type="date"
                 required
@@ -181,7 +181,7 @@ export default function AssetAudit({ user }: AssetAuditProps) {
               />
             </div>
             <div className="flex flex-col space-y-1">
-              <label className="text-[10px] uppercase font-bold text-[var(--muted)]">End Date</label>
+              <label className="text-[10px] uppercase font-bold text-(--muted)">End Date</label>
               <input
                 type="date"
                 required
@@ -191,7 +191,7 @@ export default function AssetAudit({ user }: AssetAuditProps) {
               />
             </div>
             <div className="flex flex-col space-y-1">
-              <label className="text-[10px] uppercase font-bold text-[var(--muted)]">Assigned Auditor</label>
+              <label className="text-[10px] uppercase font-bold text-(--muted)">Assigned Auditor</label>
               <select
                 required
                 value={auditorId}
@@ -216,8 +216,8 @@ export default function AssetAudit({ user }: AssetAuditProps) {
       )}
 
       {/* Select active audit selector */}
-      <div className="erp-card bg-[var(--surface)] p-4 flex flex-col md:flex-row items-center gap-3">
-        <span className="text-xs font-bold uppercase tracking-wider text-[var(--muted)]">Active Cycle:</span>
+      <div className="erp-card bg-(--surface) p-4 flex flex-col md:flex-row items-center gap-3">
+        <span className="text-xs font-bold uppercase tracking-wider text-(--muted)">Active Cycle:</span>
         <select
           value={selectedCycleId}
           onChange={(e) => setSelectedCycleId(e.target.value)}
@@ -231,8 +231,8 @@ export default function AssetAudit({ user }: AssetAuditProps) {
           ))}
         </select>
         {activeCycle && (
-          <span className="text-xs text-[var(--muted)]">
-            Auditor: <span className="text-[var(--foreground)] font-semibold">{activeCycle.auditor.name}</span> | Scope: <span className="text-[var(--foreground)] font-semibold">{activeCycle.items?.length || 0} assets</span>
+          <span className="text-xs text-(--muted)">
+            Auditor: <span className="text-(--foreground) font-semibold">{activeCycle.auditor.name}</span> | Scope: <span className="text-(--foreground) font-semibold">{activeCycle.items?.length || 0} assets</span>
           </span>
         )}
       </div>
@@ -242,19 +242,19 @@ export default function AssetAudit({ user }: AssetAuditProps) {
           {/* Main check-off checklist */}
           <div className="lg:col-span-2 space-y-4">
             <div className="flex justify-between items-center">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-[var(--muted)]">Verification Checklist</h2>
+              <h2 className="text-xs font-bold uppercase tracking-wider text-(--muted)">Verification Checklist</h2>
               {activeCycle.status === "Active" && canManage && (
                 <button
                   onClick={handleCloseCycle}
                   disabled={loading}
-                  className="erp-btn-secondary text-xs text-[var(--danger-text)] font-semibold border-red-950/20 hover:bg-red-950/10"
+                  className="erp-btn-secondary text-xs text-(--danger-text) font-semibold border-red-950/20 hover:bg-red-950/10"
                 >
                   Close & Lock Audit
                 </button>
               )}
             </div>
 
-            <div className="overflow-x-auto border border-[var(--border)] bg-[var(--surface)]">
+            <div className="overflow-x-auto border border-(--border) bg-(--surface)">
               <table className="erp-table">
                 <thead>
                   <tr>
@@ -270,7 +270,7 @@ export default function AssetAudit({ user }: AssetAuditProps) {
                     <tr key={item.id}>
                       <td className="tech-code font-bold">{item.asset.tag}</td>
                       <td className="font-semibold">{item.asset.name}</td>
-                      <td className="tech-code text-xs text-[var(--muted)]">{item.asset.serialNumber}</td>
+                      <td className="tech-code text-xs text-(--muted)">{item.asset.serialNumber}</td>
                       <td>
                         <span
                           className={`badge ${
@@ -289,19 +289,19 @@ export default function AssetAudit({ user }: AssetAuditProps) {
                           <div className="flex gap-1">
                             <button
                               onClick={() => handleCheckItem(item.id, "Verified")}
-                              className="text-[10px] px-2 py-0.5 border border-[var(--border)] hover:bg-[var(--background)] font-medium"
+                              className="text-[10px] px-2 py-0.5 border border-(--border) hover:bg-(--background) font-medium"
                             >
                               Verify
                             </button>
                             <button
                               onClick={() => handleCheckItem(item.id, "Missing")}
-                              className="text-[10px] px-2 py-0.5 border border-red-950/20 text-[var(--danger-text)] hover:bg-red-950/15 font-medium"
+                              className="text-[10px] px-2 py-0.5 border border-red-950/20 text-(--danger-text) hover:bg-red-950/15 font-medium"
                             >
                               Missing
                             </button>
                             <button
                               onClick={() => handleCheckItem(item.id, "Damaged")}
-                              className="text-[10px] px-2 py-0.5 border border-amber-950/20 text-[var(--warning-text)] hover:bg-amber-950/15 font-medium"
+                              className="text-[10px] px-2 py-0.5 border border-amber-950/20 text-(--warning-text) hover:bg-amber-950/15 font-medium"
                             >
                               Damage
                             </button>
@@ -321,29 +321,29 @@ export default function AssetAudit({ user }: AssetAuditProps) {
               <h3 className="text-xs font-bold uppercase tracking-wider">Discrepancy Report</h3>
               <div className="space-y-3">
                 <div className="flex justify-between items-center text-xs">
-                  <span className="text-[var(--muted)]">Total Scoped Assets:</span>
+                  <span className="text-(--muted)">Total Scoped Assets:</span>
                   <span className="font-semibold">{activeCycle.items?.length || 0}</span>
                 </div>
-                <div className="flex justify-between items-center text-xs border-t border-[var(--border)] pt-2">
-                  <span className="text-[var(--muted)]">Verified OK:</span>
-                  <span className="font-semibold text-[var(--success-text)]">
+                <div className="flex justify-between items-center text-xs border-t border-(--border) pt-2">
+                  <span className="text-(--muted)">Verified OK:</span>
+                  <span className="font-semibold text-(--success-text)">
                     {activeCycle.items?.filter((item: any) => item.status === "Verified").length || 0}
                   </span>
                 </div>
-                <div className="flex justify-between items-center text-xs border-t border-[var(--border)] pt-2">
-                  <span className="text-[var(--muted)]">Missing Assets:</span>
-                  <span className="font-semibold text-[var(--danger-text)]">
+                <div className="flex justify-between items-center text-xs border-t border-(--border) pt-2">
+                  <span className="text-(--muted)">Missing Assets:</span>
+                  <span className="font-semibold text-(--danger-text)">
                     {activeCycle.items?.filter((item: any) => item.status === "Missing").length || 0}
                   </span>
                 </div>
-                <div className="flex justify-between items-center text-xs border-t border-[var(--border)] pt-2">
-                  <span className="text-[var(--muted)]">Damaged Assets:</span>
-                  <span className="font-semibold text-[var(--warning-text)]">
+                <div className="flex justify-between items-center text-xs border-t border-(--border) pt-2">
+                  <span className="text-(--muted)">Damaged Assets:</span>
+                  <span className="font-semibold text-(--warning-text)">
                     {activeCycle.items?.filter((item: any) => item.status === "Damaged").length || 0}
                   </span>
                 </div>
-                <div className="flex justify-between items-center text-xs border-t border-[var(--border)] pt-2">
-                  <span className="text-[var(--muted)]">Pending Verification:</span>
+                <div className="flex justify-between items-center text-xs border-t border-(--border) pt-2">
+                  <span className="text-(--muted)">Pending Verification:</span>
                   <span className="font-semibold">
                     {activeCycle.items?.filter((item: any) => item.status === "Pending").length || 0}
                   </span>
@@ -351,7 +351,7 @@ export default function AssetAudit({ user }: AssetAuditProps) {
               </div>
 
               {activeCycle.status === "Closed" && (
-                <div className="p-3 mt-2 text-xs border border-red-950/20 bg-red-950/5 text-[var(--danger-text)]">
+                <div className="p-3 mt-2 text-xs border border-red-950/20 bg-red-950/5 text-(--danger-text)">
                   Discrepancy Report Locked. All confirmed missing items have automatically been transitioned to the Lost status.
                 </div>
               )}

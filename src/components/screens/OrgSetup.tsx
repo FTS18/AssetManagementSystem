@@ -123,7 +123,7 @@ export default function OrgSetup({ user }: OrgSetupProps) {
     return (
       <div className="ui-card text-center p-8" style={{ borderColor: "var(--danger)", background: "var(--danger-bg)" }}>
         <h2 className="text-base font-semibold mb-2" style={{ color: "var(--danger)" }}>Access restricted</h2>
-        <p className="text-sm text-[var(--muted)]">
+        <p className="text-sm text-(--muted)">
           Only admins can access and modify organization settings.
         </p>
       </div>
@@ -134,12 +134,12 @@ export default function OrgSetup({ user }: OrgSetupProps) {
     <div className="space-y-6 animate-slide-up">
       {/* Header section */}
       <div>
-        <h1 className="text-lg font-semibold text-[var(--fg)]">Organization</h1>
-        <p className="text-sm text-[var(--muted)] mt-0.5">Manage departments, asset categories, and employee roles.</p>
+        <h1 className="text-lg font-semibold text-(--fg)">Organization</h1>
+        <p className="text-sm text-(--muted) mt-0.5">Manage departments, asset categories, and employee roles.</p>
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-[var(--border)] gap-1">
+      <div className="flex border-b border-(--border) gap-1">
         {([
           { id: "departments", label: "Departments" },
           { id: "categories",  label: "Categories"  },
@@ -148,10 +148,10 @@ export default function OrgSetup({ user }: OrgSetupProps) {
           <button
             key={tab.id}
             onClick={() => { setActiveTab(tab.id); setError(""); setSuccess(""); }}
-            className={`px-3 py-2 text-sm font-medium border-b-2 -mb-[1px] transition-colors duration-[var(--duration-fast)] ${
+            className={`px-3 py-2 text-sm font-medium border-b-2 mb-[-1px] transition-colors duration-(--duration-fast) ${
               activeTab === tab.id
-                ? "border-[var(--accent)] text-[var(--accent)]"
-                : "border-transparent text-[var(--muted)] hover:text-[var(--fg)]"
+                ? "border-(--accent) text-(--accent)"
+                : "border-transparent text-(--muted) hover:text-(--fg)"
             }`}
           >
             {tab.label}
@@ -160,12 +160,12 @@ export default function OrgSetup({ user }: OrgSetupProps) {
       </div>
 
       {error && (
-        <div className="px-3.5 py-2.5 rounded-[var(--radius-sm)] text-sm" style={{ background: "var(--danger-bg)", color: "var(--danger)" }}>
+        <div className="px-3.5 py-2.5 rounded-sm text-sm" style={{ background: "var(--danger-bg)", color: "var(--danger)" }}>
           {error}
         </div>
       )}
       {success && (
-        <div className="px-3.5 py-2.5 rounded-[var(--radius-sm)] text-sm" style={{ background: "var(--success-bg)", color: "var(--success)" }}>
+        <div className="px-3.5 py-2.5 rounded-sm text-sm" style={{ background: "var(--success-bg)", color: "var(--success)" }}>
           {success}
         </div>
       )}
@@ -174,8 +174,8 @@ export default function OrgSetup({ user }: OrgSetupProps) {
       {activeTab === "departments" && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-4">
-            <h2 className="text-sm font-semibold text-[var(--fg)]">Registered departments</h2>
-            <div className="overflow-x-auto border border-[var(--border)] bg-[var(--surface)]">
+            <h2 className="text-sm font-semibold text-(--fg)">Registered departments</h2>
+            <div className="overflow-x-auto border border-(--border) bg-(--surface)">
               <table className="erp-table">
                 <thead>
                   <tr>
@@ -188,7 +188,7 @@ export default function OrgSetup({ user }: OrgSetupProps) {
                 <tbody>
                   {departments.length === 0 ? (
                     <tr>
-                      <td colSpan={4} className="text-center py-4 text-xs text-[var(--muted)]">
+                      <td colSpan={4} className="text-center py-4 text-xs text-(--muted)">
                         No departments registered.
                       </td>
                     </tr>
@@ -197,7 +197,7 @@ export default function OrgSetup({ user }: OrgSetupProps) {
                       <tr key={dept.id}>
                         <td className="font-semibold">{dept.name}</td>
                         <td className="text-xs">{dept.head?.name || "Unassigned"}</td>
-                        <td className="text-xs text-[var(--muted)]">{dept.parent?.name || "None"}</td>
+                        <td className="text-xs text-(--muted)">{dept.parent?.name || "None"}</td>
                         <td>
                           <span className="badge badge-success">Active</span>
                         </td>
@@ -211,10 +211,10 @@ export default function OrgSetup({ user }: OrgSetupProps) {
 
           <div>
             <div className="ui-card space-y-4">
-              <h3 className="text-sm font-semibold text-[var(--fg)]">Create department</h3>
+              <h3 className="text-sm font-semibold text-(--fg)">Create department</h3>
               <form onSubmit={handleCreateDepartment} className="space-y-3.5">
                 <div className="flex flex-col space-y-1.5">
-                  <label className="text-sm font-medium text-[var(--fg)]">Name</label>
+                  <label className="text-sm font-medium text-(--fg)">Name</label>
                   <input
                     type="text"
                     required
@@ -226,7 +226,7 @@ export default function OrgSetup({ user }: OrgSetupProps) {
                 </div>
 
                 <div className="flex flex-col space-y-1.5">
-                  <label className="text-sm font-medium text-[var(--fg)]">Department head</label>
+                  <label className="text-sm font-medium text-(--fg)">Department head</label>
                   <select
                     value={deptHeadId}
                     onChange={(e) => setDeptHeadId(e.target.value)}
@@ -242,7 +242,7 @@ export default function OrgSetup({ user }: OrgSetupProps) {
                 </div>
 
                 <div className="flex flex-col space-y-1.5">
-                  <label className="text-sm font-medium text-[var(--fg)]">Parent department</label>
+                  <label className="text-sm font-medium text-(--fg)">Parent department</label>
                   <select
                     value={deptParentId}
                     onChange={(e) => setDeptParentId(e.target.value)}
@@ -270,8 +270,8 @@ export default function OrgSetup({ user }: OrgSetupProps) {
       {activeTab === "categories" && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-4">
-            <h2 className="text-sm font-semibold text-[var(--fg)]">Asset categories</h2>
-            <div className="overflow-x-auto border border-[var(--border)] bg-[var(--surface)]">
+            <h2 className="text-sm font-semibold text-(--fg)">Asset categories</h2>
+            <div className="overflow-x-auto border border-(--border) bg-(--surface)">
               <table className="erp-table">
                 <thead>
                   <tr>
@@ -283,9 +283,9 @@ export default function OrgSetup({ user }: OrgSetupProps) {
                 <tbody>
                   {categories.map((cat) => (
                     <tr key={cat.id}>
-                      <td className="tech-code text-[var(--muted)]">CAT-{String(cat.id).padStart(2, "0")}</td>
+                      <td className="tech-code text-(--muted)">CAT-{String(cat.id).padStart(2, "0")}</td>
                       <td className="font-semibold">{cat.name}</td>
-                      <td className="text-xs text-[var(--muted)]">
+                      <td className="text-xs text-(--muted)">
                         {cat.customFields ? "Custom Fields Defined" : "Standard Schema"}
                       </td>
                     </tr>
@@ -297,7 +297,7 @@ export default function OrgSetup({ user }: OrgSetupProps) {
 
           <div>
             <div className="ui-card space-y-4">
-              <h3 className="text-sm font-semibold text-[var(--fg)]">Add category</h3>
+              <h3 className="text-sm font-semibold text-(--fg)">Add category</h3>
               <div className="flex flex-col space-y-2">
                 <input
                   type="text"
@@ -328,8 +328,8 @@ export default function OrgSetup({ user }: OrgSetupProps) {
       {/* Tab C: Employees */}
       {activeTab === "employees" && (
         <div className="space-y-4">
-          <h2 className="text-sm font-semibold text-[var(--fg)]">Employee directory</h2>
-          <div className="overflow-x-auto border border-[var(--border)] bg-[var(--surface)]">
+          <h2 className="text-sm font-semibold text-(--fg)">Employee directory</h2>
+          <div className="overflow-x-auto border border-(--border) bg-(--surface)">
             <table className="erp-table">
               <thead>
                 <tr>

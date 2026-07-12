@@ -118,23 +118,23 @@ export default function ResourceBooking({ user }: ResourceBookingProps) {
       {/* Header */}
       <div>
         <h1 className="text-xl font-bold tracking-tight mb-1">Resource Booking Scheduler</h1>
-        <p className="text-xs text-[var(--muted)]">Reserve shared equipment, vehicles, or meeting conference rooms without schedule collisions.</p>
+        <p className="text-xs text-(--muted)">Reserve shared equipment, vehicles, or meeting conference rooms without schedule collisions.</p>
       </div>
 
       {error && (
-        <div className="p-3 text-xs font-medium border border-red-950/20 bg-red-950/10 text-[var(--danger-text)]">
+        <div className="p-3 text-xs font-medium border border-red-950/20 bg-red-950/10 text-(--danger-text)">
           {error}
         </div>
       )}
       {success && (
-        <div className="p-3 text-xs font-medium border border-emerald-950/20 bg-emerald-950/10 text-[var(--success-text)]">
+        <div className="p-3 text-xs font-medium border border-emerald-950/20 bg-emerald-950/10 text-(--success-text)">
           {success}
         </div>
       )}
 
       {/* Select Resource Selector */}
-      <div className="erp-card bg-[var(--surface)] p-4 flex flex-col md:flex-row items-center gap-3">
-        <span className="text-xs font-bold uppercase tracking-wider text-[var(--muted)]">Active Resource:</span>
+      <div className="erp-card bg-(--surface) p-4 flex flex-col md:flex-row items-center gap-3">
+        <span className="text-xs font-bold uppercase tracking-wider text-(--muted)">Active Resource:</span>
         <select
           value={selectedAssetId}
           onChange={(e) => setSelectedAssetId(e.target.value)}
@@ -147,8 +147,8 @@ export default function ResourceBooking({ user }: ResourceBookingProps) {
           ))}
         </select>
         {selectedAsset && (
-          <span className="text-xs text-[var(--muted)]">
-            Location: <span className="text-[var(--foreground)]">{selectedAsset.location}</span> | Condition: <span className="text-[var(--foreground)]">{selectedAsset.condition}</span>
+          <span className="text-xs text-(--muted)">
+            Location: <span className="text-(--foreground)">{selectedAsset.location}</span> | Condition: <span className="text-(--foreground)">{selectedAsset.condition}</span>
           </span>
         )}
       </div>
@@ -156,8 +156,8 @@ export default function ResourceBooking({ user }: ResourceBookingProps) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Bookings Timeline Column */}
         <div className="lg:col-span-2 space-y-4">
-          <h2 className="text-xs font-bold uppercase tracking-wider text-[var(--muted)]">Schedule Calendar</h2>
-          <div className="overflow-x-auto border border-[var(--border)] bg-[var(--surface)]">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-(--muted)">Schedule Calendar</h2>
+          <div className="overflow-x-auto border border-(--border) bg-(--surface)">
             <table className="erp-table">
               <thead>
                 <tr>
@@ -171,7 +171,7 @@ export default function ResourceBooking({ user }: ResourceBookingProps) {
               <tbody>
                 {bookings.filter((b) => b.status !== "Cancelled").length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="text-center py-4 text-xs text-[var(--muted)]">
+                    <td colSpan={5} className="text-center py-4 text-xs text-(--muted)">
                       No active bookings scheduled for this resource.
                     </td>
                   </tr>
@@ -196,7 +196,7 @@ export default function ResourceBooking({ user }: ResourceBookingProps) {
                           {(user.id === b.employeeId || user.role === "Admin" || user.role === "AssetManager") && (
                             <button
                               onClick={() => handleCancelBooking(b.id)}
-                              className="text-xs text-[var(--danger-text)] font-semibold hover:underline"
+                              className="text-xs text-(--danger-text) font-semibold hover:underline"
                             >
                               Cancel
                             </button>
@@ -217,7 +217,7 @@ export default function ResourceBooking({ user }: ResourceBookingProps) {
             <form onSubmit={handleBook} className="space-y-4">
               <div className="grid grid-cols-2 gap-2">
                 <div className="flex flex-col space-y-1">
-                  <label className="text-[10px] uppercase font-bold text-[var(--muted)]">Start Date</label>
+                  <label className="text-[10px] uppercase font-bold text-(--muted)">Start Date</label>
                   <input
                     type="date"
                     required
@@ -227,7 +227,7 @@ export default function ResourceBooking({ user }: ResourceBookingProps) {
                   />
                 </div>
                 <div className="flex flex-col space-y-1">
-                  <label className="text-[10px] uppercase font-bold text-[var(--muted)]">Start Time</label>
+                  <label className="text-[10px] uppercase font-bold text-(--muted)">Start Time</label>
                   <input
                     type="time"
                     required
@@ -240,7 +240,7 @@ export default function ResourceBooking({ user }: ResourceBookingProps) {
 
               <div className="grid grid-cols-2 gap-2">
                 <div className="flex flex-col space-y-1">
-                  <label className="text-[10px] uppercase font-bold text-[var(--muted)]">End Date</label>
+                  <label className="text-[10px] uppercase font-bold text-(--muted)">End Date</label>
                   <input
                     type="date"
                     required
@@ -250,7 +250,7 @@ export default function ResourceBooking({ user }: ResourceBookingProps) {
                   />
                 </div>
                 <div className="flex flex-col space-y-1">
-                  <label className="text-[10px] uppercase font-bold text-[var(--muted)]">End Time</label>
+                  <label className="text-[10px] uppercase font-bold text-(--muted)">End Time</label>
                   <input
                     type="time"
                     required
