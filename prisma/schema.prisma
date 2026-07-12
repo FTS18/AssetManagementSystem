@@ -75,6 +75,10 @@ model Asset {
   maintenanceRequests MaintenanceRequest[]
   auditItems          AuditItem[]
   transfers           TransferRequest[]
+
+  @@index([status])
+  @@index([categoryId])
+  @@index([location])
 }
 
 model Allocation {
@@ -90,6 +94,10 @@ model Allocation {
   returnedDate       DateTime?
   conditionOnCheckIn String?
   status             String      @default("Active") // Active, Returned, Overdue
+
+  @@index([status])
+  @@index([employeeId])
+  @@index([departmentId])
 }
 
 model TransferRequest {
