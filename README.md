@@ -103,7 +103,7 @@ Time-slot booking for shared resources — rooms, vehicles, equipment — with o
 
 Repair requests routed through an approval workflow before any work begins:
 
-- Raise a request: select the asset, describe the issue, set priority, attach a photo
+- Raise a request: Select the asset, Describe the issue, Set priority, Attach a photo
 - **Workflow**: Pending → Approved / Rejected (by Asset Manager) → Technician Assigned → In Progress → Resolved
 - Asset status automatically moves to Under Maintenance on approval and back to Available on resolution
 - Full maintenance history retained per asset
