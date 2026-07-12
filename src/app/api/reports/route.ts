@@ -13,8 +13,32 @@ async function getAuthUser() {
 export async function GET() {
   try {
     const user = await getAuthUser();
-    if (!user || (user.role !== "Admin" && user.role !== "AssetManager")) {
-      return NextResponse.json({ error: "Forbidden: Admin or AssetManager privileges required to view system analytics" }, { status: 403 });
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const isManager = user.role === "Admin" || user.role === "AssetManager";
+
+    if (!isManager) {
+      // Employee & DeptHead Dashboard Stats
+      const [myAllocations, myBookings, myMaintenance] = await Promise.all([
+        db.allocation.count({
+          where: { employeeId: user.id, status: "Active" }
+        }),
+        db.resourceBooking.count({
+          where: { employeeId: user.id, status: "Upcoming" }
+        }),
+        db.maintenanceRequest.count({
+          where: { employeeId: user.id, status: { in: ["Pending", "Approved", "InProgress"] } }
+        })
+      ]);
+
+      return NextResponse.json({
+        isManager: false,
+        myAllocations,
+        myBookings,
+        myMaintenance
+      });
     }
 
     // Execute all 14 database queries concurrently to minimize HTTP network round-trips to Turso

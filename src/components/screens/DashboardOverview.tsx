@@ -40,22 +40,38 @@ export default function DashboardOverview({ user, setActiveScreen }: DashboardOv
         (ra.assets ?? []).forEach((asset: any) => {
           (asset.allocations ?? []).forEach((alloc: any) => {
             if (alloc.status === "Active" && alloc.expectedReturnDate) {
+              // Ensure standard employees only see their own overdue items
+              if (rr.isManager === false && alloc.employeeId !== user.id) return;
+              
               const due = new Date(alloc.expectedReturnDate);
               if (due < now) overdue.push({ ...alloc, assetTag: asset.tag, assetName: asset.name, days: Math.round((now.getTime() - due.getTime()) / 86_400_000) });
             }
           });
         });
 
-        setStats({
-          available:   count("Available"),
-          allocated:   count("Allocated"),
-          maintenance: count("UnderMaintenance"),
-          bookings:    (rr.resourceBookings ?? []).reduce((a: number, b: any) => a + Number(b.count ?? 0), 0),
-          overdue:     overdue.length,
-          maintenanceToday: rr.maintenanceToday ?? 0,
-          pendingTransfers: rr.pendingTransfers ?? 0,
-          upcomingReturns: rr.upcomingReturns ?? 0,
-        });
+        if (rr.isManager === false) {
+          setStats({
+            available: 0,
+            allocated: rr.myAllocations ?? 0,
+            maintenance: rr.myMaintenance ?? 0,
+            bookings: rr.myBookings ?? 0,
+            overdue: overdue.length,
+            maintenanceToday: 0,
+            pendingTransfers: 0,
+            upcomingReturns: 0
+          });
+        } else {
+          setStats({
+            available:   count("Available"),
+            allocated:   count("Allocated"),
+            maintenance: count("UnderMaintenance"),
+            bookings:    (rr.resourceBookings ?? []).reduce((a: number, b: any) => a + Number(b.count ?? 0), 0),
+            overdue:     overdue.length,
+            maintenanceToday: rr.maintenanceToday ?? 0,
+            pendingTransfers: rr.pendingTransfers ?? 0,
+            upcomingReturns: rr.upcomingReturns ?? 0,
+          });
+        }
         setOverdueItems(overdue);
         setRecentLogs((rl.logs ?? []).slice(0, 8));
       } catch { /* silent */ } finally {
@@ -81,7 +97,7 @@ export default function DashboardOverview({ user, setActiveScreen }: DashboardOv
 
   const isManager = user.role === "Admin" || user.role === "AssetManager";
 
-  const statItems = [
+  const statItems = isManager ? [
     { label: "Available",   value: stats.available,        color: "var(--success)" },
     { label: "Allocated",   value: stats.allocated,        color: "var(--fg)" },
     { label: "Active Bookings", value: stats.bookings,     color: "var(--fg)" },
@@ -89,6 +105,11 @@ export default function DashboardOverview({ user, setActiveScreen }: DashboardOv
     { label: "Pending Transfers", value: stats.pendingTransfers, color: "var(--warning)" },
     { label: "Upcoming Returns", value: stats.upcomingReturns, color: "var(--success)" },
     { label: "Overdue",     value: stats.overdue,          color: stats.overdue > 0 ? "var(--danger)" : "var(--fg)" },
+  ] : [
+    { label: "My Allocations", value: stats.allocated, color: "var(--fg)" },
+    { label: "My Bookings", value: stats.bookings, color: "var(--fg)" },
+    { label: "My Maintenance", value: stats.maintenance, color: "var(--warning)" },
+    { label: "My Overdue Returns", value: stats.overdue, color: stats.overdue > 0 ? "var(--danger)" : "var(--fg)" },
   ];
 
   return (
@@ -103,8 +124,8 @@ export default function DashboardOverview({ user, setActiveScreen }: DashboardOv
 
       {/* Stats strip */}
       {loading ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-px" style={{ background: "var(--border)", border: "1px solid var(--border)", borderRadius: "var(--radius-md)", overflow: "hidden" }}>
-          {[...Array(7)].map((_, i) => (
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-px" style={{ gridTemplateColumns: isManager ? 'repeat(7, 1fr)' : 'repeat(4, 1fr)', background: "var(--border)", border: "1px solid var(--border)", borderRadius: "var(--radius-md)", overflow: "hidden" }}>
+          {[...Array(isManager ? 7 : 4)].map((_, i) => (
             <div key={i} className="px-5 py-5 animate-pulse" style={{ background: "var(--surface)" }}>
               <div className="h-3 w-16 rounded-(--radius-sm) mb-3" style={{ background: "var(--surface-2)" }} />
               <div className="h-8 w-10 rounded-(--radius-sm)" style={{ background: "var(--surface-2)" }} />
@@ -114,7 +135,7 @@ export default function DashboardOverview({ user, setActiveScreen }: DashboardOv
       ) : (
         <div
           className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-px"
-          style={{ background: "var(--border)", border: "1px solid var(--border)", borderRadius: "var(--radius-md)", overflow: "hidden" }}
+          style={{ gridTemplateColumns: isManager ? 'repeat(7, 1fr)' : 'repeat(4, 1fr)', background: "var(--border)", border: "1px solid var(--border)", borderRadius: "var(--radius-md)", overflow: "hidden" }}
         >
           {statItems.map((s, i) => (
             <div

@@ -18,7 +18,10 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const isManager = user.role === "Admin" || user.role === "AssetManager";
+    
     const requests = await db.maintenanceRequest.findMany({
+      where: isManager ? undefined : { employeeId: user.id },
       include: {
         asset: { select: { id: true, tag: true, name: true, status: true } },
         employee: { select: { id: true, name: true, email: true } },
