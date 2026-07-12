@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed:full": "npx tsx scripts/seed-full.ts",
+    "seed:demo": "npx tsx scripts/seed-demo-users.ts"
   },
   "dependencies": {
     "@libsql/client": "^0.17.4",

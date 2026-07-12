@@ -329,11 +329,16 @@ Push the schema to create the local SQLite database file:
 npx prisma db push
 ```
 
-Then seed it with demo departments, employees, assets, and bookings:
+Then seed it with demo departments, employees, assets, and bookings. You have two options:
 
-```bash
-node prisma/seed.js
-```
+- **Massive Enterprise Seed (Recommended)**: Generates 500+ realistic assets and full organizational hierarchies.
+  ```bash
+  npm run seed:full
+  ```
+- **Demo Users Only**: Only creates the demo login accounts.
+  ```bash
+  npm run seed:demo
+  ```
 
 To visually browse or edit the database:
 
