@@ -220,12 +220,14 @@ export default function DashboardOverview({ user, setActiveScreen }: DashboardOv
                         <td style={{ color: "var(--fg)" }}>{item.employeeName ?? item.departmentName ?? "Unassigned"}</td>
                         <td><span className="badge badge-danger tabular-nums">{item.days}d</span></td>
                         <td className="text-right">
-                          <button
-                            onClick={() => setActiveScreen("allocations")}
-                            className="text-xs font-semibold text-(--accent) hover:underline"
-                          >
-                            Resolve
-                          </button>
+                          {isManager && (
+                            <button
+                              onClick={() => setActiveScreen("allocations")}
+                              className="text-xs font-semibold text-(--accent) hover:underline"
+                            >
+                              Resolve
+                            </button>
+                          )}
                         </td>
                       </tr>
                     ))}
