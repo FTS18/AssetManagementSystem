@@ -176,13 +176,30 @@ export default function DashboardOverview({ user, setActiveScreen }: DashboardOv
               )}
             </div>
             {loading ? (
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {[...Array(3)].map((_, i) => (
-                  <div key={i} className="h-10 rounded-(--radius-sm) animate-pulse" style={{ background: "var(--surface-2)" }} />
+                  <div key={i} className="flex items-center justify-between py-2 border-b border-(--border-subtle)">
+                    <div className="space-y-2">
+                      <div className="h-3.5 w-16 skeleton" />
+                      <div className="h-4 w-44 skeleton" />
+                    </div>
+                    <div className="h-3.5 w-24 skeleton" />
+                    <div className="h-5 w-12 rounded-full skeleton" />
+                  </div>
                 ))}
               </div>
             ) : overdueItems.length === 0 ? (
-              <p className="text-sm py-4 text-center" style={{ color: "var(--muted)" }}>No overdue assets — all clear.</p>
+              <div className="flex flex-col items-center justify-center p-8 border border-dashed border-(--border) rounded-(--radius-md) text-center space-y-3 bg-white/5">
+                <div className="h-10 w-10 rounded-full flex items-center justify-center bg-green-500/10 border border-green-500/20 text-green-500">
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-sm font-semibold text-(--fg)">All Clear</h3>
+                  <p className="text-xs text-(--muted) mt-0.5">No overdue return handovers registered in the system.</p>
+                </div>
+              </div>
             ) : (
               <div className="w-full overflow-x-auto">
                 <table className="erp-table min-w-full">

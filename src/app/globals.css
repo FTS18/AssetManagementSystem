@@ -158,21 +158,18 @@ html, body {
 }
 .sidebar-grain > * { position: relative; z-index: 1; }
 
-/* ─── Cards ────────────────────────────────────────────────────── */
-.ui-card {
+.ui-card, .erp-card {
   background-color: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: 1.25rem;
   box-shadow: var(--shadow-sm);
+  transition: transform var(--duration-base) var(--ease-out), box-shadow var(--duration-base) var(--ease-out);
 }
 
-.erp-card {
-  background-color: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 1.25rem;
-  box-shadow: var(--shadow-sm);
+.ui-card:hover, .erp-card:hover {
+  transform: translateY(-2.5px);
+  box-shadow: var(--shadow-md);
 }
 
 /* ─── Tables ───────────────────────────────────────────────────── */
