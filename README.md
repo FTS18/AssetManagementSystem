@@ -1,6 +1,6 @@
 # AssetFlow — Enterprise Asset & Resource Management System
 
-> A centralized ERP platform built with Next.js, Prisma, and React to help organizations track, allocate, audit, and maintain their physical assets and shared resources.
+> A centralized ERP platform built using Next.js, Prisma, and React to help organizations track, allocate, audit, and maintain their physical assets and shared resources.
 
 ---
 
@@ -8,7 +8,7 @@
 
 Organizations of every shape and size — schools, hospitals, factories, offices, agencies — deal with the same quiet problem: nobody really knows where things are, who has them, or what condition they're in. Spreadsheets fill up, paper logs get lost, and assets quietly slip through the cracks.
 
-AssetFlow fixes that.
+AssetFlow fixes that!
 
 It gives your organization a single, structured system for managing the full lifecycle of every asset — from the moment it's registered to the day it's retired or disposed of. Asset managers can register and allocate equipment, department heads can oversee what their teams hold, employees can book shared resources and raise maintenance requests, and auditors can run structured verification cycles that actually close.
 
