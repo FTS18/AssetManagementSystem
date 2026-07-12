@@ -265,7 +265,7 @@ export default function MainLayout({
           </div>
         </header>
 
-        <main className="flex-1 p-6 lg:p-8 overflow-y-auto" style={{ maxWidth: "1280px", width: "100%", margin: "0 auto" }}>
+        <main className="flex-1 p-6 lg:p-8 overflow-y-auto w-full">
           {children}
         </main>
       </div>

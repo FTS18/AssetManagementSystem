@@ -250,7 +250,7 @@ async function main() {
   for(let i=0; i<3; i++) {
     const audit = await prisma.auditCycle.create({
       data: {
-        name: `202\${4+i} Q\${Math.floor(Math.random()*4)+1} Inventory Check`,
+        name: `202${4+i} Q${Math.floor(Math.random()*4)+1} Inventory Check`,
         status: i === 2 ? "Active" : "Closed",
         startDate: new Date(2025, i*3, 1),
         endDate: new Date(2025, i*3, 15),

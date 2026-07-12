@@ -807,9 +807,9 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
       
       {/* Slide-out Advanced Filters Drawer */}
       {showAdvFilters && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[400] flex justify-end">
-          <div className="w-full max-w-sm bg-(--surface) border-l border-(--border) p-6 overflow-y-auto flex flex-col h-full text-(--foreground)">
-            <div className="flex justify-between items-center border-b border-(--border) pb-4 mb-4">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[400] flex items-center justify-center p-4">
+          <div className="erp-card w-full max-w-md space-y-4 max-h-[85vh] overflow-y-auto bg-(--surface) border border-(--border) text-(--foreground)">
+            <div className="flex justify-between items-center border-b border-(--border) pb-3 mb-2">
               <h3 className="text-sm font-semibold text-(--fg)">Advanced Filters</h3>
               <button onClick={() => setShowAdvFilters(false)} className="text-xs text-(--muted) hover:text-(--foreground) font-semibold">Close</button>
             </div>
@@ -843,9 +843,9 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
 
 
       {selectedAsset && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[400] flex justify-end">
-          <div className="w-full max-w-lg bg-(--surface) border-l border-(--border) p-6 overflow-y-auto flex flex-col h-full text-(--foreground)">
-            <div className="flex justify-between items-center border-b border-(--border) pb-4 mb-4">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[400] flex items-center justify-center p-4">
+          <div className="erp-card w-full max-w-lg space-y-4 max-h-[85vh] overflow-y-auto bg-(--surface) border border-(--border) text-(--foreground)">
+            <div className="flex justify-between items-center border-b border-(--border) pb-3 mb-2">
               <div>
                 <h3 className="text-sm font-semibold text-(--fg)">Asset Details & Lifecycle</h3>
                 <p className="text-xs text-(--muted)">History logs for {selectedAsset.name} ({selectedAsset.tag})</p>
