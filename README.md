@@ -10,7 +10,7 @@ Organizations of every shape and size — schools, hospitals, factories, offices
 
 AssetFlow fixes that!
 
-It gives your organization a single, structured system for managing the full lifecycle of every asset — from the moment it's registered to the day it's retired or disposed of. Asset managers can register and allocate equipment, department heads can oversee what their teams hold, employees can book shared resources and raise maintenance requests, and auditors can run structured verification cycles that actually close.
+It gives your organization a single, structured system for managing the full lifecycle of every asset. From the moment it's registered to the day it's retired or disposed of. Asset managers can register and allocate equipment, department heads can oversee what their teams hold, employees can book shared resources and raise maintenance requests, and auditors can run structured verification cycles that actually close.
 
 The system is intentionally scoped to asset and resource management. It doesn't touch purchasing, invoicing, or accounting. It does one thing and tries to do it well.
 
