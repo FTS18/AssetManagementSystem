@@ -6,21 +6,21 @@ interface LoginScreenProps {
   onLoginSuccess: (user: any) => void;
 }
 
-export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [isSignup, setIsSignup] = useState(false);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+const demoUsers = [
+  { name: "Sarah Jenkins",   role: "Admin",         email: "admin@assetflow.com"   },
+  { name: "Marcus Vance",    role: "Asset manager", email: "manager@assetflow.com" },
+  { name: "Elena Rostova",   role: "IT dept head",  email: "elena.it@assetflow.com"},
+  { name: "David Kim",       role: "IT employee",   email: "david@assetflow.com"   },
+  { name: "Priya Patel",     role: "HR employee",   email: "priya@assetflow.com"   },
+];
 
-  const demoUsers = [
-    { name: "Sarah Jenkins", role: "Admin", email: "admin@assetflow.com" },
-    { name: "Marcus Vance", role: "Asset Manager", email: "manager@assetflow.com" },
-    { name: "Elena Rostova", role: "IT Dept Head", email: "elena.it@assetflow.com" },
-    { name: "David Kim", role: "IT Employee", email: "david@assetflow.com" },
-    { name: "Priya Patel", role: "HR Employee", email: "priya@assetflow.com" },
-  ];
+export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
+  const [email, setEmail]     = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName]       = useState("");
+  const [isSignup, setIsSignup] = useState(false);
+  const [error, setError]     = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleDevSwitch = async (demoEmail: string) => {
     setError("");
@@ -45,10 +45,8 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
     e.preventDefault();
     setError("");
     setLoading(true);
-
     const url = isSignup ? "/api/auth/signup" : "/api/auth/login";
     const payload = isSignup ? { name, email, password } : { email, password };
-
     try {
       const res = await fetch(url, {
         method: "POST",
@@ -57,10 +55,9 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Authentication failed");
-
       if (isSignup) {
         setIsSignup(false);
-        setError("Account created. Please log in.");
+        setError("Account created — please sign in.");
       } else {
         onLoginSuccess(data.user);
       }
@@ -72,69 +69,106 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
   };
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-[var(--background)] text-[var(--foreground)]">
-      {/* Brand Intro Column */}
-      <div className="flex-1 flex flex-col justify-center px-8 py-16 md:px-16 border-b md:border-b-0 md:border-r border-[var(--border)]">
-        <div className="max-w-md">
-          <div className="flex items-center space-x-3 mb-6">
-            <img src="/logo-white.png" alt="AssetFlow" className="h-8 w-auto hidden dark:block" />
-            <img src="/logo-black.png" alt="AssetFlow" className="h-8 w-auto block dark:hidden" />
-            <span className="text-xl font-bold tracking-tight">AssetFlow</span>
+    <div
+      className="min-h-screen flex bg-[var(--bg)]"
+      style={{ fontFamily: "var(--font-sans)" }}
+    >
+      {/* Left brand panel — visible md+ */}
+      <div className="hidden md:flex flex-col justify-between w-[42%] max-w-md bg-[var(--accent)] px-12 py-14">
+        {/* Logo */}
+        <div className="flex items-center gap-2.5">
+          <div className="h-8 w-8 rounded-lg bg-white/20 flex items-center justify-center">
+            <span className="text-white font-bold text-base leading-none">A</span>
           </div>
-          <h1 className="text-3xl font-extrabold tracking-tight mb-4">
-            Enterprise Asset & Resource Management
+          <span className="text-white font-semibold text-base tracking-tight">AssetFlow</span>
+        </div>
+
+        {/* Hero text */}
+        <div>
+          <h1
+            className="text-3xl font-semibold text-white leading-snug"
+            style={{ textWrap: "balance" }}
+          >
+            Track, allocate, and audit every corporate asset — in one place.
           </h1>
-          <p className="text-[var(--muted)] leading-relaxed text-sm">
-            Simplify and digitize how your organization tracks physical equipment, registers lifecycle transitions, manages maintenance requests, and schedules shared spaces without conflict.
+          <p className="mt-4 text-sm text-white/70 leading-relaxed max-w-xs">
+            A modern ERP built for IT, operations, and finance teams that need clarity at every step of an asset's lifecycle.
           </p>
+        </div>
+
+        {/* Bottom stat strip */}
+        <div className="flex gap-8">
+          {[
+            { value: "6 modules", label: "Fully integrated" },
+            { value: "RBAC",      label: "Role-based access" },
+            { value: "SQLite",    label: "Zero config db" },
+          ].map(s => (
+            <div key={s.label}>
+              <p className="text-white font-semibold text-sm">{s.value}</p>
+              <p className="text-white/60 text-xs mt-0.5">{s.label}</p>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Login Form and Dev Switcher Column */}
-      <div className="flex-1 flex flex-col justify-center px-8 py-12 md:px-16 max-w-xl mx-auto w-full">
-        <div className="erp-card w-full">
-          <h2 className="text-lg font-bold mb-6">
-            {isSignup ? "Create New Employee Account" : "Access Central Portal"}
+      {/* Right form panel */}
+      <div className="flex-1 flex items-center justify-center px-6 py-12">
+        <div className="w-full max-w-sm">
+          {/* Mobile logo */}
+          <div className="flex items-center gap-2 mb-8 md:hidden">
+            <div className="h-7 w-7 rounded-md bg-[var(--accent)] flex items-center justify-center">
+              <span className="text-[var(--accent-fg)] font-bold text-sm leading-none">A</span>
+            </div>
+            <span className="font-semibold text-[var(--fg)] text-sm">AssetFlow</span>
+          </div>
+
+          <h2 className="text-xl font-semibold text-[var(--fg)] mb-1">
+            {isSignup ? "Create an account" : "Sign in"}
           </h2>
+          <p className="text-sm text-[var(--muted)] mb-6">
+            {isSignup
+              ? "You'll start with the Employee role by default."
+              : "Enter your credentials to access the dashboard."}
+          </p>
 
           {error && (
-            <div className="p-3 mb-4 text-xs font-medium border border-red-950/20 bg-red-950/10 text-[var(--danger-text)]">
+            <div className="mb-4 px-3.5 py-2.5 rounded-[var(--radius-sm)] bg-[var(--danger-bg)] border border-[oklch(from_var(--danger)_l_c_h_/_0.2)] text-[var(--danger)] text-sm">
               {error}
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {isSignup && (
-              <div className="flex flex-col space-y-1">
-                <label className="text-xs text-[var(--muted)] font-medium">Name</label>
+              <div>
+                <label className="block text-sm font-medium text-[var(--fg)] mb-1.5">Full name</label>
                 <input
                   type="text"
                   required
                   value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={e => setName(e.target.value)}
                   className="erp-input"
-                  placeholder="e.g. John Doe"
+                  placeholder="Jane Smith"
                 />
               </div>
             )}
 
-            <div className="flex flex-col space-y-1">
-              <label className="text-xs text-[var(--muted)] font-medium">Email Address</label>
+            <div>
+              <label className="block text-sm font-medium text-[var(--fg)] mb-1.5">Email address</label>
               <input
                 type="email"
                 required
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={e => setEmail(e.target.value)}
                 className="erp-input"
-                placeholder="name@company.com"
+                placeholder="you@company.com"
               />
             </div>
 
-            <div className="flex flex-col space-y-1">
-              <div className="flex justify-between items-center">
-                <label className="text-xs text-[var(--muted)] font-medium">Password</label>
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-sm font-medium text-[var(--fg)]">Password</label>
                 {!isSignup && (
-                  <button type="button" className="text-xs text-[var(--muted)] hover:text-[var(--foreground)]">
+                  <button type="button" className="text-xs text-[var(--accent)] hover:underline">
                     Forgot password?
                   </button>
                 )}
@@ -143,48 +177,51 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
                 type="password"
                 required
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={e => setPassword(e.target.value)}
                 className="erp-input"
                 placeholder="••••••••"
               />
             </div>
 
-            <button type="submit" disabled={loading} className="erp-btn-primary w-full text-center">
-              {loading ? "Authenticating..." : isSignup ? "Create Account" : "Log In"}
+            <button type="submit" disabled={loading} className="erp-btn-primary w-full mt-1.5">
+              {loading ? "Signing in…" : isSignup ? "Create account" : "Sign in"}
             </button>
           </form>
 
-          <div className="mt-6 pt-4 border-t border-[var(--border)] text-center">
+          <p className="mt-5 text-sm text-center text-[var(--muted)]">
+            {isSignup ? "Already have an account? " : "New here? "}
             <button
-              onClick={() => setIsSignup(!isSignup)}
-              className="text-xs text-[var(--muted)] hover:text-[var(--foreground)]"
+              onClick={() => { setIsSignup(!isSignup); setError(""); }}
+              className="text-[var(--accent)] hover:underline font-medium"
             >
-              {isSignup ? "Already have an account? Log in" : "New employee? Register here (default role)"}
+              {isSignup ? "Sign in" : "Create account"}
             </button>
-          </div>
-        </div>
-
-        {/* Judging Dev Console Switcher */}
-        <div className="mt-8 erp-card border-dashed">
-          <div className="flex items-center space-x-2 mb-4">
-            <div className="h-2 w-2 rounded-full bg-[var(--warning-text)]"></div>
-            <span className="text-xs font-bold uppercase tracking-wider text-[var(--muted)]">Dev Console / Switch User</span>
-          </div>
-          <p className="text-xs text-[var(--muted)] mb-4">
-            Click any demo profile to authenticate instantly using seeded credentials.
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            {demoUsers.map((demo) => (
-              <button
-                key={demo.email}
-                disabled={loading}
-                onClick={() => handleDevSwitch(demo.email)}
-                className="flex flex-col items-start p-2 border border-[var(--border)] hover:border-[var(--accent)] text-left bg-[var(--background)] transition-colors"
-              >
-                <span className="text-xs font-medium">{demo.name}</span>
-                <span className="text-[10px] text-[var(--muted)]">{demo.role} ({demo.email})</span>
-              </button>
-            ))}
+
+          {/* Dev console */}
+          <div className="mt-8 pt-6 border-t border-[var(--border)]">
+            <p className="text-xs font-medium text-[var(--muted)] mb-3 flex items-center gap-2">
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--warning)]"></span>
+              Dev console — click to sign in instantly
+            </p>
+            <div className="space-y-1.5">
+              {demoUsers.map(u => (
+                <button
+                  key={u.email}
+                  disabled={loading}
+                  onClick={() => handleDevSwitch(u.email)}
+                  className="w-full flex items-center justify-between px-3 py-2.5 rounded-[var(--radius-sm)] border border-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-2)] hover:border-[var(--accent)] transition-colors duration-[var(--duration-fast)] text-left"
+                >
+                  <div>
+                    <p className="text-sm font-medium text-[var(--fg)]">{u.name}</p>
+                    <p className="text-xs text-[var(--muted)]">{u.role}</p>
+                  </div>
+                  <svg className="text-[var(--muted)]" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M9 18l6-6-6-6"/>
+                  </svg>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
