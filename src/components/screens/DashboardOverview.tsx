@@ -134,13 +134,13 @@ export default function DashboardOverview({ user, setActiveScreen }: DashboardOv
     >
       {/* Heading */}
       <div>
-        <h1 className="text-3xl font-extrabold tracking-tight text-(--fg)">Overview</h1>
-        <p className="text-base text-(--muted) mt-1">Real-time asset counts and recent activity.</p>
+        <h1 className="text-xl sm:text-3xl font-extrabold tracking-tight text-(--fg)">Overview</h1>
+        <p className="text-sm sm:text-base text-(--muted) mt-1">Real-time asset counts and recent activity.</p>
       </div>
 
       {/* Stats strip */}
       {loading ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-px" style={{ gridTemplateColumns: isManager ? 'repeat(7, 1fr)' : 'repeat(4, 1fr)', background: "var(--border)", border: "1px solid var(--border)", borderRadius: "var(--radius-md)", overflow: "hidden" }}>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-px" style={{ background: "var(--border)", border: "1px solid var(--border)", borderRadius: "var(--radius-md)", overflow: "hidden" }}>
           {[...Array(isManager ? 7 : 4)].map((_, i) => (
             <div key={i} className="px-5 py-5 animate-pulse" style={{ background: "var(--surface)" }}>
               <div className="h-3 w-16 rounded-sm mb-3" style={{ background: "var(--surface-2)" }} />
@@ -150,8 +150,8 @@ export default function DashboardOverview({ user, setActiveScreen }: DashboardOv
         </div>
       ) : (
         <div
-          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-px"
-          style={{ gridTemplateColumns: isManager ? 'repeat(7, 1fr)' : 'repeat(4, 1fr)', background: "var(--border)", border: "1px solid var(--border)", borderRadius: "var(--radius-md)", overflow: "hidden" }}
+          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-px"
+          style={{ background: "var(--border)", border: "1px solid var(--border)", borderRadius: "var(--radius-md)", overflow: "hidden" }}
         >
           {statItems.map((s, i) => (
             <div
@@ -190,16 +190,16 @@ export default function DashboardOverview({ user, setActiveScreen }: DashboardOv
       )}
 
       {/* Quick actions */}
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2">
         {isManager && (
-          <button onClick={() => setActiveScreen("assets")} className="erp-btn-primary">
+          <button onClick={() => setActiveScreen("assets")} className="erp-btn-primary w-full sm:w-auto">
             Register asset
           </button>
         )}
-        <button onClick={() => setActiveScreen("bookings")}    className="erp-btn-secondary">Book a resource</button>
-        <button onClick={() => setActiveScreen("maintenance")} className="erp-btn-secondary">Raise maintenance ticket</button>
+        <button onClick={() => setActiveScreen("bookings")}    className="erp-btn-secondary w-full sm:w-auto">Book a resource</button>
+        <button onClick={() => setActiveScreen("maintenance")} className="erp-btn-secondary w-full sm:w-auto">Raise maintenance ticket</button>
         {user.role === "Admin" && (
-          <button onClick={() => setActiveScreen("org-setup")} className="erp-btn-secondary">Manage organization</button>
+          <button onClick={() => setActiveScreen("org-setup")} className="erp-btn-secondary w-full sm:w-auto">Manage organization</button>
         )}
       </div>
 

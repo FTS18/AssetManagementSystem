@@ -276,8 +276,8 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
     <div className="space-y-6 animate-slide-up">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-extrabold tracking-tight text-(--fg) mb-1">Asset Allocation & Transfers</h1>
-        <p className="text-base text-(--muted)">Manage handovers, process return check-ins, and approve transfers between personnel.</p>
+        <h1 className="text-xl sm:text-3xl font-extrabold tracking-tight text-(--fg) mb-1">Asset Allocation & Transfers</h1>
+        <p className="text-sm sm:text-base text-(--muted)">Manage handovers, process return check-ins, and approve transfers between personnel.</p>
       </div>
 
       {error && (
@@ -304,7 +304,7 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
                   <BarChart data={allocationsChartData} layout="vertical" margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" horizontal={false} />
                     <XAxis type="number" stroke="var(--muted)" fontSize={10} allowDecimals={false} />
-                    <YAxis dataKey="name" type="category" stroke="var(--muted)" fontSize={10} width={80} />
+                    <YAxis dataKey="name" type="category" stroke="var(--muted)" fontSize={9} width={110} tick={{ fontSize: 9 }} />
                     <Tooltip
                       contentStyle={{ backgroundColor: "var(--surface)", borderColor: "var(--border)", color: "var(--fg)", fontSize: "12px", borderRadius: "8px" }}
                     />
