@@ -17,13 +17,30 @@ export default function Home() {
   const [user, setUser]               = useState<any | null>(null);
   const [activeScreen, setActiveScreen] = useState("dashboard");
   const [loading, setLoading]         = useState(true);
+  const [progress, setProgress]       = useState(0);
+  const [progressComplete, setProgressComplete] = useState(false);
 
   useEffect(() => {
+    // 1. Fetch user session
     fetch("/api/auth/me")
       .then(r => r.json())
       .then(data => { if (data.user) setUser(data.user); })
       .catch(() => {})
       .finally(() => setLoading(false));
+
+    // 2. Animate loading progress bar
+    let start = 0;
+    const interval = setInterval(() => {
+      start += Math.floor(Math.random() * 12) + 6;
+      if (start >= 100) {
+        start = 100;
+        clearInterval(interval);
+        setTimeout(() => setProgressComplete(true), 200);
+      }
+      setProgress(start);
+    }, 45);
+
+    return () => clearInterval(interval);
   }, []);
 
   const handleLoginSuccess = (u: any) => { setUser(u); setActiveScreen("dashboard"); };
@@ -34,11 +51,32 @@ export default function Home() {
     setActiveScreen("dashboard");
   };
 
-  if (loading) return (
-    <div className="min-h-screen flex items-center justify-center bg-(--bg)">
-      <span className="text-sm text-(--muted)" style={{ fontFamily: "var(--font-sans)" }}>
-        Loading…
-      </span>
+  const showLoader = loading || !progressComplete;
+
+  if (showLoader) return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-(--bg) px-6 relative overflow-hidden mesh-bg">
+      <div className="w-full max-w-xs space-y-5 text-center z-10">
+        <div className="space-y-1">
+          <h1 className="text-3xl font-extrabold tracking-tight text-(--fg)">AssetFlow</h1>
+          <p className="text-[10px] uppercase tracking-widest text-(--muted) font-bold">System Ledger Node</p>
+        </div>
+
+        <div className="space-y-2">
+          {/* Progress bar */}
+          <div className="w-full h-1 bg-(--surface-2) border border-(--border-subtle) rounded-full overflow-hidden">
+            <div 
+              className="h-full bg-(--accent) transition-all duration-75 ease-out"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+          <div className="flex justify-between items-center text-[9px] text-(--muted) font-semibold uppercase tracking-wider tech-code">
+            <span>
+              {progress < 35 ? "Checking session..." : progress < 75 ? "Syncing database index..." : "Decrypting tokens..."}
+            </span>
+            <span className="tabular-nums">{progress}%</span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 
