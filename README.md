@@ -303,7 +303,7 @@ npm install
 ### 2. Configure Environment Variables
 
 > **🚀 Want to skip local setup?**
-> If you are part of the team and just want to connect to the live shared demo database, **contact me (Ananay)** for the Turso Database URL and the correct `.env` credentials!
+> If you are part of the team and just want to connect to the live shared demo database, **contact me ([Ananay on GitHub @fts18](https://github.com/fts18))** for the Turso Database URL and the correct `.env` credentials!
 
 Otherwise, to set up your own local environment from scratch, copy the example environment file and fill in your values:
 
@@ -314,8 +314,8 @@ cp .env.example .env
 Open `.env` and set the following:
 
 ```env
-# Database configuration (Local SQLite fallback)
-DATABASE_URL="file:./dev.db"
+# Database configuration (Local SQLite fallback or Turso connection string)
+DATABASE_URL="libsql://your-turso-db-url.turso.io?authToken=your-turso-auth-token-here"
 
 # Turso Database URL (Required if using Turso)
 TURSO_DATABASE_URL="libsql://your-turso-db-url.turso.io"
