@@ -139,8 +139,8 @@ export default function AssetAudit({ user }: AssetAuditProps) {
       {/* Header */}
       <div className="flex justify-between items-start">
         <div>
-          <h1 className="text-xl font-bold tracking-tight mb-1">Asset Audits</h1>
-          <p className="text-xs text-(--muted)">Initiate audit verification cycles, check off asset states, and lock discrepancy registers.</p>
+          <h1 className="text-3xl font-extrabold tracking-tight text-(--fg) mb-1">Asset Audits</h1>
+          <p className="text-base text-(--muted)">Initiate audit verification cycles, check off asset states, and lock discrepancy registers.</p>
         </div>
         {canManage && !showCreateForm && (
           <button onClick={() => setShowCreateForm(true)} className="erp-btn-primary text-xs">

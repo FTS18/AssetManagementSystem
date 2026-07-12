@@ -63,8 +63,8 @@ export default function ReportsAnalytics() {
     <div className="space-y-6 animate-slide-up">
       {/* Header */}
       <div>
-        <h1 className="text-xl font-bold tracking-tight mb-1">Reports & Analytics</h1>
-        <p className="text-xs text-(--muted) font-medium">Core operational insights, utilization trends, and booking heatmap indicators.</p>
+        <h1 className="text-3xl font-extrabold tracking-tight text-(--fg) mb-1">Reports & Analytics</h1>
+        <p className="text-base text-(--muted) font-medium">Core operational insights, utilization trends, and booking heatmap indicators.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

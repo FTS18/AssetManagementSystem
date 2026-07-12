@@ -257,8 +257,8 @@ export default function OrgSetup({ user }: OrgSetupProps) {
     <div className="space-y-6 animate-slide-up">
       {/* Header section */}
       <div>
-        <h1 className="text-lg font-semibold text-(--fg)">Organization Setup</h1>
-        <p className="text-sm text-(--muted) mt-0.5">Manage departments, asset categories, and employee directory details.</p>
+        <h1 className="text-3xl font-extrabold tracking-tight text-(--fg)">Organization Setup</h1>
+        <p className="text-base text-(--muted) mt-1">Manage departments, asset categories, and employee directory details.</p>
       </div>
 
       {/* Tabs */}

@@ -65,8 +65,8 @@ export default function ActivityLogs() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-lg font-semibold" style={{ color: "var(--fg)" }}>Activity log</h1>
-        <p className="text-sm mt-0.5" style={{ color: "var(--muted)" }}>
+        <h1 className="text-3xl font-extrabold tracking-tight text-(--fg)">Activity log</h1>
+        <p className="text-base text-(--muted) mt-1">
           Append-only audit trail of every action in the system.
         </p>
       </div>

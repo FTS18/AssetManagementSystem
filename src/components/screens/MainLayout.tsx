@@ -90,10 +90,10 @@ export default function MainLayout({
         <img
           src="/assetflow_logo_transparent_white.png"
           alt="AssetFlow Logo"
-          className="h-10 w-10 rounded-(--radius-md) bg-white/5 p-1 object-contain shrink-0"
+          className="h-14 w-14 rounded-(--radius-md) bg-white/5 p-1 object-contain shrink-0"
         />
         <span
-          className="font-semibold text-sm tracking-tight"
+          className="font-bold text-3xl tracking-tight"
           style={{ color: "var(--sidebar-fg)" }}
         >
           AssetFlow
@@ -222,9 +222,9 @@ export default function MainLayout({
             <img
               src="/assetflow_logo_transparent_white.png"
               alt="AssetFlow Logo"
-              className="h-8 w-8 rounded-(--radius-sm) bg-white/5 p-1 object-contain shrink-0"
+              className="h-11 w-11 rounded-(--radius-md) bg-white/5 p-1 object-contain shrink-0"
             />
-            <span className="text-sm font-semibold tracking-tight" style={{ color: "var(--sidebar-fg)" }}>AssetFlow</span>
+            <span className="text-2xl font-bold tracking-tight" style={{ color: "var(--sidebar-fg)" }}>AssetFlow</span>
           </div>
         </header>
 

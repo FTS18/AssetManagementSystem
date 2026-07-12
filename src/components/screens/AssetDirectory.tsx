@@ -194,8 +194,8 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
       {/* Header */}
       <div className="flex justify-between items-start">
         <div>
-          <h1 className="text-xl font-bold tracking-tight mb-1">Asset Directory</h1>
-          <p className="text-xs text-(--muted)">Register, search, and audit corporate physical inventory and active lifecycles.</p>
+          <h1 className="text-3xl font-extrabold tracking-tight text-(--fg) mb-1">Asset Directory</h1>
+          <p className="text-base text-(--muted)">Register, search, and audit corporate physical inventory and active lifecycles.</p>
         </div>
         <div className="flex gap-2">
           <button onClick={() => setShowScanSim(true)} className="erp-btn-secondary text-xs">

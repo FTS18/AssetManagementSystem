@@ -166,8 +166,8 @@ export default function ResourceBooking({ user }: ResourceBookingProps) {
     <div className="space-y-6 animate-slide-up">
       {/* Header */}
       <div>
-        <h1 className="text-xl font-bold tracking-tight mb-1">Resource Booking Scheduler</h1>
-        <p className="text-xs text-(--muted)">Reserve shared equipment, vehicles, or meeting conference rooms without schedule collisions.</p>
+        <h1 className="text-3xl font-extrabold tracking-tight text-(--fg) mb-1">Resource Booking Scheduler</h1>
+        <p className="text-base text-(--muted)">Reserve shared equipment, vehicles, or meeting conference rooms without schedule collisions.</p>
       </div>
 
       {error && (

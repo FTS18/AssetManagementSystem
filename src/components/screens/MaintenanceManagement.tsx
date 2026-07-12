@@ -208,8 +208,8 @@ export default function MaintenanceManagement({ user }: MaintenanceManagementPro
       {/* Header */}
       <div className="flex justify-between items-start">
         <div>
-          <h1 className="text-xl font-bold tracking-tight mb-1">Maintenance Management</h1>
-          <p className="text-xs text-(--muted)">Route asset repairs, track technician workflows, and review resolution reports.</p>
+          <h1 className="text-3xl font-extrabold tracking-tight text-(--fg) mb-1">Maintenance Management</h1>
+          <p className="text-base text-(--muted)">Route asset repairs, track technician workflows, and review resolution reports.</p>
         </div>
         {!showForm && (
           <button onClick={() => setShowForm(true)} className="erp-btn-primary text-xs">

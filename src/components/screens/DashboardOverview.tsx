@@ -102,8 +102,8 @@ export default function DashboardOverview({ user, setActiveScreen }: DashboardOv
     >
       {/* Heading */}
       <div>
-        <h1 className="text-lg font-semibold" style={{ color: "var(--fg)" }}>Overview</h1>
-        <p className="text-sm mt-0.5" style={{ color: "var(--muted)" }}>Real-time asset counts and recent activity.</p>
+        <h1 className="text-3xl font-extrabold tracking-tight text-(--fg)">Overview</h1>
+        <p className="text-base text-(--muted) mt-1">Real-time asset counts and recent activity.</p>
       </div>
 
       {/* Stats strip */}

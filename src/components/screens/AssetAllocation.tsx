@@ -211,8 +211,8 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
     <div className="space-y-6 animate-slide-up">
       {/* Header */}
       <div>
-        <h1 className="text-xl font-bold tracking-tight mb-1">Asset Allocation & Transfers</h1>
-        <p className="text-xs text-(--muted)">Manage handovers, process return check-ins, and approve transfers between personnel.</p>
+        <h1 className="text-3xl font-extrabold tracking-tight text-(--fg) mb-1">Asset Allocation & Transfers</h1>
+        <p className="text-base text-(--muted)">Manage handovers, process return check-ins, and approve transfers between personnel.</p>
       </div>
 
       {error && (
