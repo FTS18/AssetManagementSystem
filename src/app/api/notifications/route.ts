@@ -61,6 +61,46 @@ export async function GET() {
       }
     }
 
+    // Auto-generate alerts for overdue return handovers
+    const overdueAllocations = await db.allocation.findMany({
+      where: {
+        employeeId: user.id,
+        status: "Active",
+        expectedReturnDate: {
+          lt: now,
+        },
+      },
+      include: {
+        asset: { select: { name: true, tag: true } },
+      },
+    });
+
+    for (const alloc of overdueAllocations) {
+      const title = `Overdue Return Alert`;
+      const detailsPrefix = `Your handover for ${alloc.asset.name} (${alloc.asset.tag})`;
+      
+      const existing = await db.notification.findFirst({
+        where: {
+          employeeId: user.id,
+          title,
+          details: { contains: detailsPrefix },
+        },
+      });
+
+      if (!existing && alloc.expectedReturnDate) {
+        const daysOverdue = Math.round((now.getTime() - new Date(alloc.expectedReturnDate).getTime()) / (1000 * 60 * 60 * 24));
+        await db.notification.create({
+          data: {
+            employeeId: user.id,
+            title,
+            details: `${detailsPrefix} is overdue by ${daysOverdue} days. Please return the asset or request a transfer.`,
+            type: "Alert",
+            isRead: false,
+          },
+        });
+      }
+    }
+
     const notifications = await db.notification.findMany({
       where: { employeeId: user.id },
       orderBy: { createdDate: "desc" },
