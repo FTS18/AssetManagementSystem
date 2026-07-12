@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { CustomSelect } from "@/components/ui/CustomSelect";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
 
 interface MaintenanceManagementProps {
   user: any;
@@ -121,10 +122,10 @@ export default function MaintenanceManagement({ user }: MaintenanceManagementPro
   const renderKanbanColumn = (columnTitle: string, statusKeys: string[]) => {
     const colRequests = requests.filter((r) => statusKeys.includes(r.status));
     return (
-      <div className="flex-1 min-w-[260px] bg-(--surface) border border-(--border) flex flex-col h-[550px] rounded-(--radius-md) overflow-hidden">
+      <div className="flex-1 min-w-[260px] bg-(--surface) border border-(--border) flex flex-col h-[550px] rounded-md overflow-hidden">
         <div className="p-3 border-b border-(--border) bg-(--background) flex justify-between items-center">
           <span className="text-xs font-semibold text-(--muted)">{columnTitle}</span>
-          <span className="tech-code text-[10px] px-2 py-0.5 border border-(--border) rounded-(--radius-sm)">{colRequests.length}</span>
+          <span className="tech-code text-[10px] px-2 py-0.5 border border-(--border) rounded-sm">{colRequests.length}</span>
         </div>
         <div className="p-3 flex-1 overflow-y-auto space-y-3">
           {colRequests.length === 0 ? (
@@ -204,6 +205,41 @@ export default function MaintenanceManagement({ user }: MaintenanceManagementPro
     );
   };
 
+  // Maintenance stats computation
+  const priorityCounts = requests.reduce((acc: any, cur: any) => {
+    acc[cur.priority] = (acc[cur.priority] || 0) + 1;
+    return acc;
+  }, {});
+  const priorityChartData = ["Low", "Medium", "High", "Critical"].map((p) => ({
+    name: p,
+    count: priorityCounts[p] || 0,
+  }));
+
+  const statusCounts = requests.reduce((acc: any, cur: any) => {
+    acc[cur.status] = (acc[cur.status] || 0) + 1;
+    return acc;
+  }, {});
+  const statusChartData = Object.keys(statusCounts).map((k) => ({
+    name: k,
+    value: statusCounts[k],
+  }));
+
+  const PRIORITY_COLORS: Record<string, string> = {
+    Low: "var(--success-text)",
+    Medium: "var(--accent)",
+    High: "var(--warning-text)",
+    Critical: "var(--danger-text)",
+  };
+
+  const STATUS_COLORS: Record<string, string> = {
+    Pending: "var(--muted)",
+    Approved: "var(--accent)",
+    Assigned: "var(--accent)",
+    InProgress: "var(--warning-text)",
+    Resolved: "var(--success-text)",
+    Rejected: "var(--danger-text)",
+  };
+
   return (
     <div className="space-y-6 animate-slide-up">
       {/* Header */}
@@ -227,6 +263,67 @@ export default function MaintenanceManagement({ user }: MaintenanceManagementPro
       {success && (
         <div className="p-3 text-xs font-medium border border-emerald-950/20 bg-emerald-950/10 text-(--success-text)">
           {success}
+        </div>
+      )}
+
+      {/* Visual Analytics Strip */}
+      {requests.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="erp-card flex flex-col justify-between">
+            <h3 className="text-xs font-bold text-(--muted) uppercase tracking-wider mb-2">Tickets by Priority</h3>
+            <div className="h-44 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={priorityChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                  <XAxis dataKey="name" stroke="var(--muted)" fontSize={10} />
+                  <YAxis stroke="var(--muted)" fontSize={10} allowDecimals={false} />
+                  <Tooltip
+                    contentStyle={{ backgroundColor: "var(--surface)", borderColor: "var(--border)", color: "var(--fg)", fontSize: "12px", borderRadius: "8px" }}
+                    cursor={{ fill: "var(--surface-2)" }}
+                  />
+                  <Bar dataKey="count" fill="var(--accent)" radius={[4, 4, 0, 0]} name="Tickets Count">
+                    {priorityChartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={PRIORITY_COLORS[entry.name] || "var(--accent)"} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          <div className="erp-card flex flex-col justify-between">
+            <h3 className="text-xs font-bold text-(--muted) uppercase tracking-wider mb-2">Work Order Status</h3>
+            <div className="h-44 w-full flex items-center justify-center">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={statusChartData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={50}
+                    outerRadius={70}
+                    paddingAngle={2}
+                    dataKey="value"
+                  >
+                    {statusChartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={STATUS_COLORS[entry.name] || "var(--muted)"} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{ backgroundColor: "var(--surface)", borderColor: "var(--border)", color: "var(--fg)", fontSize: "12px", borderRadius: "8px" }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="flex flex-col space-y-1 ml-4 text-xs font-semibold">
+                {statusChartData.map((item) => (
+                  <div key={item.name} className="flex items-center space-x-2">
+                    <span className="h-2 w-2 rounded-full" style={{ backgroundColor: STATUS_COLORS[item.name] || "var(--muted)" }} />
+                    <span style={{ color: "var(--fg)" }}>{item.name} ({item.value})</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       )}
 

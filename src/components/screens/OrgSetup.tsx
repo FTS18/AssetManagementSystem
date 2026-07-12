@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { UserPlus, UserCog, UserX, Check, Search, Filter } from "lucide-react";
 import { CustomSelect } from "@/components/ui/CustomSelect";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
 
 interface OrgSetupProps {
   user: any;
@@ -255,6 +256,32 @@ export default function OrgSetup({ user }: OrgSetupProps) {
     );
   }
 
+  const deptHeadcounts = departments.reduce((acc: any, dept: any) => {
+    const count = employees.filter((e) => e.departmentId === dept.id).length;
+    acc[dept.name] = count;
+    return acc;
+  }, {});
+  const deptHeadcountsChartData = Object.keys(deptHeadcounts).map((k) => ({
+    name: k,
+    count: deptHeadcounts[k],
+  })).filter(x => x.count > 0);
+
+  const roleCounts = employees.reduce((acc: any, cur: any) => {
+    acc[cur.role] = (acc[cur.role] || 0) + 1;
+    return acc;
+  }, {});
+  const roleChartData = Object.keys(roleCounts).map((k) => ({
+    name: k,
+    value: roleCounts[k],
+  }));
+
+  const ROLE_COLORS: Record<string, string> = {
+    Admin: "var(--danger-text)",
+    AssetManager: "var(--accent)",
+    DeptHead: "var(--warning-text)",
+    Employee: "var(--muted)",
+  };
+
   return (
     <div className="space-y-6 animate-slide-up">
       {/* Header section */}
@@ -285,13 +312,74 @@ export default function OrgSetup({ user }: OrgSetupProps) {
       </div>
 
       {error && (
-        <div className="px-3.5 py-2.5 rounded-(--radius-sm) text-sm" style={{ background: "var(--danger-bg)", color: "var(--danger)" }}>
+        <div className="px-3.5 py-2.5 rounded-sm text-sm" style={{ background: "var(--danger-bg)", color: "var(--danger)" }}>
           {error}
         </div>
       )}
       {success && (
-        <div className="px-3.5 py-2.5 rounded-(--radius-sm) text-sm font-semibold" style={{ background: "var(--success-bg)", color: "var(--success)" }}>
+        <div className="px-3.5 py-2.5 rounded-sm text-sm font-semibold" style={{ background: "var(--success-bg)", color: "var(--success)" }}>
           {success}
+        </div>
+      )}
+
+      {/* Visual Analytics Strip */}
+      {employees.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="erp-card flex flex-col justify-between">
+            <h3 className="text-xs font-bold text-(--muted) uppercase tracking-wider mb-2">Employee Headcount by Department</h3>
+            <div className="h-44 w-full">
+              {deptHeadcountsChartData.length === 0 ? (
+                <p className="text-xs text-(--muted) text-center py-12">No active department headcount.</p>
+              ) : (
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={deptHeadcountsChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                    <XAxis dataKey="name" stroke="var(--muted)" fontSize={10} />
+                    <YAxis stroke="var(--muted)" fontSize={10} allowDecimals={false} />
+                    <Tooltip
+                      contentStyle={{ backgroundColor: "var(--surface)", borderColor: "var(--border)", color: "var(--fg)", fontSize: "12px", borderRadius: "8px" }}
+                      cursor={{ fill: "var(--surface-2)" }}
+                    />
+                    <Bar dataKey="count" fill="var(--accent)" radius={[4, 4, 0, 0]} name="Headcount" />
+                  </BarChart>
+                </ResponsiveContainer>
+              )}
+            </div>
+          </div>
+
+          <div className="erp-card flex flex-col justify-between">
+            <h3 className="text-xs font-bold text-(--muted) uppercase tracking-wider mb-2">Role Distribution</h3>
+            <div className="h-44 w-full flex items-center justify-center">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={roleChartData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={50}
+                    outerRadius={70}
+                    paddingAngle={2}
+                    dataKey="value"
+                  >
+                    {roleChartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={ROLE_COLORS[entry.name] || "var(--muted)"} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{ backgroundColor: "var(--surface)", borderColor: "var(--border)", color: "var(--fg)", fontSize: "12px", borderRadius: "8px" }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="flex flex-col space-y-1 ml-4 text-xs font-semibold">
+                {roleChartData.map((item) => (
+                  <div key={item.name} className="flex items-center space-x-2">
+                    <span className="h-2 w-2 rounded-full" style={{ backgroundColor: ROLE_COLORS[item.name] || "var(--muted)" }} />
+                    <span style={{ color: "var(--fg)" }}>{item.name} ({item.value})</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
@@ -300,7 +388,7 @@ export default function OrgSetup({ user }: OrgSetupProps) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-4">
             <h2 className="text-sm font-semibold text-(--fg)">Registered departments</h2>
-            <div className="overflow-x-auto border border-(--border) bg-(--surface) rounded-(--radius-md) overflow-hidden">
+            <div className="overflow-x-auto border border-(--border) bg-(--surface) rounded-md overflow-hidden">
               <table className="erp-table min-w-[650px] w-full">
                 <thead>
                   <tr>
@@ -407,7 +495,7 @@ export default function OrgSetup({ user }: OrgSetupProps) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-4">
             <h2 className="text-sm font-semibold text-(--fg)">Asset categories</h2>
-            <div className="overflow-x-auto border border-(--border) bg-(--surface) rounded-(--radius-md) overflow-hidden">
+            <div className="overflow-x-auto border border-(--border) bg-(--surface) rounded-md overflow-hidden">
               <table className="erp-table min-w-[550px] w-full">
                 <thead>
                   <tr>
@@ -458,7 +546,7 @@ export default function OrgSetup({ user }: OrgSetupProps) {
                 </div>
 
                 {/* Custom fields designer block */}
-                <div className="border border-(--border) p-3 rounded-(--radius-sm) space-y-2 bg-(--background)">
+                <div className="border border-(--border) p-3 rounded-sm space-y-2 bg-(--background)">
                   <span className="text-[10px] font-bold text-(--muted) uppercase tracking-wider">Custom Fields Designer</span>
                   
                   {customFieldTemplate.length > 0 && (
@@ -523,7 +611,7 @@ export default function OrgSetup({ user }: OrgSetupProps) {
       {activeTab === "employees" && (
         <div className="space-y-4">
           <h2 className="text-sm font-semibold text-(--fg)">Employee directory</h2>
-          <div className="overflow-x-auto border border-(--border) bg-(--surface) rounded-(--radius-md) overflow-hidden">
+          <div className="overflow-x-auto border border-(--border) bg-(--surface) rounded-md overflow-hidden">
             <table className="erp-table min-w-[750px] w-full">
               <thead>
                 <tr>
@@ -569,7 +657,7 @@ export default function OrgSetup({ user }: OrgSetupProps) {
 
       {/* Department Edit Dialog Popup */}
       {editingDept && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[400] flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-400 flex items-center justify-center p-4">
           <div className="erp-card w-full max-w-md space-y-4">
             <div className="flex justify-between items-center border-b border-(--border) pb-2">
               <h3 className="text-sm font-semibold text-(--fg)">Edit Department</h3>
@@ -650,7 +738,7 @@ export default function OrgSetup({ user }: OrgSetupProps) {
 
       {/* Employee Edit Dialog Popup */}
       {editingEmp && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[400] flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-400 flex items-center justify-center p-4">
           <div className="erp-card w-full max-w-md space-y-4">
             <div className="flex justify-between items-center border-b border-(--border) pb-2">
               <h3 className="text-sm font-semibold text-(--fg)">Edit Employee Directory Record</h3>

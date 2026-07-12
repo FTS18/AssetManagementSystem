@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Check } from "lucide-react";
 import { CustomSelect } from "@/components/ui/CustomSelect";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
 
 interface ResourceBookingProps {
   user: any;
@@ -162,6 +163,33 @@ export default function ResourceBooking({ user }: ResourceBookingProps) {
     }
   };
 
+  const statusCounts = bookings.reduce((acc: any, cur: any) => {
+    acc[cur.status] = (acc[cur.status] || 0) + 1;
+    return acc;
+  }, {});
+  const statusChartData = ["Upcoming", "Ongoing", "Completed", "Cancelled"].map((s) => ({
+    name: s,
+    value: statusCounts[s] || 0,
+  })).filter(x => x.value > 0);
+
+  const dayOfWeekCounts = bookings.reduce((acc: any, cur: any) => {
+    const day = new Date(cur.startDate).toLocaleDateString("en-US", { weekday: "short" });
+    acc[day] = (acc[day] || 0) + 1;
+    return acc;
+  }, {});
+  const daysOrder = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const dayChartData = daysOrder.map((day) => ({
+    name: day,
+    count: dayOfWeekCounts[day] || 0,
+  }));
+
+  const STATUS_COLORS: Record<string, string> = {
+    Upcoming: "var(--accent)",
+    Ongoing: "var(--success-text)",
+    Completed: "var(--muted)",
+    Cancelled: "var(--danger-text)",
+  };
+
   const selectedAsset = bookableAssets.find((a) => String(a.id) === selectedAssetId);
 
   return (
@@ -202,11 +230,68 @@ export default function ResourceBooking({ user }: ResourceBookingProps) {
         )}
       </div>
 
+      {/* Visual Analytics Strip */}
+      {selectedAssetId && bookings.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="erp-card flex flex-col justify-between">
+            <h3 className="text-xs font-bold text-(--muted) uppercase tracking-wider mb-2">Booking Status Breakdown</h3>
+            <div className="h-44 w-full flex items-center justify-center">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={statusChartData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={50}
+                    outerRadius={70}
+                    paddingAngle={2}
+                    dataKey="value"
+                  >
+                    {statusChartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={STATUS_COLORS[entry.name] || "var(--muted)"} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{ backgroundColor: "var(--surface)", borderColor: "var(--border)", color: "var(--fg)", fontSize: "12px", borderRadius: "8px" }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="flex flex-col space-y-1 ml-4 text-xs font-semibold">
+                {statusChartData.map((item) => (
+                  <div key={item.name} className="flex items-center space-x-2">
+                    <span className="h-2 w-2 rounded-full" style={{ backgroundColor: STATUS_COLORS[item.name] || "var(--muted)" }} />
+                    <span style={{ color: "var(--fg)" }}>{item.name} ({item.value})</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="erp-card flex flex-col justify-between">
+            <h3 className="text-xs font-bold text-(--muted) uppercase tracking-wider mb-2">Booking Count by Day of Week</h3>
+            <div className="h-44 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={dayChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                  <XAxis dataKey="name" stroke="var(--muted)" fontSize={10} />
+                  <YAxis stroke="var(--muted)" fontSize={10} allowDecimals={false} />
+                  <Tooltip
+                    contentStyle={{ backgroundColor: "var(--surface)", borderColor: "var(--border)", color: "var(--fg)", fontSize: "12px", borderRadius: "8px" }}
+                    cursor={{ fill: "var(--surface-2)" }}
+                  />
+                  <Bar dataKey="count" fill="var(--accent)" radius={[4, 4, 0, 0]} name="Bookings Count" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Bookings Timeline Column */}
         <div className="lg:col-span-2 space-y-4">
           <h2 className="text-xs font-semibold text-(--muted)">Schedule Calendar</h2>
-          <div className="overflow-x-auto border border-(--border) bg-(--surface) rounded-(--radius-md) overflow-hidden">
+          <div className="overflow-x-auto border border-(--border) bg-(--surface) rounded-md overflow-hidden">
             <table className="erp-table min-w-[650px] w-full">
               <thead>
                 <tr>
@@ -336,8 +421,8 @@ export default function ResourceBooking({ user }: ResourceBookingProps) {
 
       {/* Reschedule Modal popup */}
       {reschedulingBooking && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[500] flex items-center justify-center p-4">
-          <div className="erp-card w-full max-w-sm space-y-4 bg-(--surface) z-[500]">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-500 flex items-center justify-center p-4">
+          <div className="erp-card w-full max-w-sm space-y-4 bg-(--surface) z-500">
             <div className="flex justify-between items-center border-b border-(--border) pb-2">
               <h3 className="text-sm font-semibold text-(--fg)">Reschedule Booking</h3>
               <button onClick={() => setReschedulingBooking(null)} className="text-xs text-(--muted) hover:text-(--foreground)">

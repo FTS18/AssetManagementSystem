@@ -1,6 +1,15 @@
-"use client";
-
 import { useState, useEffect } from "react";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, LineChart, Line } from "recharts";
+
+const COLORS: Record<string, string> = {
+  Available: "var(--success-text)",
+  Allocated: "var(--accent)",
+  UnderMaintenance: "var(--warning-text)",
+  Reserved: "var(--warning-text)",
+  Retired: "var(--danger-text)",
+  Lost: "var(--danger-text)",
+  Disposed: "var(--danger-text)",
+};
 
 interface DashboardOverviewProps {
   user: any;
@@ -20,6 +29,9 @@ export default function DashboardOverview({ user, setActiveScreen }: DashboardOv
   });
   const [overdueItems, setOverdueItems] = useState<any[]>([]);
   const [recentLogs, setRecentLogs] = useState<any[]>([]);
+  const [statusData, setStatusData] = useState<any[]>([]);
+  const [bookingTrend, setBookingTrend] = useState<any[]>([]);
+  const [maintenanceTrend, setMaintenanceTrend] = useState<any[]>([]);
   const [loading, setLoading]       = useState(true);
   const [visible, setVisible]       = useState(false);
 
@@ -34,6 +46,10 @@ export default function DashboardOverview({ user, setActiveScreen }: DashboardOv
 
         const sc = rr.statusCounts ?? [];
         const count = (status: string) => Number(sc.find((s: any) => s.status === status)?._count?.id ?? sc.find((s: any) => s.status === status)?.count ?? 0);
+        
+        setStatusData(sc.map((s: any) => ({ name: s.status, value: Number(s._count?.id ?? s.count ?? 0) })).filter((s:any) => s.value > 0));
+        setBookingTrend(rr.bookingTrend ?? []);
+        setMaintenanceTrend(rr.maintenanceTrend ?? []);
 
         const now = new Date();
         const overdue: any[] = [];
@@ -98,10 +114,10 @@ export default function DashboardOverview({ user, setActiveScreen }: DashboardOv
   const isManager = user.role === "Admin" || user.role === "AssetManager";
 
   const statItems = isManager ? [
-    { label: "Available",   value: stats.available,        color: "var(--success)" },
-    { label: "Allocated",   value: stats.allocated,        color: "var(--fg)" },
-    { label: "Active Bookings", value: stats.bookings,     color: "var(--fg)" },
-    { label: "Maint. Today", value: stats.maintenanceToday, color: "var(--warning)" },
+    { label: "Available", value: stats.available, color: "var(--success-text)" },
+    { label: "Allocated", value: stats.allocated, color: "var(--fg)" },
+    { label: "Maintenance", value: stats.maintenance, color: "var(--warning-text)", trend: maintenanceTrend },
+    { label: "Active bookings", value: stats.bookings, color: "var(--accent)", trend: bookingTrend },
     { label: "Pending Transfers", value: stats.pendingTransfers, color: "var(--warning)" },
     { label: "Upcoming Returns", value: stats.upcomingReturns, color: "var(--success)" },
     { label: "Overdue",     value: stats.overdue,          color: stats.overdue > 0 ? "var(--danger)" : "var(--fg)" },
@@ -127,8 +143,8 @@ export default function DashboardOverview({ user, setActiveScreen }: DashboardOv
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-px" style={{ gridTemplateColumns: isManager ? 'repeat(7, 1fr)' : 'repeat(4, 1fr)', background: "var(--border)", border: "1px solid var(--border)", borderRadius: "var(--radius-md)", overflow: "hidden" }}>
           {[...Array(isManager ? 7 : 4)].map((_, i) => (
             <div key={i} className="px-5 py-5 animate-pulse" style={{ background: "var(--surface)" }}>
-              <div className="h-3 w-16 rounded-(--radius-sm) mb-3" style={{ background: "var(--surface-2)" }} />
-              <div className="h-8 w-10 rounded-(--radius-sm)" style={{ background: "var(--surface-2)" }} />
+              <div className="h-3 w-16 rounded-sm mb-3" style={{ background: "var(--surface-2)" }} />
+              <div className="h-8 w-10 rounded-sm" style={{ background: "var(--surface-2)" }} />
             </div>
           ))}
         </div>
@@ -149,12 +165,25 @@ export default function DashboardOverview({ user, setActiveScreen }: DashboardOv
               }}
             >
               <p className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">{s.label}</p>
-              <p
-                className="mt-2 font-semibold tabular-nums text-2xl"
-                style={{ lineHeight: 1, color: s.color }}
-              >
-                {s.value}
-              </p>
+              
+              <div className="flex items-end justify-between mt-2">
+                <p
+                  className="font-semibold tabular-nums text-2xl"
+                  style={{ lineHeight: 1, color: s.color }}
+                >
+                  {s.value}
+                </p>
+                {/* Mini Sparkline */}
+                {s.trend && s.trend.length > 0 && (
+                  <div className="h-6 w-16 opacity-70">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={s.trend}>
+                        <Line type="monotone" dataKey="count" stroke={s.color} strokeWidth={2} dot={false} isAnimationActive={true} />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                )}
+              </div>
             </div>
           ))}
         </div>
@@ -194,7 +223,7 @@ export default function DashboardOverview({ user, setActiveScreen }: DashboardOv
             {loading ? (
               <div className="space-y-3">
                 {[...Array(3)].map((_, i) => (
-                  <div key={i} className="h-10 rounded-(--radius-sm) animate-pulse" style={{ background: "var(--surface-2)" }} />
+                  <div key={i} className="h-10 rounded-sm animate-pulse" style={{ background: "var(--surface-2)" }} />
                 ))}
               </div>
             ) : (
@@ -266,35 +295,28 @@ export default function DashboardOverview({ user, setActiveScreen }: DashboardOv
               {loading ? (
                 <div className="space-y-3">
                   {[...Array(4)].map((_, i) => (
-                    <div key={i} className="h-10 rounded-(--radius-sm) animate-pulse" style={{ background: "var(--surface-2)" }} />
+                    <div key={i} className="h-10 rounded-sm animate-pulse" style={{ background: "var(--surface-2)" }} />
                   ))}
                 </div>
               ) : (
-                <div className="space-y-0">
+                <div className="relative border-l border-(--border) ml-3 mt-4 space-y-6 pb-2">
                   {recentLogs.length === 0 ? (
-                    <p className="text-sm" style={{ color: "var(--muted)" }}>No recent activity.</p>
+                    <p className="text-sm pl-4" style={{ color: "var(--muted)" }}>No recent activity.</p>
                   ) : recentLogs.map((log, i) => (
-                    <div
-                      key={log.id}
-                      className="py-2.5 border-b last:border-0"
-                      style={{
-                        borderColor: "var(--border-subtle)",
-                        opacity: visible ? 1 : 0,
-                        transform: visible ? "translateY(0)" : "translateY(6px)",
-                        transition: `opacity 260ms ease ${320 + i * 35}ms, transform 260ms ease ${320 + i * 35}ms`,
-                      }}
-                    >
-                      <div className="flex justify-between gap-3 items-baseline">
-                        <p className="text-sm font-medium leading-snug" style={{ color: "var(--fg)" }}>
-                          {humanizeAction(log.action)}
-                        </p>
-                        <span className="text-xs shrink-0 tabular-nums" style={{ color: "var(--muted)" }}>
-                          {timeAgo(log.timestamp)}
-                        </span>
-                      </div>
-                      {log.details && (
-                        <p className="text-xs mt-0.5 truncate" style={{ color: "var(--muted)" }}>{log.details}</p>
-                      )}
+                    <div key={i} className="relative pl-6">
+                      {/* Timeline Dot */}
+                      <div className="absolute left-[-5px] top-1.5 h-2.5 w-2.5 rounded-full" style={{ background: "var(--accent)", boxShadow: "0 0 0 4px var(--surface)" }}></div>
+                      
+                      <p className="text-sm" style={{ color: "var(--fg)" }}>
+                        <span className="font-semibold text-(--accent)">{log.employeeName || log.action}</span>{" "}
+                        <span style={{ color: "var(--muted)" }}>{log.employeeName ? log.action.toLowerCase() : ""}</span>{" "}
+                        {log.details && (
+                          <span className="font-medium" style={{ color: "var(--fg)" }}>{log.details}</span>
+                        )}
+                      </p>
+                      <p className="text-xs mt-1" style={{ color: "var(--muted)" }}>
+                        {new Date(log.timestamp).toLocaleDateString()} at {new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </p>
                     </div>
                   ))}
                 </div>

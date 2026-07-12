@@ -29,17 +29,17 @@ export function QRCodeModal({ asset, onClose }: QRCodeModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-      <div className="erp-card bg-[var(--surface)] w-full max-w-sm flex flex-col items-center gap-6 p-8 relative animate-in zoom-in-95 duration-200">
+      <div className="erp-card bg-(--surface) w-full max-w-sm flex flex-col items-center gap-6 p-8 relative animate-in zoom-in-95 duration-200">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-1 text-[var(--muted)] hover:text-[var(--fg)] transition-colors"
+          className="absolute top-4 right-4 p-1 text-(--muted) hover:text-(--fg) transition-colors"
         >
           <X size={18} />
         </button>
 
         <div className="text-center">
-          <h2 className="text-lg font-bold text-[var(--fg)]">Asset Tag QR Code</h2>
-          <p className="text-xs text-[var(--muted)] mt-1">Scan this code to load asset details</p>
+          <h2 className="text-lg font-bold text-(--fg)">Asset Tag QR Code</h2>
+          <p className="text-xs text-(--muted) mt-1">Scan this code to load asset details</p>
         </div>
 
         {/* This div is the one that gets printed */}

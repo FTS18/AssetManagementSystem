@@ -1,7 +1,9 @@
 "use client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { useState, useEffect } from "react";
-import { Search, Filter, QrCode, FileText, CheckCircle2 } from "lucide-react";
+import { QrCode } from "lucide-react";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
 import { exportToCSV } from "@/lib/export";
 import { QRCodeModal } from "@/components/ui/QRCodeModal";
 import { CustomSelect } from "@/components/ui/CustomSelect";
@@ -217,6 +219,34 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
 
   const canRegister = user.role === "AssetManager" || user.role === "Admin";
 
+  const statusCounts = assets.reduce((acc: any, cur: any) => {
+    acc[cur.status] = (acc[cur.status] || 0) + 1;
+    return acc;
+  }, {});
+  const statusChartData = Object.keys(statusCounts).map((k) => ({
+    name: k,
+    value: statusCounts[k],
+  }));
+
+  const conditionCounts = assets.reduce((acc: any, cur: any) => {
+    acc[cur.condition] = (acc[cur.condition] || 0) + 1;
+    return acc;
+  }, {});
+  const conditionChartData = ["New", "Good", "Fair", "Poor"].map((cond) => ({
+    name: cond,
+    count: conditionCounts[cond] || 0,
+  }));
+
+  const STATUS_COLORS: Record<string, string> = {
+    Available: "var(--success-text)",
+    Allocated: "var(--accent)",
+    UnderMaintenance: "var(--warning-text)",
+    Reserved: "var(--warning-text)",
+    Retired: "var(--danger-text)",
+    Lost: "var(--danger-text)",
+    Disposed: "var(--danger-text)",
+  };
+
   return (
     <div className="space-y-6 animate-slide-up">
       {/* Header */}
@@ -248,6 +278,63 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
       {success && (
         <div className="p-3 text-xs font-medium border border-emerald-950/20 bg-emerald-950/10 text-(--success-text)">
           {success}
+        </div>
+      )}
+
+      {/* Visual Analytics Strip */}
+      {assets.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="erp-card flex flex-col justify-between">
+            <h3 className="text-xs font-bold text-(--muted) uppercase tracking-wider mb-2">Asset Status Distribution</h3>
+            <div className="h-44 w-full flex items-center justify-center">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={statusChartData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={50}
+                    outerRadius={70}
+                    paddingAngle={2}
+                    dataKey="value"
+                  >
+                    {statusChartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={STATUS_COLORS[entry.name] || "var(--muted)"} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{ backgroundColor: "var(--surface)", borderColor: "var(--border)", color: "var(--fg)", fontSize: "12px", borderRadius: "8px" }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="flex flex-col space-y-1 ml-4 text-xs font-semibold">
+                {statusChartData.map((item) => (
+                  <div key={item.name} className="flex items-center space-x-2">
+                    <span className="h-2 w-2 rounded-full" style={{ backgroundColor: STATUS_COLORS[item.name] || "var(--muted)" }} />
+                    <span style={{ color: "var(--fg)" }}>{item.name} ({item.value})</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="erp-card flex flex-col justify-between">
+            <h3 className="text-xs font-bold text-(--muted) uppercase tracking-wider mb-2">Inventory Condition Status</h3>
+            <div className="h-44 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={conditionChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                  <XAxis dataKey="name" stroke="var(--muted)" fontSize={10} />
+                  <YAxis stroke="var(--muted)" fontSize={10} allowDecimals={false} />
+                  <Tooltip
+                    contentStyle={{ backgroundColor: "var(--surface)", borderColor: "var(--border)", color: "var(--fg)", fontSize: "12px", borderRadius: "8px" }}
+                    cursor={{ fill: "var(--surface-2)" }}
+                  />
+                  <Bar dataKey="count" fill="var(--accent)" radius={[4, 4, 0, 0]} name="Assets Count" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
         </div>
       )}
 
@@ -425,7 +512,7 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
       </div>
 
       {/* Directory Table */}
-      <div className="overflow-x-auto border border-(--border) bg-(--surface) rounded-(--radius-md) overflow-hidden">
+      <div className="overflow-x-auto border border-(--border) bg-(--surface) rounded-md overflow-hidden">
         <table className="erp-table min-w-[750px] w-full">
           <thead>
             <tr>
@@ -476,7 +563,7 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
 
       {/* Slide-out History Timeline Drawer */}
       {selectedAsset && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[400] flex justify-end">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-400 flex justify-end">
           <div className="w-full max-w-lg bg-(--surface) border-l border-(--border) p-6 overflow-y-auto flex flex-col h-full text-(--foreground)">
             <div className="flex justify-between items-center border-b border-(--border) pb-4 mb-4">
               <div>
@@ -498,11 +585,11 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
 
             {/* Display Photos / Documents if attached */}
             <div className="mb-6 space-y-4">
-              <div className="flex items-center gap-4 bg-(--background) p-3 border border-(--border) rounded-(--radius-sm)">
+              <div className="flex items-center gap-4 bg-(--background) p-3 border border-(--border) rounded-sm">
                 <img
                   src={`https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${selectedAsset.tag}`}
                   alt="Asset QR Code"
-                  className="h-20 w-20 border border-(--border) bg-white p-1 rounded-(--radius-sm) shrink-0"
+                  className="h-20 w-20 border border-(--border) bg-white p-1 rounded-sm shrink-0"
                 />
                 <div>
                   <span className="text-[10px] uppercase font-bold text-(--muted) tracking-wider">Asset tag QR Code</span>
@@ -513,7 +600,7 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
 
               {/* Financial Depreciation Module */}
               {selectedAsset.acquisitionCost != null && selectedAsset.acquisitionDate && (
-                <div className="bg-(--surface) p-3 border border-(--border) rounded-(--radius-sm)">
+                <div className="bg-(--surface) p-3 border border-(--border) rounded-sm">
                   <span className="text-[10px] uppercase font-bold text-(--muted) tracking-wider">Financial Valuation</span>
                   <div className="mt-2 grid grid-cols-2 gap-4">
                     <div>
@@ -545,7 +632,7 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
                   <img
                     src={selectedAsset.photoUrl}
                     alt={selectedAsset.name}
-                    className="h-36 w-full object-cover rounded-(--radius-sm) border border-(--border) mt-1.5"
+                    className="h-36 w-full object-cover rounded-sm border border-(--border) mt-1.5"
                   />
                 </div>
               )}
@@ -596,7 +683,7 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
 
       {/* QR Code Scanner Simulation Pop-up Modal */}
       {showScanSim && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[500] flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-500 flex items-center justify-center p-4">
           <div className="erp-card w-full max-w-sm space-y-4">
             <div className="flex justify-between items-center border-b border-(--border) pb-2">
               <h3 className="text-sm font-semibold text-(--fg)">QR Code Scanner Simulator</h3>

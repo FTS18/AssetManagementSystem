@@ -4,7 +4,8 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 model Employee {
@@ -26,6 +27,7 @@ model Employee {
   transfersTo       TransferRequest[]  @relation("TransferTo")
   approvedTransfers TransferRequest[]  @relation("ApprovedBy")
   maintenance       MaintenanceRequest[]
+  resolvedMaintenance MaintenanceRequest[] @relation("ResolvedBy")
   activityLogs      ActivityLog[]
   notifications     Notification[]
 
@@ -138,6 +140,10 @@ model MaintenanceRequest {
   assignedTechnicianId Int?
   photoUrl             String?
   resolutionNotes      String?
+  cost                 Float?
+  resolvedAt           DateTime?
+  resolvedById         Int?
+  resolvedBy           Employee? @relation("ResolvedBy", fields: [resolvedById], references: [id])
   createdDate          DateTime  @default(now())
 }
 

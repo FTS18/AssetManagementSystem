@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { exportToCSV } from "@/lib/export";
 import { CustomSelect } from "@/components/ui/CustomSelect";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
 
 interface AssetAuditProps {
   user: any;
@@ -148,6 +149,28 @@ export default function AssetAudit({ user }: AssetAuditProps) {
     exportToCSV(`audit_log_${activeCycle.name.replace(/\s+/g, '_')}.csv`, formatted);
   };
 
+  // Audit cycle progress stats
+  const auditItems = activeCycle?.items || [];
+  const totalAuditItems = auditItems.length;
+  const verifiedCount = auditItems.filter((i: any) => i.status === "Verified").length;
+  const missingCount = auditItems.filter((i: any) => i.status === "Missing").length;
+  const flaggedCount = auditItems.filter((i: any) => i.status === "Flagged" || i.status === "Damaged").length;
+  const pendingCount = auditItems.filter((i: any) => i.status === "Pending").length;
+
+  const auditProgressData = [
+    { name: "Verified", value: verifiedCount },
+    { name: "Missing", value: missingCount },
+    { name: "Flagged", value: flaggedCount },
+    { name: "Pending", value: pendingCount },
+  ].filter(x => x.value > 0);
+
+  const AUDIT_COLORS: Record<string, string> = {
+    Verified: "var(--success-text)",
+    Missing: "var(--danger-text)",
+    Flagged: "var(--warning-text)",
+    Pending: "var(--muted)",
+  };
+
   return (
     <div className="space-y-6 animate-slide-up">
       {/* Header */}
@@ -178,6 +201,84 @@ export default function AssetAudit({ user }: AssetAuditProps) {
       {success && (
         <div className="p-3 text-xs font-medium border border-emerald-950/20 bg-emerald-950/10 text-(--success-text)">
           {success}
+        </div>
+      )}
+
+      {/* Visual Analytics Strip */}
+      {activeCycle && auditItems.length > 0 && (
+        <div className="erp-card space-y-4">
+          <div className="flex justify-between items-center border-b border-(--border) pb-2">
+            <h3 className="text-xs font-bold text-(--muted) uppercase tracking-wider">Audit Progress Overview: {activeCycle.name}</h3>
+            <span className="badge badge-success">{totalAuditItems - pendingCount} / {totalAuditItems} items verified</span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+            {/* Progress Bar / Ring */}
+            <div className="flex flex-col justify-center space-y-3">
+              <div>
+                <div className="flex justify-between text-xs font-semibold mb-1">
+                  <span>Overall Reconciliation Rate</span>
+                  <span className="text-(--accent)">{totalAuditItems > 0 ? Math.round(((totalAuditItems - pendingCount) / totalAuditItems) * 100) : 0}%</span>
+                </div>
+                <div className="w-full h-3 bg-(--background) border border-(--border) rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-(--accent) rounded-full transition-all duration-500" 
+                    style={{ width: `${totalAuditItems > 0 ? ((totalAuditItems - pendingCount) / totalAuditItems) * 100 : 0}%` }}
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-4 gap-2 text-center">
+                <div className="p-2 border border-(--border) bg-(--surface-2) rounded-sm">
+                  <p className="text-[10px] font-bold text-(--muted) uppercase">Total</p>
+                  <p className="text-lg font-bold text-(--fg)">{totalAuditItems}</p>
+                </div>
+                <div className="p-2 border border-(--border) bg-emerald-950/10 rounded-sm">
+                  <p className="text-[10px] font-bold text-(--success-text) uppercase">Verified</p>
+                  <p className="text-lg font-bold text-(--success-text)">{verifiedCount}</p>
+                </div>
+                <div className="p-2 border border-(--border) bg-red-950/10 rounded-sm">
+                  <p className="text-[10px] font-bold text-(--danger-text) uppercase">Missing</p>
+                  <p className="text-lg font-bold text-(--danger-text)">{missingCount}</p>
+                </div>
+                <div className="p-2 border border-(--border) bg-amber-950/10 rounded-sm">
+                  <p className="text-[10px] font-bold text-(--warning-text) uppercase">Flagged</p>
+                  <p className="text-lg font-bold text-(--warning-text)">{flaggedCount}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Donut Chart */}
+            <div className="h-44 w-full flex items-center justify-center">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={auditProgressData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={50}
+                    outerRadius={70}
+                    paddingAngle={2}
+                    dataKey="value"
+                  >
+                    {auditProgressData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={AUDIT_COLORS[entry.name] || "var(--muted)"} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{ backgroundColor: "var(--surface)", borderColor: "var(--border)", color: "var(--fg)", fontSize: "12px", borderRadius: "8px" }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="flex flex-col space-y-1 ml-4 text-xs font-semibold">
+                {auditProgressData.map((item) => (
+                  <div key={item.name} className="flex items-center space-x-2">
+                    <span className="h-2 w-2 rounded-full" style={{ backgroundColor: AUDIT_COLORS[item.name] || "var(--muted)" }} />
+                    <span style={{ color: "var(--fg)" }}>{item.name} ({item.value})</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
@@ -317,7 +418,7 @@ export default function AssetAudit({ user }: AssetAuditProps) {
               )}
             </div>
 
-            <div className="overflow-x-auto border border-(--border) bg-(--surface) rounded-(--radius-md) overflow-hidden">
+            <div className="overflow-x-auto border border-(--border) bg-(--surface) rounded-md overflow-hidden">
               <table className="erp-table min-w-[650px] w-full">
                 <thead>
                   <tr>
@@ -352,7 +453,7 @@ export default function AssetAudit({ user }: AssetAuditProps) {
                           <div className="flex gap-1">
                             <button
                               onClick={() => handleCheckItem(item.id, "Verified")}
-                              className="text-[10px] px-2 py-0.5 border border-(--border) hover:bg-(--background) font-medium rounded-(--radius-sm)"
+                              className="text-[10px] px-2 py-0.5 border border-(--border) hover:bg-(--background) font-medium rounded-sm"
                             >
                               Verify
                             </button>

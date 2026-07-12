@@ -62,7 +62,7 @@ export async function GET(request: Request) {
           } else if (user.role === "DeptHead") {
             return (
               alloc.departmentId === user.departmentId ||
-              (alloc.employee && alloc.employee.departmentId === user.departmentId)
+              (alloc.employee && (alloc.employee as any).departmentId === user.departmentId)
             );
           }
           return false;

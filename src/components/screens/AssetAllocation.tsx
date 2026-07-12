@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { CustomSelect } from "@/components/ui/CustomSelect";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
 
 interface AssetAllocationProps {
   user: any;
@@ -230,6 +231,47 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
 
   const canManage = user.role === "AssetManager" || user.role === "Admin" || user.role === "DeptHead";
 
+  // Group active allocations by department or employee
+  const allocationsByDept = activeAllocations.reduce((acc: any, cur: any) => {
+    if (cur.departmentId) {
+      const dept = departments.find((d) => d.id === cur.departmentId);
+      const name = dept ? dept.name : `Dept ${cur.departmentId}`;
+      acc[name] = (acc[name] || 0) + 1;
+    } else if (cur.employeeId) {
+      const emp = employees.find((e) => e.id === cur.employeeId);
+      if (emp && emp.departmentId) {
+        const dept = departments.find((d) => d.id === emp.departmentId);
+        const name = dept ? dept.name : `Dept ${emp.departmentId}`;
+        acc[name] = (acc[name] || 0) + 1;
+      } else {
+        acc["Other"] = (acc["Other"] || 0) + 1;
+      }
+    }
+    return acc;
+  }, {});
+
+  const allocationsChartData = Object.keys(allocationsByDept).map((k) => ({
+    name: k,
+    count: allocationsByDept[k],
+  }));
+
+  const returnStatusCounts = activeAllocations.reduce(
+    (acc: any, cur: any) => {
+      if (cur.expectedReturnDate && new Date(cur.expectedReturnDate) < new Date()) {
+        acc.overdue += 1;
+      } else {
+        acc.onTime += 1;
+      }
+      return acc;
+    },
+    { overdue: 0, onTime: 0 }
+  );
+
+  const returnStatusChartData = [
+    { name: "On-Time", value: returnStatusCounts.onTime },
+    { name: "Overdue", value: returnStatusCounts.overdue },
+  ];
+
   return (
     <div className="space-y-6 animate-slide-up">
       {/* Header */}
@@ -246,6 +288,73 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
       {success && (
         <div className="p-3 text-xs font-medium border border-emerald-950/20 bg-emerald-950/10 text-(--success-text)">
           {success}
+        </div>
+      )}
+
+      {/* Visual Analytics Strip */}
+      {activeAllocations.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="erp-card flex flex-col justify-between">
+            <h3 className="text-xs font-bold text-(--muted) uppercase tracking-wider mb-2">Allocations by Department</h3>
+            <div className="h-44 w-full">
+              {allocationsChartData.length === 0 ? (
+                <p className="text-xs text-(--muted) text-center py-12">No active department allocations.</p>
+              ) : (
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={allocationsChartData} layout="vertical" margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" horizontal={false} />
+                    <XAxis type="number" stroke="var(--muted)" fontSize={10} allowDecimals={false} />
+                    <YAxis dataKey="name" type="category" stroke="var(--muted)" fontSize={10} width={80} />
+                    <Tooltip
+                      contentStyle={{ backgroundColor: "var(--surface)", borderColor: "var(--border)", color: "var(--fg)", fontSize: "12px", borderRadius: "8px" }}
+                    />
+                    <Bar dataKey="count" fill="var(--accent)" radius={[0, 4, 4, 0]} name="Allocated Assets" />
+                  </BarChart>
+                </ResponsiveContainer>
+              )}
+            </div>
+          </div>
+
+          <div className="erp-card flex flex-col justify-between">
+            <h3 className="text-xs font-bold text-(--muted) uppercase tracking-wider mb-2">Return SLA Status</h3>
+            <div className="h-44 w-full flex items-center justify-center">
+              {returnStatusCounts.onTime === 0 && returnStatusCounts.overdue === 0 ? (
+                <p className="text-xs text-(--muted) text-center py-12">No returns scheduled.</p>
+              ) : (
+                <>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={returnStatusChartData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={50}
+                        outerRadius={70}
+                        paddingAngle={2}
+                        dataKey="value"
+                      >
+                        <Cell key="cell-ontime" fill="var(--success-text)" />
+                        <Cell key="cell-overdue" fill="var(--danger-text)" />
+                      </Pie>
+                      <Tooltip
+                        contentStyle={{ backgroundColor: "var(--surface)", borderColor: "var(--border)", color: "var(--fg)", fontSize: "12px", borderRadius: "8px" }}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="flex flex-col space-y-1 ml-4 text-xs font-semibold">
+                    <div className="flex items-center space-x-2">
+                      <span className="h-2 w-2 rounded-full bg-(--success-text)" />
+                      <span style={{ color: "var(--fg)" }}>On-Time ({returnStatusCounts.onTime})</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span className="h-2 w-2 rounded-full bg-(--danger-text)" />
+                      <span style={{ color: "var(--fg)" }}>Overdue ({returnStatusCounts.overdue})</span>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
         </div>
       )}
 
@@ -297,7 +406,7 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
           {/* Active Handouts List */}
           <div className="space-y-3">
             <h2 className="text-xs font-semibold text-(--muted)">Active Handovers</h2>
-            <div className="overflow-x-auto border border-(--border) bg-(--surface) rounded-(--radius-md) overflow-hidden">
+            <div className="overflow-x-auto border border-(--border) bg-(--surface) rounded-md overflow-hidden">
               <table className="erp-table min-w-[650px] w-full">
                 <thead>
                   <tr>
@@ -350,7 +459,7 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
           {canManage && (
             <div className="space-y-3">
               <h2 className="text-xs font-semibold text-(--muted)">Pending Transfer Requests</h2>
-              <div className="overflow-x-auto border border-(--border) bg-(--surface) rounded-(--radius-md) overflow-hidden">
+              <div className="overflow-x-auto border border-(--border) bg-(--surface) rounded-md overflow-hidden">
                 <table className="erp-table min-w-[750px] w-full">
                   <thead>
                     <tr>

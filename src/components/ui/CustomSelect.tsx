@@ -30,14 +30,14 @@ export function CustomSelect({ value, onChange, options, className = "", placeho
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full text-left bg-[var(--surface)] border border-[var(--border)] text-[var(--fg)] px-3 py-2 text-xs rounded-[var(--radius-sm)] flex items-center justify-between transition-colors hover:border-[var(--accent-subtle)] focus:outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent-subtle)]"
+        className="w-full text-left bg-(--surface) border border-(--border) text-(--fg) px-3 py-2 text-xs rounded-sm flex items-center justify-between transition-colors hover:border-(--accent-subtle) focus:outline-none focus:border-(--accent) focus:ring-2 focus:ring-(--accent-subtle)"
       >
         <span className="truncate">{selectedOption ? selectedOption.label : placeholder}</span>
-        <ChevronDown size={14} className={`text-[var(--muted)] shrink-0 ml-2 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
+        <ChevronDown size={14} className={`text-(--muted) shrink-0 ml-2 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
       </button>
 
       {isOpen && (
-        <div className="absolute z-[999] top-full left-0 w-full mt-1 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-sm)] shadow-lg overflow-hidden animate-in fade-in zoom-in-95 duration-100">
+        <div className="absolute z-999 top-full left-0 w-full mt-1 bg-(--surface) border border-(--border) rounded-sm shadow-lg overflow-hidden animate-in fade-in zoom-in-95 duration-100">
           <ul className="max-h-60 overflow-y-auto py-1 scrollbar-thin">
             {options.map((opt) => (
               <li
@@ -46,10 +46,10 @@ export function CustomSelect({ value, onChange, options, className = "", placeho
                   onChange(opt.value);
                   setIsOpen(false);
                 }}
-                className={`px-3 py-2 text-xs cursor-pointer flex items-center justify-between transition-colors hover:bg-[var(--surface-2)] ${String(value) === String(opt.value) ? "bg-[var(--surface-2)] text-[var(--accent)] font-semibold" : "text-[var(--fg)]"}`}
+                className={`px-3 py-2 text-xs cursor-pointer flex items-center justify-between transition-colors hover:bg-(--surface-2) ${String(value) === String(opt.value) ? "bg-(--surface-2) text-(--accent) font-semibold" : "text-(--fg)"}`}
               >
                 <span className="truncate pr-2">{opt.label}</span>
-                {String(value) === String(opt.value) && <Check size={14} className="shrink-0 text-[var(--success)]" />}
+                {String(value) === String(opt.value) && <Check size={14} className="shrink-0 text-(--success)" />}
               </li>
             ))}
           </ul>

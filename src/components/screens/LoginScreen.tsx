@@ -119,7 +119,7 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
           </div>
 
           {/* Theme element: Mock Asset Ledger Card */}
-          <div className="p-5 rounded-(--radius-md) border border-white/10 bg-white/5 space-y-3">
+          <div className="p-5 rounded-md border border-white/10 bg-white/5 space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-bold uppercase tracking-wider text-white/40">Active Allocation Ledger</span>
               <span className="flex items-center gap-1.5 text-[10px] text-white/60">
@@ -132,7 +132,7 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
                 { tag: "AF-1082", name: "Dell UltraSharp 32\"", status: "Allocated", assignee: "David Kim", statusColor: "text-white bg-white/10" },
                 { tag: "AF-0943", name: "MacBook Pro M3 Max", status: "In Repair", assignee: "Maintenance Team", statusColor: "text-amber-300 bg-amber-500/10" },
               ].map(item => (
-                <div key={item.tag} className="flex items-center justify-between p-2.5 rounded-(--radius-sm) bg-white/5 border border-white/5 text-xs">
+                <div key={item.tag} className="flex items-center justify-between p-2.5 rounded-sm bg-white/5 border border-white/5 text-xs">
                   <div className="min-w-0 flex-1">
                     <p className="font-semibold text-white truncate">{item.name}</p>
                     <p className="text-[10px] text-white/40 mt-0.5">Tag: {item.tag} · {item.assignee}</p>
@@ -181,13 +181,13 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
           </p>
 
           {error && (
-            <div className="mb-4 px-3.5 py-2.5 rounded-(--radius-sm) bg-(--danger-bg) border border-[oklch(from_var(--danger)_l_c_h/0.2)] text-(--danger) text-sm">
+            <div className="mb-4 px-3.5 py-2.5 rounded-sm bg-(--danger-bg) border border-[oklch(from_var(--danger)_l_c_h/0.2)] text-(--danger) text-sm">
               {error}
             </div>
           )}
 
           {successMsg && (
-            <div className="mb-4 px-3.5 py-2.5 rounded-(--radius-sm) bg-(--success-bg) border border-[oklch(from_var(--success)_l_c_h/0.2)] text-(--success) text-sm font-semibold">
+            <div className="mb-4 px-3.5 py-2.5 rounded-sm bg-(--success-bg) border border-[oklch(from_var(--success)_l_c_h/0.2)] text-(--success) text-sm font-semibold">
               {successMsg}
             </div>
           )}
@@ -288,7 +288,7 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
                   key={u.email}
                   disabled={loading}
                   onClick={() => handleDevSwitch(u.email)}
-                  className="w-full flex items-center justify-between px-3 py-2.5 rounded-(--radius-sm) border border-(--border) bg-(--surface) hover:bg-(--surface-2) hover:border-(--accent) transition-colors duration-(--duration-fast) text-left"
+                  className="w-full flex items-center justify-between px-3 py-2.5 rounded-sm border border-(--border) bg-(--surface) hover:bg-(--surface-2) hover:border-(--accent) transition-colors duration-(--duration-fast) text-left"
                 >
                   <div>
                     <p className="text-sm font-medium text-(--fg)">{u.name}</p>

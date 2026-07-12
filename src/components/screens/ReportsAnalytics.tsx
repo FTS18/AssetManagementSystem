@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip, AreaChart, Area, LineChart, Line, ScatterChart, Scatter, ZAxis, Legend } from "recharts";
 
 const COLORS = {
   Available: "var(--success-text)",
@@ -196,15 +196,20 @@ export default function ReportsAnalytics() {
                 data.resourceBookings.map((item: any) => {
                   const percentage = Math.round((item.count / maxBooking) * 100) || 5;
                   return (
-                    <div key={item.assetName} className="space-y-1">
-                      <div className="flex justify-between text-xs font-medium">
-                        <span>{item.assetName}</span>
-                        <span>{item.count} bookings</span>
+                    <div key={item.assetName} className="space-y-1.5 mb-3">
+                      <div className="flex justify-between text-xs">
+                        <span className="font-semibold text-(--fg)">{item.assetName}</span>
+                        <span className="font-bold text-(--accent)">{item.count} bookings</span>
                       </div>
-                      <div className="w-full h-2 bg-(--background) border border-(--border) rounded-full overflow-hidden">
+                      <div className="w-full h-1.5 bg-(--surface-2) rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-(--success-text)"
-                          style={{ width: `${percentage}%` }}
+                          className="h-full rounded-full"
+                          style={{ 
+                            width: `${percentage}%`,
+                            background: "linear-gradient(90deg, var(--accent) 0%, oklch(75% 0.15 260) 100%)",
+                            boxShadow: "0 0 8px var(--accent)",
+                            transition: "width 1s ease-out"
+                          }}
                         ></div>
                       </div>
                     </div>
@@ -238,21 +243,28 @@ export default function ReportsAnalytics() {
                 <p className="text-xs text-(--muted)">No maintenance tickets resolved or raised.</p>
               ) : (
                 data.maintenanceRequests.map((item: any) => (
-                  <div key={item.priority} className="space-y-1">
-                    <div className="flex justify-between text-xs font-medium">
-                      <span>{item.priority} Priority</span>
-                      <span>{item.count} requests</span>
+                  <div key={item.priority} className="space-y-1.5 mb-3">
+                    <div className="flex justify-between text-xs">
+                      <span className="font-semibold text-(--fg)">{item.priority} Priority</span>
+                      <span className="font-bold text-(--accent)">{item.count} requests</span>
                     </div>
-                    <div className="w-full h-2 bg-(--background) border border-(--border) rounded-full overflow-hidden">
+                    <div className="w-full h-1.5 bg-(--surface-2) rounded-full overflow-hidden">
                       <div
-                        className={`h-full ${
-                          item.priority === "Critical"
-                            ? "bg-(--danger-text)"
+                        className="h-full rounded-full"
+                        style={{ 
+                          width: `${Math.min(100, (item.count / 5) * 100)}%`,
+                          background: item.priority === "Critical" 
+                            ? "linear-gradient(90deg, var(--danger) 0%, oklch(75% 0.18 25) 100%)"
                             : item.priority === "High"
-                            ? "bg-(--warning-text)"
-                            : "bg-(--accent)"
-                        }`}
-                        style={{ width: `${Math.min(100, (item.count / 5) * 100)}%` }}
+                            ? "linear-gradient(90deg, var(--warning) 0%, oklch(80% 0.15 70) 100%)"
+                            : "linear-gradient(90deg, var(--accent) 0%, oklch(75% 0.15 260) 100%)",
+                          boxShadow: item.priority === "Critical" 
+                            ? "0 0 8px var(--danger)" 
+                            : item.priority === "High" 
+                            ? "0 0 8px var(--warning)" 
+                            : "0 0 8px var(--accent)",
+                          transition: "width 1s ease-out"
+                        }}
                       ></div>
                     </div>
                   </div>
@@ -338,7 +350,7 @@ export default function ReportsAnalytics() {
               Export CSV
             </button>
           </div>
-          <div className="overflow-x-auto border border-(--border) bg-(--surface) rounded-(--radius-md) overflow-hidden mt-2">
+          <div className="overflow-x-auto border border-(--border) bg-(--surface) rounded-md overflow-hidden mt-2">
             <table className="erp-table min-w-[750px] w-full">
               <thead>
                 <tr>
@@ -402,32 +414,26 @@ export default function ReportsAnalytics() {
             </button>
           </div>
           
-          <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-12 gap-2 pt-2">
-            {data.heatmap.map((h: any) => {
-              // Calculate cell color intensity based on usage
-              const ratio = maxHeatmapCount > 0 ? h.count / maxHeatmapCount : 0;
-              const intensity = Math.min(1, ratio);
-              return (
-                <div
-                  key={h.hour}
-                  className="p-2 border border-(--border) rounded-(--radius-sm) flex flex-col items-center justify-center text-center transition-all duration-200"
-                  style={{
-                    background: intensity > 0 ? `rgba(255, 255, 255, ${0.05 + intensity * 0.15})` : "var(--background)",
-                    borderColor: intensity > 0.5 ? "var(--accent)" : "var(--border)",
-                  }}
-                  title={`${h.count} bookings at ${h.hour}`}
-                >
-                  <span className="text-[9px] text-(--muted) font-semibold">{h.hour}</span>
-                  <span className={`text-xs font-bold mt-1 ${intensity > 0.5 ? "text-(--accent)" : "text-(--fg)"}`}>{h.count}</span>
-                </div>
-              );
-            })}
-          </div>
-          <div className="text-[10px] text-(--muted) flex items-center gap-2 pt-2 justify-end">
-            <span>Low Usage</span>
-            <div className="h-2 w-8 bg-white/5 border border-(--border)"></div>
-            <div className="h-2 w-8 bg-white/20 border border-(--accent)"></div>
-            <span>Peak Usage</span>
+          <div className="h-64 w-full mt-4">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={data.heatmap} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="var(--accent)" stopOpacity={0.4} />
+                    <stop offset="95%" stopColor="var(--accent)" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                <XAxis dataKey="hour" stroke="var(--muted)" fontSize={10} tickMargin={10} />
+                <YAxis stroke="var(--muted)" fontSize={10} tickMargin={10} />
+                <Tooltip
+                  contentStyle={{ backgroundColor: "var(--surface)", borderColor: "var(--border)", color: "var(--fg)", fontSize: "12px", borderRadius: "8px", boxShadow: "var(--shadow-md)" }}
+                  itemStyle={{ color: "var(--accent)", fontWeight: "bold" }}
+                  labelStyle={{ color: "var(--muted)", marginBottom: "4px" }}
+                />
+                <Area type="monotone" dataKey="count" name="Bookings" stroke="var(--accent)" strokeWidth={3} fillOpacity={1} fill="url(#colorCount)" />
+              </AreaChart>
+            </ResponsiveContainer>
           </div>
         </div>
         {/* Asset Portfolio Book Value */}
@@ -463,7 +469,7 @@ export default function ReportsAnalytics() {
             {/* Category Breakdown Table */}
             <div className="space-y-3">
               <span className="text-[10px] uppercase font-bold text-(--muted)">Value by Category</span>
-              <div className="overflow-x-auto border border-(--border) rounded-(--radius-md) overflow-hidden">
+              <div className="overflow-x-auto border border-(--border) rounded-md overflow-hidden">
                 <table className="erp-table min-w-[500px] w-full">
                   <thead>
                     <tr>
@@ -541,6 +547,77 @@ export default function ReportsAnalytics() {
                 );
               })()}
             </div>
+          </div>
+        </div>
+
+        {/* 5-Year Depreciation Projection */}
+        <div className="erp-card space-y-4 md:col-span-2">
+          <div className="flex justify-between items-center">
+            <h2 className="text-xs font-semibold text-(--muted)">5-Year Portfolio Depreciation Forecast</h2>
+            <button
+              onClick={() =>
+                exportCSV(
+                  "depreciation_forecast",
+                  ["Year", "Projected Book Value"],
+                  data.depreciationCurve.map((x: any) => [x.year, x.value])
+                )
+              }
+              className="text-[10px] font-bold text-(--accent) hover:underline"
+            >
+              Export CSV
+            </button>
+          </div>
+          <div className="h-64 w-full mt-4">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={data.depreciationCurve} margin={{ top: 10, right: 20, left: -10, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                <XAxis dataKey="year" stroke="var(--muted)" fontSize={10} tickMargin={10} />
+                <YAxis stroke="var(--muted)" fontSize={10} tickMargin={10} tickFormatter={(val) => `₹${(val/1000).toFixed(0)}k`} />
+                <Tooltip
+                  contentStyle={{ backgroundColor: "var(--surface)", borderColor: "var(--border)", color: "var(--fg)", fontSize: "12px", borderRadius: "8px", boxShadow: "var(--shadow-md)" }}
+                  itemStyle={{ color: "var(--warning)", fontWeight: "bold" }}
+                  formatter={(value: unknown) => [`₹${Number(value ?? 0).toLocaleString("en-IN", { maximumFractionDigits: 0 })}`, 'Projected Value']}
+                  labelStyle={{ color: "var(--muted)", marginBottom: "4px" }}
+                />
+                <Line type="monotone" dataKey="value" stroke="var(--warning)" strokeWidth={3} dot={{ r: 4, strokeWidth: 2, fill: "var(--surface)" }} activeDot={{ r: 6 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Vendor Reliability Index */}
+        <div className="erp-card space-y-4 md:col-span-2">
+          <div className="flex justify-between items-center">
+            <h2 className="text-xs font-semibold text-(--muted)">Vendor Reliability Index (Simulated)</h2>
+            <button
+              onClick={() =>
+                exportCSV(
+                  "vendor_reliability",
+                  ["Vendor", "Total Assets", "Failure Rate (%)"],
+                  data.vendorReliability.map((x: any) => [x.vendor, x.totalAssets, x.failureRate])
+                )
+              }
+              className="text-[10px] font-bold text-(--accent) hover:underline"
+            >
+              Export CSV
+            </button>
+          </div>
+          <div className="h-64 w-full mt-4">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={data.vendorReliability} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                <XAxis dataKey="vendor" stroke="var(--muted)" fontSize={10} tickMargin={10} />
+                <YAxis stroke="var(--muted)" fontSize={10} tickMargin={10} tickFormatter={(val) => `${val}%`} />
+                <Tooltip
+                  contentStyle={{ backgroundColor: "var(--surface)", borderColor: "var(--border)", color: "var(--fg)", fontSize: "12px", borderRadius: "8px", boxShadow: "var(--shadow-md)" }}
+                  itemStyle={{ color: "var(--danger-text)", fontWeight: "bold" }}
+                  formatter={(value: unknown) => [`${Number(value ?? 0)}%`, 'Hardware Failure Rate']}
+                  labelStyle={{ color: "var(--muted)", marginBottom: "4px" }}
+                  cursor={{ fill: "var(--surface-2)" }}
+                />
+                <Bar dataKey="failureRate" fill="var(--danger-text)" radius={[4, 4, 0, 0]} name="Failure Rate" />
+              </BarChart>
+            </ResponsiveContainer>
           </div>
         </div>
 

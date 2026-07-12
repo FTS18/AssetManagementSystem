@@ -59,39 +59,39 @@ export function CommandPalette({ setActiveScreen, userRole }: CommandPaletteProp
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[1000] flex items-start justify-center pt-[15vh] p-4 animate-in fade-in duration-200">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-1000 flex items-start justify-center pt-[15vh] p-4 animate-in fade-in duration-200">
       <div 
-        className="w-full max-w-lg bg-[var(--surface)] border border-[var(--border)] rounded-xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200"
+        className="w-full max-w-lg bg-(--surface) border border-(--border) rounded-xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center px-4 py-3 border-b border-[var(--border)] gap-3">
-          <Search size={18} className="text-[var(--muted)]" />
+        <div className="flex items-center px-4 py-3 border-b border-(--border) gap-3">
+          <Search size={18} className="text-(--muted)" />
           <input
             ref={inputRef}
             type="text"
-            className="flex-1 bg-transparent outline-none text-[var(--fg)] text-sm placeholder:text-[var(--placeholder)]"
+            className="flex-1 bg-transparent outline-none text-(--fg) text-sm placeholder:text-(--placeholder)"
             placeholder="Search pages and actions..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
           <div className="flex gap-1">
-            <kbd className="bg-[var(--surface-2)] text-[var(--muted)] text-[10px] font-mono px-1.5 py-0.5 rounded border border-[var(--border)]">esc</kbd>
+            <kbd className="bg-(--surface-2) text-(--muted) text-[10px] font-mono px-1.5 py-0.5 rounded border border-(--border)">esc</kbd>
           </div>
         </div>
         
         <div className="max-h-[60vh] overflow-y-auto p-2">
           {filteredItems.length > 0 ? (
             <div className="space-y-1">
-              <div className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted)] px-3 py-2">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-(--muted) px-3 py-2">
                 Navigation
               </div>
               {filteredItems.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => handleSelect(item.id)}
-                  className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-[var(--fg)] hover:bg-[var(--surface-2)] rounded-lg transition-colors text-left group"
+                  className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-(--fg) hover:bg-(--surface-2) rounded-lg transition-colors text-left group"
                 >
-                  <div className="text-[var(--muted)] group-hover:text-[var(--accent)] transition-colors">
+                  <div className="text-(--muted) group-hover:text-(--accent) transition-colors">
                     {item.icon}
                   </div>
                   <span className="font-medium">{item.label}</span>
@@ -99,22 +99,22 @@ export function CommandPalette({ setActiveScreen, userRole }: CommandPaletteProp
               ))}
             </div>
           ) : (
-            <div className="py-8 text-center text-sm text-[var(--muted)]">
+            <div className="py-8 text-center text-sm text-(--muted)">
               No results found for "{query}"
             </div>
           )}
         </div>
         
-        <div className="bg-[var(--surface-2)] border-t border-[var(--border)] px-4 py-2.5 flex items-center justify-between text-[10px] text-[var(--muted)]">
+        <div className="bg-(--surface-2) border-t border-(--border) px-4 py-2.5 flex items-center justify-between text-[10px] text-(--muted)">
           <div className="flex items-center gap-1.5">
             <span>Use</span>
-            <kbd className="bg-[var(--surface)] font-mono px-1.5 py-0.5 rounded border border-[var(--border)]">↑</kbd>
-            <kbd className="bg-[var(--surface)] font-mono px-1.5 py-0.5 rounded border border-[var(--border)]">↓</kbd>
+            <kbd className="bg-(--surface) font-mono px-1.5 py-0.5 rounded border border-(--border)">↑</kbd>
+            <kbd className="bg-(--surface) font-mono px-1.5 py-0.5 rounded border border-(--border)">↓</kbd>
             <span>to navigate</span>
           </div>
           <div className="flex items-center gap-1.5">
             <span>Press</span>
-            <kbd className="bg-[var(--surface)] font-mono px-1.5 py-0.5 rounded border border-[var(--border)]">enter</kbd>
+            <kbd className="bg-(--surface) font-mono px-1.5 py-0.5 rounded border border-(--border)">enter</kbd>
             <span>to select</span>
           </div>
         </div>

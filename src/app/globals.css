@@ -1,91 +1,97 @@
 @import "tailwindcss";
 
-/* ─── Tokens: cream + black only, no blue ─────────────────────── */
+/* ─── Tokens: Premium Crisp Indigo SaaS ─────────────────────── */
 :root {
-  /* Content background: refined warm sandstone cream */
-  --bg:            oklch(94.5% 0.012 80);
-  --surface:       oklch(99.5% 0.003 80);
-  --surface-2:     oklch(91.5% 0.016 80);
-  --border:        oklch(14%  0.008 80 / 0.08);
-  --border-subtle: oklch(14%  0.008 80 / 0.04);
+  /* Content background: crisp icy blue/white to eliminate any creaminess */
+  --bg:            oklch(98% 0.015 255);
+  --surface:       oklch(100% 0.005 255);
+  --surface-2:     oklch(96% 0.015 255);
+  --border:        oklch(92% 0.02 255);
+  --border-subtle: oklch(95% 0.01 255);
 
-  /* Sidebar: dark oatmeal */
-  --sidebar-bg:        oklch(18%  0.01 75);
-  --sidebar-fg:        oklch(96%  0.008 80);
-  --sidebar-muted:     oklch(52%  0.008 80);
-  --sidebar-hover:     oklch(23%  0.01 75);
-  --sidebar-active:    oklch(94%  0.012 80);   /* bright cream text when active */
-  --sidebar-active-bg: oklch(25%  0.01 75);   /* slightly lighter dark pill */
-  --sidebar-border:    oklch(22%  0.008 75);
+  /* Sidebar: Vibrant Brand Blue */
+  --sidebar-bg:        oklch(48% 0.15 260);
+  --sidebar-fg:        oklch(99% 0.01 255);
+  --sidebar-muted:     oklch(85% 0.05 260);
+  --sidebar-hover:     oklch(55% 0.15 260);
+  --sidebar-active:    oklch(100% 0 0);
+  --sidebar-active-bg: oklch(40% 0.16 260);
+  --sidebar-border:    oklch(42% 0.15 260);
 
   /* Content text */
-  --fg:            oklch(14%  0.008 80);
-  --muted:         oklch(46%  0.01  80);
-  --placeholder:   oklch(62%  0.008 80);
+  --fg:            oklch(20% 0.015 255);
+  --muted:         oklch(55% 0.02 255);
+  --placeholder:   oklch(65% 0.01 255);
 
-  /* Accent: near-black (primary action = black button) */
-  --accent:        oklch(16%  0.008 80);
-  --accent-hover:  oklch(10%  0.005 80);
-  --accent-fg:     oklch(96%  0.01  80);
-  --accent-subtle: oklch(91%  0.016 80);
+  /* Accent: vibrant brand indigo */
+  --accent:        oklch(52% 0.16 260);
+  --accent-hover:  oklch(48% 0.16 260);
+  --accent-fg:     oklch(100% 0 0);
+  --accent-subtle: oklch(93% 0.03 260);
 
-  /* Semantic states — warm tones, still no blue */
-  --success:       oklch(44%  0.13  145);
-  --success-bg:    oklch(94%  0.04  145);
-  --warning:       oklch(50%  0.13  72);
-  --warning-bg:    oklch(95%  0.04  80);
-  --danger:        oklch(48%  0.17  22);
-  --danger-bg:     oklch(96%  0.035 22);
+  /* Semantic states */
+  --success:       oklch(55% 0.15 150);
+  --success-text:  oklch(45% 0.13 150);
+  --success-bg:    oklch(95% 0.04 150);
+  --warning:       oklch(65% 0.15 70);
+  --warning-text:  oklch(50% 0.13 70);
+  --warning-bg:    oklch(95% 0.04 70);
+  --danger:        oklch(55% 0.18 25);
+  --danger-text:   oklch(48% 0.17 25);
+  --danger-bg:     oklch(96% 0.035 25);
 
-  /* Refined, softer warm-toned shadows to pop cards off the background */
-  --shadow-xs: 0 1px 2px oklch(14% 0.008 80 / 0.03);
-  --shadow-sm: 0 4px 16px oklch(14% 0.008 80 / 0.04), 0 1px 2px oklch(14% 0.008 80 / 0.02);
-  --shadow-md: 0 12px 36px oklch(14% 0.008 80 / 0.07), 0 3px 8px oklch(14% 0.008 80 / 0.03);
+  /* Soft modern shadows */
+  --shadow-xs: 0 1px 2px oklch(20% 0.015 255 / 0.03);
+  --shadow-sm: 0 4px 12px oklch(20% 0.015 255 / 0.05), 0 1px 3px oklch(20% 0.015 255 / 0.03);
+  --shadow-md: 0 12px 32px oklch(20% 0.015 255 / 0.08), 0 4px 10px oklch(20% 0.015 255 / 0.04);
 
   /* Motion */
   --ease-out:      cubic-bezier(0.16, 1, 0.3, 1);
-  --duration-fast: 120ms;
-  --duration-base: 200ms;
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
 
   /* Radii */
   --radius-sm: 8px;
   --radius-md: 12px;
-  --radius-lg: 18px;
+  --radius-lg: 16px;
 }
 
 /* ─── Dark Mode Overrides ──────────────────────────────────────── */
 html[data-theme="dark"] {
-  --bg:            oklch(14%  0.008 80);
-  --surface:       oklch(19%  0.006 80);
-  --surface-2:     oklch(22%  0.006 80);
-  --border:        oklch(28%  0.008 80);
-  --border-subtle: oklch(24%  0.006 80);
-  --fg:            oklch(96%  0.008 80);
-  --muted:         oklch(62%  0.008 80);
-  --placeholder:   oklch(46%  0.01  80);
+  /* Rich obsidian with subtle blue tint */
+  --bg:            oklch(16% 0.012 255);
+  --surface:       oklch(20% 0.012 255);
+  --surface-2:     oklch(24% 0.012 255);
+  --border:        oklch(28% 0.01 255);
+  --border-subtle: oklch(24% 0.008 255);
+  --fg:            oklch(96% 0.005 255);
+  --muted:         oklch(70% 0.01 255);
+  --placeholder:   oklch(55% 0.01 255);
   
-  --accent:        oklch(96%  0.008 80);
-  --accent-hover:  oklch(99.5% 0.005 80);
-  --accent-fg:     oklch(14%  0.008 80);
-  --accent-subtle: oklch(28%  0.008 80);
+  /* Glowing brand indigo for dark mode */
+  --accent:        oklch(65% 0.16 260);
+  --accent-hover:  oklch(70% 0.16 260);
+  --accent-fg:     oklch(14% 0.01 260);
+  --accent-subtle: oklch(28% 0.04 260);
 
-  /* Sidebar dark overrides */
-  --sidebar-bg:        oklch(10%  0.005 80);
-  --sidebar-fg:        oklch(96%  0.008 80);
-  --sidebar-muted:     oklch(50%  0.008 80);
-  --sidebar-hover:     oklch(16%  0.006 80);
-  --sidebar-active:    oklch(98%  0.005 80);
-  --sidebar-active-bg: oklch(19%  0.006 80);
-  --sidebar-border:    oklch(18%  0.005 80);
+  /* Sidebar dark overrides (slightly darker than bg) */
+  --sidebar-bg:        oklch(14% 0.012 255);
+  --sidebar-fg:        oklch(96% 0.005 255);
+  --sidebar-muted:     oklch(60% 0.01 255);
+  --sidebar-hover:     oklch(20% 0.012 255);
+  --sidebar-active:    oklch(98% 0.005 255);
+  --sidebar-active-bg: oklch(24% 0.012 255);
+  --sidebar-border:    oklch(22% 0.01 255);
+
+  --shadow-sm: 0 4px 16px oklch(0% 0 0 / 0.3);
+  --shadow-md: 0 12px 36px oklch(0% 0 0 / 0.4);
 }
 
-/* Dark theme specific mesh gradients to prevent light colors overlay */
+/* Mesh gradients for dark theme */
 html[data-theme="dark"] .mesh-bg {
   background-image:
-    radial-gradient(ellipse at 15%  15%, oklch(17% 0.008 80  / 0.55) 0%, transparent 55%),
-    radial-gradient(ellipse at 85%  85%, oklch(15% 0.006 80  / 0.45) 0%, transparent 50%),
-    radial-gradient(ellipse at 70%  20%, oklch(19% 0.008 80  / 0.4)  0%, transparent 45%),
-    radial-gradient(ellipse at 20%  80%, oklch(16% 0.008 80  / 0.35) 0%, transparent 50%);
+    radial-gradient(ellipse at 15%  15%, oklch(22% 0.02 260 / 0.25) 0%, transparent 55%),
+    radial-gradient(ellipse at 85%  85%, oklch(20% 0.015 250 / 0.2) 0%, transparent 50%);
 }
 
 /* ─── Tailwind bridge ──────────────────────────────────────────── */
@@ -147,13 +153,13 @@ html, body {
 .mesh-bg {
   position: relative;
   overflow: hidden;
-  /* Animated warm cream mesh gradient */
+  /* Animated crisp blue/indigo mesh gradient */
   background-color: var(--bg);
   background-image:
-    radial-gradient(ellipse at 15%  15%, oklch(90% 0.025 75  / 0.55) 0%, transparent 55%),
-    radial-gradient(ellipse at 85%  85%, oklch(88% 0.03  90  / 0.45) 0%, transparent 50%),
-    radial-gradient(ellipse at 70%  20%, oklch(93% 0.02  70  / 0.4)  0%, transparent 45%),
-    radial-gradient(ellipse at 20%  80%, oklch(91% 0.028 88  / 0.35) 0%, transparent 50%);
+    radial-gradient(ellipse at 15%  15%, oklch(96% 0.02 260 / 0.7) 0%, transparent 55%),
+    radial-gradient(ellipse at 85%  85%, oklch(94% 0.02 255 / 0.6) 0%, transparent 50%),
+    radial-gradient(ellipse at 70%  20%, oklch(97% 0.015 250 / 0.5)  0%, transparent 45%),
+    radial-gradient(ellipse at 20%  80%, oklch(95% 0.025 258 / 0.4) 0%, transparent 50%);
   background-size: 200% 200%, 200% 200%, 200% 200%, 200% 200%;
   animation: mesh-drift 18s ease-in-out infinite;
 }
