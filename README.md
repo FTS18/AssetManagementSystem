@@ -1,203 +1,351 @@
-# 📦 AssetFlow — Enterprise Asset & Resource Management System
+# AssetFlow — Enterprise Asset & Resource Management System
 
-> **A secure, centralized ERP platform to track, allocate, and maintain physical assets and shared resources across an organization.**
-
-Built with a **Node.js + Express backend**, a concurrency-locked JSON database, and a premium, high-fidelity **glassmorphism web frontend**, AssetFlow solves a critical vulnerability common in hackathon projects: client-side trust. All authentication, authorization, resource-booking constraints, and asset lifecycle state transitions are strictly validated and enforced **server-side** via JWT.
+> A centralized ERP platform that helps organizations track, allocate, audit, and maintain their physical assets and shared resources — all in one place.
 
 ---
 
-## 🚀 Hackathon Value Proposition
+## What is AssetFlow?
 
-Most quick-built systems trust the client's self-declared role. AssetFlow is architected with enterprise-grade guards:
-1. **Zero-Trust Auth**: The client never declares its role or ID. It presents a signed JWT, which the server decodes to identify permissions.
-2. **Lifecycle State Machine Guard**: Prevent impossible states (e.g., a "Disposed" asset cannot suddenly become "Available" without going through procurement).
-3. **Double-Allocation & Overlap Protection**: Strict conflict checks on asset assignment and booking scheduler (preventing double-booking down to the millisecond).
-4. **Audit Discrepancy Reporting**: Complete auditing loops that auto-flag missing items and log actions to an append-only immutable activity log.
+Organizations of every shape and size — schools, hospitals, factories, offices, agencies — deal with the same quiet problem: nobody really knows where things are, who has them, or what condition they're in. Spreadsheets fill up, paper logs get lost, and assets quietly slip through the cracks.
 
----
+AssetFlow fixes that.
 
-## 📐 System Architecture
+It gives your organization a single, structured system for managing the full lifecycle of every asset — from the moment it's registered to the day it's retired or disposed of. Asset managers can register and allocate equipment, department heads can oversee what their teams hold, employees can book shared resources and raise maintenance requests, and auditors can run structured verification cycles that actually close.
 
-```
-                 +-----------------------------------------+
-                 |            Browser Frontend             |
-                 |      (Vanilla HTML5, CSS3, JS ES6)      |
-                 +-----------------------------------------+
-                                      |
-                                      | fetch() with JWT Header
-                                      | (Authorization: Bearer <JWT>)
-                                      v
-                 +-----------------------------------------+
-                 |        Express REST Server (3000)       |
-                 +-----------------------------------------+
-                   |                  |                  |
-            [Auth Middleware]  [Route Handlers]  [Upload Handler]
-            Verify token &      Validate input    Multer storage
-            decode roles        & logic guards     for attachments
-                   |                  |                  |
-                   +--------+---------+------------------+
-                            |
-                            v
-                 +-----------------------------------------+
-                 |            DB Controller (db.js)        |
-                 |   - Concurrency Queue / proper-lockfile |
-                 |   - State Transition Validation         |
-                 |   - Allocation Conflict Engine          |
-                 +-----------------------------------------+
-                            |
-                            v
-                 +-----------------------------------------+
-                 |         File Database (db.json)         |
-                 +-----------------------------------------+
-```
+The system is intentionally scoped to asset and resource management. It doesn't touch purchasing, invoicing, or accounting. It does one thing and tries to do it well.
 
 ---
 
-## 🛠 Tech Stack
+## Who It's For
 
-* **Frontend**: Vanilla HTML5, CSS3 (Modern dark-mode, glassmorphism, responsive grid), Vanilla JS (ES6+), [Chart.js](https://www.chartjs.org/) via CDN for visual analytics.
-* **Backend**: Node.js, Express.js.
-* **Security & Auth**: `jsonwebtoken` (signed tokens), `bcryptjs` (password hashing).
-* **File Handling**: `multer` for asset photo & maintenance report uploads.
-* **Validation**: `express-validator` for API input verification.
-* **Concurrency**: `proper-lockfile` (or a promise-based write queue) ensuring data integrity on `db.json` concurrent writes.
+AssetFlow is built for any organization that manages physical assets or shared spaces and wants to move beyond manual processes:
+
+- **IT teams** tracking laptops, servers, and peripherals
+- **Facilities teams** managing conference rooms, vehicles, and equipment pools
+- **HR and admin** maintaining an accurate picture of who holds what
+- **Audit and compliance** teams that need a reliable paper trail
 
 ---
 
-## 🌟 Key Features & Workflows
+## Features
 
-### 🛡️ 1. Multi-Role RBAC (Role-Based Access Control)
-* **Admin**: Manage organization settings, departments, custom category schemas, employee directories, and promote roles.
-* **Asset Manager**: Register new assets (with document/image uploads), approve allocations, manage maintenance workflows, and analyze system health.
-* **Department Head**: Oversee department-specific assets, initiate internal asset transfers, and approve department bookings.
-* **Employee / Technician**: View assigned assets, book shared resources (rooms/vehicles), report maintenance issues, and update maintenance task progress.
+### Authentication & Role Management
 
-### 🔄 2. State-Machine Driven Asset Lifecycle
-The server enforces a strict transition map for assets to prevent logical errors and fraud:
+Signup creates an Employee account — no role selection at registration. Admins promote employees to Department Head or Asset Manager from the Employee Directory. This is the only place roles are assigned, preventing self-elevation.
 
-| From State | Allowed To States |
+- Email/password login with JWT-based session management
+- Forgot password flow
+- All authorization enforced server-side — the client never declares its own role
+
+### Dashboard & KPI Overview
+
+Every role sees a real-time operational snapshot when they log in:
+
+- **KPI cards**: Assets Available, Assets Allocated, Maintenance Today, Active Bookings, Pending Transfers, Upcoming Returns
+- Overdue returns (past Expected Return Date) are surfaced separately and highlighted
+- Quick actions: Register Asset, Book Resource, Raise Maintenance Request
+
+### Organization Setup (Admin)
+
+Three-tab master data management for everything else in the system to depend on:
+
+**Departments** — Create, edit, and deactivate departments. Assign Department Heads and optionally nest departments under parent departments to reflect your org structure.
+
+**Asset Categories** — Define categories like Electronics, Furniture, Vehicles, and add optional category-specific fields (e.g., warranty period for Electronics).
+
+**Employee Directory** — Manage the full employee roster with name, email, department, role, and status. Role promotion happens here and only here.
+
+### Asset Registration & Directory
+
+A central register for every asset in your organization:
+
+- Register assets with: name, category, auto-generated Asset Tag (e.g. `AF-0001`), serial number, acquisition date, acquisition cost, condition, location, photo and documents, and a "shared/bookable" flag
+- Search and filter by Asset Tag, serial number, QR code, category, status, department, or location
+- Full lifecycle status visible per asset
+- Per-asset history combining allocation history and maintenance history in a single timeline
+
+### Asset Lifecycle
+
+Assets move through a defined set of states with strict transition rules enforced on the server:
+
+| State | Can Transition To |
 |---|---|
-| **Available** | `Allocated`, `Reserved`, `UnderMaintenance`, `Retired` |
-| **Allocated** | `Available`, `UnderMaintenance` |
-| **Reserved** | `Allocated`, `Available` |
-| **UnderMaintenance** | `Available`, `Retired`, `Lost` |
-| **Lost** | `Disposed` |
-| **Retired** | `Disposed` |
-| **Disposed** | *(None - terminal state)* |
+| **Available** | Allocated, Reserved, Under Maintenance, Retired |
+| **Allocated** | Available, Under Maintenance |
+| **Reserved** | Allocated, Available |
+| **Under Maintenance** | Available, Retired, Lost |
+| **Lost** | Disposed |
+| **Retired** | Disposed |
+| **Disposed** | *(Terminal — no further transitions)* |
 
-### 📅 3. Real-Time Resource Booking (Overlap Validation)
-No double-booking. The booking engine performs immediate server-side overlap checks:
-$$\text{Overlap Condition: } (\text{NewStart} < \text{ExistingEnd}) \land (\text{NewEnd} > \text{ExistingStart})$$
-If a conflict is detected, the API rejects with a `400 Bad Request` and details the current holder, ensuring schedule integrity.
+This prevents impossible states and keeps the register reliable.
 
-### 📝 4. Closed-Loop Audit Cycle
-* Admins create an **Audit Cycle** specifying scope (e.g., IT department assets) and assigning an auditor.
-* The auditor uses an interactive checklist to verify assets as `Verified`, `Missing`, or `Damaged`.
-* Closing the cycle auto-generates a discrepancy report and transitions missing assets to `Lost` in the master register.
+### Asset Allocation & Transfers
+
+Managing who holds what, with clear conflict rules:
+
+- Allocate an asset to an employee or department, with an optional Expected Return Date
+- **Conflict prevention**: If an asset is already allocated, the system blocks re-allocation, shows who currently holds it, and surfaces a Transfer Request button instead
+- **Transfer workflow**: Requested → Approved (by Asset Manager or Department Head) → Re-allocated, with history updated automatically
+- **Return flow**: Mark returned, capture a condition check-in note, asset reverts to Available
+- Overdue allocations are automatically flagged and surfaced in the Dashboard and Notifications
+
+### Resource Booking
+
+Time-slot booking for shared resources — rooms, vehicles, equipment — with overlap prevention built in:
+
+- Calendar view showing a resource's existing bookings
+- **Overlap validation**: Bookings that overlap with an existing reservation are rejected. A request for 9:30–10:30 when the room is booked 9:00–10:00 is blocked; a request for 10:00–11:00 is accepted since it starts exactly as the prior booking ends
+- Booking statuses: Upcoming, Ongoing, Completed, Cancelled
+- Cancel or reschedule with automatic reminder notifications before a slot starts
+
+### Maintenance Management
+
+Repair requests routed through an approval workflow before any work begins:
+
+- Raise a request: select the asset, describe the issue, set priority, attach a photo
+- **Workflow**: Pending → Approved / Rejected (by Asset Manager) → Technician Assigned → In Progress → Resolved
+- Asset status automatically moves to Under Maintenance on approval and back to Available on resolution
+- Full maintenance history retained per asset
+
+### Asset Audit Cycles
+
+Structured verification instead of ad hoc spot checks:
+
+- Create an Audit Cycle with a defined scope (department or location) and date range
+- Assign one or more auditors to the cycle
+- Auditors mark each asset as Verified, Missing, or Damaged
+- The system auto-generates a discrepancy report for flagged items
+- Closing a cycle locks it and updates affected asset statuses (confirmed-missing items move to Lost)
+- Full audit history retained per cycle
+
+### Reports & Analytics
+
+Operational insight for managers:
+
+- Asset utilization trends — most-used vs. idle assets
+- Maintenance frequency by asset and category
+- Assets due for maintenance or approaching end-of-life
+- Department-wise allocation summary
+- Resource booking heatmap showing peak usage windows
+- Exportable reports
+
+### Activity Logs & Notifications
+
+A complete record of everything that happens in the system:
+
+- Notifications for: asset assignments, maintenance approvals/rejections, booking confirmations and reminders, transfer approvals, overdue return alerts, audit discrepancy flags
+- Full audit log of all admin, manager, and employee actions — who did what and when
 
 ---
 
-## 📁 Project Directory Structure
+## User Roles
+
+| Role | Responsibilities |
+|---|---|
+| **Admin** | Organization setup (departments, categories, employee directory, role promotion), system-wide analytics, audit cycle management |
+| **Asset Manager** | Register and allocate assets, approve transfers and maintenance requests, manage returns and condition check-ins |
+| **Department Head** | View department assets, approve allocation and transfer requests within their department, book shared resources on behalf of the department |
+| **Employee** | View assigned assets, book shared resources, raise maintenance requests, initiate returns and transfer requests |
+
+---
+
+## How It Works — A Typical Flow
+
+1. **Admin** sets up departments, asset categories, and promotes selected employees to Department Head and Asset Manager.
+2. **Asset Manager** registers a new asset. It enters the system as Available.
+3. The asset is allocated to an employee or department. If it's already taken, the system blocks the allocation and prompts a transfer request instead. Shared resources can be flagged as bookable.
+4. **Employees** book shared resources by time slot. Overlapping requests are automatically rejected.
+5. When an asset needs repair, the holder raises a maintenance request. It must be approved before work begins — approval is what flips the status to Under Maintenance.
+6. Assets are transferred or returned as needs change. Overdue returns are flagged automatically.
+7. **Periodic audit cycles** assign auditors to verify assets across a scope, auto-generate discrepancy reports, and close cleanly — locking the cycle and updating statuses.
+8. All activity flows through notifications, logs, and reports.
+
+---
+
+## System Architecture
+
+```
+               ┌─────────────────────────────────────────┐
+               │            Browser Frontend             │
+               │      (Vanilla HTML5, CSS3, JS ES6)      │
+               └─────────────────────────────────────────┘
+                                    │
+                                    │  fetch() with JWT Authorization Header
+                                    ▼
+               ┌─────────────────────────────────────────┐
+               │        Express REST Server (:3000)      │
+               └──────────┬────────────────┬─────────────┘
+                          │                │
+               [Auth Middleware]   [Route Handlers + Input Validation]
+               Verify JWT &         Conflict guards, state machine,
+               decode role          overlap checks, audit logic
+                          │                │
+                          └────────┬───────┘
+                                   │
+               ┌─────────────────────────────────────────┐
+               │            DB Controller (db.js)        │
+               │   Concurrency queue · State validation  │
+               │   Allocation conflict engine            │
+               └─────────────────────────────────────────┘
+                                   │
+               ┌─────────────────────────────────────────┐
+               │           File Database (db.json)       │
+               └─────────────────────────────────────────┘
+```
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| **Frontend** | Vanilla HTML5, CSS3, JavaScript (ES6+), Chart.js for analytics |
+| **Backend** | Node.js, Express.js |
+| **Auth & Security** | `jsonwebtoken`, `bcryptjs` |
+| **File Uploads** | `multer` |
+| **Validation** | `express-validator` |
+| **Concurrency** | `proper-lockfile` / promise-based write queue for safe concurrent `db.json` writes |
+
+---
+
+## Project Structure
 
 ```
 AssetManagementSystem/
-├── server.js               # Express application entry point & middlewares
-├── db.js                   # JSON DB controller, concurrency queue, state guards
-├── db.json                 # Pre-seeded JSON database (Users, Assets, Logs, etc.)
-├── package.json            # Node dependencies and npm scripts
-├── public/                 # Static frontend files
-│   ├── index.html          # Single Page Application core shell
-│   ├── style.css           # Premium glassmorphism design system & styles
-│   └── app.js              # Lightweight SPA router, API wrapper, & view logic
-└── uploads/                # Directory for images and document uploads
+├── server.js           # Express application entry point & middleware registration
+├── db.js               # JSON DB controller, concurrency queue, state transition guards
+├── db.json             # Pre-seeded JSON database (users, assets, bookings, logs, etc.)
+├── package.json        # Dependencies and npm scripts
+├── public/
+│   ├── index.html      # Single Page Application shell
+│   ├── style.css       # Design system — dark mode, glassmorphism, responsive grid
+│   └── app.js          # Lightweight SPA router, API wrapper, and view logic
+└── uploads/            # Asset images and maintenance report attachments
 ```
 
 ---
 
-## 🚦 Quick Start & Installation
+## Getting Started
 
 ### Prerequisites
-* [Node.js](https://nodejs.org/) (v16+ recommended)
-* npm (v7+ recommended)
 
-### 1. Clone & Install Dependencies
+- [Node.js](https://nodejs.org/) v16 or later
+- npm v7 or later
+
+### 1. Clone and Install
+
 ```bash
 git clone <repository-url> AssetManagementSystem
 cd AssetManagementSystem
 npm install
 ```
 
-### 2. Seed Data & First Run
-On the first boot, `server.js` automatically creates and populates `db.json` with a rich dataset:
-* **10+ Pre-populated Assets** (IT equipment, vehicles, conference rooms).
-* **6 Demo Users** with pre-configured roles.
-* **Historical Data** (completed bookings, active maintenance logs, past activity records).
+### 2. First Run
+
+On first boot, `server.js` automatically creates and seeds `db.json` with:
+
+- 10+ pre-populated assets across categories (IT equipment, vehicles, conference rooms)
+- 6 demo users with pre-configured roles
+- Historical data — completed bookings, active maintenance logs, past activity records
 
 ### 3. Start the Server
-For development (with hot-reload):
+
+Development (with hot-reload):
 ```bash
 npm run dev
 ```
 
-For production/standard execution:
+Standard:
 ```bash
 npm start
 ```
-The server will start on **`http://localhost:3000`**. Open this URL in your web browser.
+
+Open **`http://localhost:3000`** in your browser.
 
 ---
 
-## 🔑 Demo Login Credentials
-For judging convenience, the frontend contains a **Dev Console / Role Switcher**. Clicking any user automatically executes a real `/api/auth/login` request using the credentials below:
+## Demo Accounts
+
+A role switcher in the UI lets you jump between accounts without re-entering credentials. Each click makes a real `/api/auth/login` request — nothing is bypassed.
 
 | Name | Role | Email | Password |
 |---|---|---|---|
-| **Sarah Jenkins** | Admin | `admin@assetflow.com` | `Demo@123` |
-| **Marcus Vance** | Asset Manager | `manager@assetflow.com` | `Demo@123` |
-| **Elena Rostova** | Dept Head (IT) | `elena.it@assetflow.com` | `Demo@123` |
-| **David Kim** | Employee | `david@assetflow.com` | `Demo@123` |
-| **Priya Patel** | Employee | `priya@assetflow.com` | `Demo@123` |
+| Sarah Jenkins | Admin | `admin@assetflow.com` | `Demo@123` |
+| Marcus Vance | Asset Manager | `manager@assetflow.com` | `Demo@123` |
+| Elena Rostova | Department Head (IT) | `elena.it@assetflow.com` | `Demo@123` |
+| David Kim | Employee | `david@assetflow.com` | `Demo@123` |
+| Priya Patel | Employee | `priya@assetflow.com` | `Demo@123` |
 
 ---
 
-## 📡 API Documentation Summary
+## API Reference
 
-### 🔐 Authentication
-* `POST /api/auth/signup` - Register a new employee (Defaults to `Employee` role).
-* `POST /api/auth/login` - Authenticate email/password. Returns JWT `{ token, user: { id, name, role } }`.
-* `POST /api/auth/forgot-password` - Simulates a password reset loop.
+### Authentication
 
-### 🏢 Organization & Personnel
-* `GET /api/departments` - Retrieve department hierarchy.
-* `POST /api/departments` - Create new department (Admin only).
-* `GET /api/employees` - View employee listing.
-* `POST /api/employees/:id/promote` - Promote an employee's role (Admin only; immutable log triggered).
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/auth/signup` | Register a new user (defaults to Employee role) |
+| `POST` | `/api/auth/login` | Authenticate and receive a signed JWT |
+| `POST` | `/api/auth/forgot-password` | Initiate a password reset |
 
-### 📦 Asset Inventory & Lifecycle
-* `GET /api/assets` - Get list of assets (filterable by category, department, location, status, tag).
-* `POST /api/assets` - Register asset + upload photo (Asset Manager only).
-* `GET /api/assets/:id/history` - Fetch full combined timeline (allocations, maintenance, movements).
+### Organization & Personnel
 
-### 🤝 Allocation & Bookings
-* `POST /api/allocations` - Assign an asset (Fails if not in `Available` state).
-* `POST /api/allocations/:id/return` - Check-in asset (Captures condition report).
-* `POST /api/transfers` - Request an asset transfer between users/departments.
-* `POST /api/bookings` - Book shared resource (Fails on time overlap).
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/departments` | Retrieve department hierarchy |
+| `POST` | `/api/departments` | Create a department (Admin only) |
+| `GET` | `/api/employees` | List all employees |
+| `POST` | `/api/employees/:id/promote` | Promote an employee's role (Admin only) |
 
-### 🔧 Maintenance
-* `POST /api/maintenance` - Raise a repair request.
-* `PUT /api/maintenance/:id/status` - Move request state (Triggers asset status flips).
+### Assets
 
-### 📋 Audits & Reports
-* `POST /api/audits` - Create audit scope (Admin only).
-* `POST /api/audits/:id/items` - Mark audit item status (Assigned auditor only).
-* `POST /api/audits/:id/close` - Calculate discrepancies, transition missing to `Lost` (Admin only).
-* `GET /api/reports` - Aggregates utilization charts, maintenance heatmaps, and category breakdowns.
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/assets` | List assets — filterable by category, department, location, status, tag |
+| `POST` | `/api/assets` | Register a new asset with photo upload (Asset Manager only) |
+| `GET` | `/api/assets/:id/history` | Full combined timeline — allocations, maintenance, movements |
+
+### Allocations & Bookings
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/allocations` | Allocate an asset (blocked if not Available) |
+| `POST` | `/api/allocations/:id/return` | Return an asset with condition check-in notes |
+| `POST` | `/api/transfers` | Request an asset transfer between users or departments |
+| `POST` | `/api/bookings` | Book a shared resource (blocked on time overlap) |
+
+### Maintenance
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/maintenance` | Raise a maintenance request |
+| `PUT` | `/api/maintenance/:id/status` | Advance workflow state (triggers asset status updates) |
+
+### Audits & Reports
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/audits` | Create an audit cycle (Admin only) |
+| `POST` | `/api/audits/:id/items` | Mark audit item status (assigned auditor only) |
+| `POST` | `/api/audits/:id/close` | Close cycle, generate discrepancy report, transition missing assets (Admin only) |
+| `GET` | `/api/reports` | Utilization charts, maintenance heatmaps, category breakdowns |
 
 ---
 
-## 🎨 Premium Visual Polish (UX highlights)
-* **Glassmorphism UI**: Deep, sleek slate surfaces (`#161d30`) floating on a rich dark background (`#0b0f19`) with high-contrast indicator highlights (indigo and mint).
-* **Dynamic Sidebar Navigation**: Adapts layout and elements in real time based on active JWT decoded role.
-* **Activity Stream**: Micro-animations on logs and notifications.
-* **Analytical Heatmap**: Chart.js charts displaying peak booking hours and resource utilization visually.
+## Design
+
+The UI is built around a dark glassmorphism design system — deep slate surfaces (`#161d30`) on a rich dark background (`#0b0f19`), with indigo and mint accents for state indicators. Navigation adapts in real time based on the authenticated user's role. Analytics are rendered with Chart.js, including a booking heatmap and utilization breakdowns.
+
+---
+
+## Mockup / POC
+
+Visual wireframes for the full application are available at:
+[Excalidraw Mockup](https://app.excalidraw.com/l/65VNwvy7c4X/5ceOBMjbDby)
+
+---
+
+## License
+
+MIT
