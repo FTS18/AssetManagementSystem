@@ -302,7 +302,7 @@ npm install
 
 ### 2. Configure Environment Variables
 
-> **🚀 Want to skip local setup?**
+> **Want to skip local setup?**
 > If you are part of the team and just want to connect to the live shared demo database, **contact me ([Ananay on GitHub @fts18](https://github.com/fts18))** for the Turso Database URL and the correct `.env` credentials!
 
 Otherwise, to set up your own local environment from scratch, copy the example environment file and fill in your values:
