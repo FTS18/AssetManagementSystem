@@ -483,6 +483,34 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
                 </div>
               </div>
 
+              {/* Financial Depreciation Module */}
+              {selectedAsset.acquisitionCost != null && selectedAsset.acquisitionDate && (
+                <div className="bg-(--surface) p-3 border border-(--border) rounded-(--radius-sm)">
+                  <span className="text-[10px] uppercase font-bold text-(--muted) tracking-wider">Financial Valuation</span>
+                  <div className="mt-2 grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-[10px] text-(--muted)">Acquisition Cost</p>
+                      <p className="text-sm font-bold text-(--foreground)">
+                        ${parseFloat(selectedAsset.acquisitionCost).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-(--muted)">Current Book Value (20% SL)</p>
+                      <p className="text-sm font-bold text-(--accent)">
+                        ${(() => {
+                          const cost = parseFloat(selectedAsset.acquisitionCost);
+                          const acqDate = new Date(selectedAsset.acquisitionDate);
+                          const ageInYears = (new Date().getTime() - acqDate.getTime()) / (1000 * 60 * 60 * 24 * 365);
+                          const depreciation = cost * 0.2 * ageInYears; // 20% Straight Line
+                          const currentVal = Math.max(0, cost - depreciation);
+                          return currentVal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                        })()}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {selectedAsset.photoUrl && (
                 <div>
                   <span className="text-[10px] uppercase font-bold text-(--muted) tracking-wider">Asset Photo</span>
