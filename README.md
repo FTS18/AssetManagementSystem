@@ -157,7 +157,7 @@ AssetFlow is architected with a security-first approach to protect sensitive org
 - **JWT Role Enforcement**: Decoding and authorization happen entirely on the server. If a client attempts to bypass the UI to call backend promotion APIs or access Admin-only pages, Next.js Middleware and Server Actions reject the request with a `403 Forbidden` response.
 - **Cryptographic Protections**: All employee passwords are salted and hashed using `bcryptjs` before storage. Plain-text passwords never touch the database.
 - **Immutable Log Trails**: High-privilege actions (like role promotions, asset disposals, and audit lockouts) are logged to an append-only log in the database that cannot be modified or cleared via standard API endpoints.
-- **Input Sanitization**: All incoming parameters are validated using `zod` schema verification to prevent script injections and malformed payloads.
+- **Input Sanitization**: All incoming parameters are validated using `zod` schema verification to prevent script injections and  malformed payloads.
 
 ---
 
