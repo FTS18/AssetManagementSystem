@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import { X, Printer } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
+import { Modal } from "@/components/ui/Modal";
 
 interface QRCodeModalProps {
   asset: { tag: string; name: string };
@@ -28,7 +29,7 @@ export function QRCodeModal({ asset, onClose }: QRCodeModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+    <Modal onClose={onClose}>
       <div className="erp-card bg-(--surface) w-full max-w-sm flex flex-col items-center gap-6 p-8 relative animate-in zoom-in-95 duration-200">
         <button
           onClick={onClose}
@@ -55,6 +56,6 @@ export function QRCodeModal({ asset, onClose }: QRCodeModalProps) {
           <Printer size={16} className="mr-2" /> Print Tag
         </button>
       </div>
-    </div>
+    </Modal>
   );
 }

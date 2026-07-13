@@ -118,7 +118,7 @@ export default function ReportsAnalytics() {
   }
 
   return (
-    <div className="space-y-6 animate-slide-up">
+    <div className="space-y-6 animate-slide-up p-6">
       {/* Header */}
       <div>
         <h1 className="text-3xl font-extrabold tracking-tight text-(--fg) mb-1">Reports & Analytics</h1>

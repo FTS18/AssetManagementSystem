@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { ToastContainer } from "@/components/ui/ToastContainer";
 import { CommandPalette } from "@/components/ui/CommandPalette";
+import { Modal } from "@/components/ui/Modal";
 
 interface MainLayoutProps {
   user: any;
@@ -265,29 +266,21 @@ export default function MainLayout({
           </div>
         </header>
 
-        <main className="flex-1 p-6 lg:p-8 overflow-y-auto w-full">
-          {children}
+        <main className="flex-1 overflow-y-auto w-full">
+          <div className="p-0 lg:p-0">
+            {children}
+          </div>
         </main>
       </div>
 
       {/* Notification Center Pop-up Modal */}
       {showNotifs && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[500] flex items-center justify-center p-4 animate-fade-in">
-          <div className="erp-card w-full max-w-md space-y-4 max-h-[85vh] flex flex-col bg-(--surface) border border-(--border)">
-            <div className="flex justify-between items-center border-b border-(--border) pb-3">
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold text-(--fg)">Notification Center</span>
-                {unreadCount > 0 && (
-                  <span className="badge badge-danger text-[10px]">{unreadCount} unread</span>
-                )}
-              </div>
-              <button
-                onClick={() => setShowNotifs(false)}
-                className="text-xs text-(--muted) hover:text-(--foreground) font-semibold"
-              >
-                Close
-              </button>
-            </div>
+        <Modal
+          title={`Notification Center${unreadCount > 0 ? ` (${unreadCount} unread)` : ""}`}
+          subtitle="System alerts, maintenance logs, and lifecycle notifications"
+          size="sm"
+          onClose={() => setShowNotifs(false)}
+        >
             
             <div className="flex-1 overflow-y-auto space-y-2.5 pr-1 max-h-[50vh]">
               {notifications.length === 0 ? (
@@ -330,8 +323,7 @@ export default function MainLayout({
                 </button>
               </div>
             )}
-          </div>
-        </div>
+        </Modal>
       )}
     </div>
   );

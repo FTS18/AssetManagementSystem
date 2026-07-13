@@ -8,6 +8,7 @@ import { exportToCSV } from "@/lib/export";
 import { QRCodeModal } from "@/components/ui/QRCodeModal";
 import { CustomSelect } from "@/components/ui/CustomSelect";
 import { Pagination } from "@/components/ui/Pagination";
+import { Modal } from "@/components/ui/Modal";
 
 interface AssetDirectoryProps {
   user: any;
@@ -385,7 +386,7 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
   };
 
   return (
-    <div className="space-y-6 animate-slide-up">
+    <div className="space-y-6 animate-slide-up p-6">
       {/* Header */}
       <div className="flex justify-between items-start">
         <div>
@@ -502,155 +503,152 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
         </div>
       )}
 
-      {/* CSV Import Form Panel */}
+      {/* CSV Import Form Modal */}
       {showImportForm && (
-        <div className="erp-card space-y-4">
-          <div className="flex justify-between items-center border-b border-(--border) pb-2">
-            <h3 className="text-sm font-semibold text-(--fg)">Bulk Import Assets via CSV</h3>
-            <button onClick={() => setShowImportForm(false)} className="text-xs text-(--muted) hover:text-(--foreground)">
-              Cancel
-            </button>
-          </div>
+        <Modal
+          title="Bulk Import Assets via CSV"
+          subtitle="Upload a .csv file or paste raw rows to register multiple inventory items"
+          size="lg"
+          onClose={() => setShowImportForm(false)}
+        >
 
-          <form onSubmit={handleCSVImportSubmit} className="space-y-4">
-            {importError && (
-              <div className="p-3 text-xs font-medium border border-red-950/20 bg-red-950/10 text-(--danger-text)">
-                {importError}
+            <form onSubmit={handleCSVImportSubmit} className="space-y-4">
+              {importError && (
+                <div className="p-3 text-xs font-medium border border-red-950/20 bg-red-950/10 text-(--danger-text)">
+                  {importError}
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex flex-col space-y-2">
+                  <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">Upload CSV File</label>
+                  <input
+                    type="file"
+                    accept=".csv"
+                    onChange={handleFileChange}
+                    className="erp-input text-xs"
+                  />
+                </div>
+
+                <div className="flex flex-col space-y-1">
+                  <span className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider block">CSV Template Reference</span>
+                  <span className="text-[11px] text-(--muted) block">
+                    Format: <code>Name,SerialNumber,CategoryName,AcquisitionCost,Condition,Location,IsBookable</code>
+                  </span>
+                  <span className="text-[10px] text-(--accent) block font-mono bg-(--surface) p-1 border border-(--border) rounded-sm select-all">
+                    ThinkPad L14,SN-998822,Laptops,1200,Good,Office A,No
+                  </span>
+                </div>
               </div>
-            )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex flex-col space-y-2">
-                <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">Upload CSV File</label>
+              <div className="flex flex-col space-y-1">
+                <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">CSV Raw Data</label>
+                <textarea
+                  required
+                  rows={6}
+                  value={csvText}
+                  onChange={(e) => setCsvText(e.target.value)}
+                  className="erp-input font-mono text-xs"
+                  placeholder="Paste CSV rows here (including header)..."
+                />
+              </div>
+
+              <button type="submit" disabled={loading} className="erp-btn-primary w-full">
+                {loading ? "Importing..." : "Process and Import Assets"}
+              </button>
+            </form>
+        </Modal>
+      )}
+
+      {/* Registration Form Modal */}
+      {showRegForm && (
+        <Modal
+          title="Register New Asset"
+          subtitle="Add physical inventory item to tracking system"
+          size="xl"
+          onClose={() => setShowRegForm(false)}
+        >
+            <form onSubmit={handleRegister} className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="flex flex-col space-y-1">
+                <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">Asset Name</label>
                 <input
-                  type="file"
-                  accept=".csv"
-                  onChange={handleFileChange}
-                  className="erp-input text-xs"
+                  type="text"
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="erp-input"
+                  placeholder="e.g. ThinkPad L14"
                 />
               </div>
 
               <div className="flex flex-col space-y-1">
-                <span className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider block">CSV Template Reference</span>
-                <span className="text-[11px] text-(--muted) block">
-                  Format: <code>Name,SerialNumber,CategoryName,AcquisitionCost,Condition,Location,IsBookable</code>
-                </span>
-                <span className="text-[10px] text-(--accent) block font-mono bg-(--surface) p-1 border border-(--border) rounded-sm select-all">
-                  ThinkPad L14,SN-998822,Laptops,1200,Good,Office A,No
-                </span>
+                <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">Serial Number</label>
+                <input
+                  type="text"
+                  required
+                  value={serialNumber}
+                  onChange={(e) => setSerialNumber(e.target.value)}
+                  className="erp-input"
+                  placeholder="e.g. SN-88220194"
+                />
               </div>
-            </div>
 
-            <div className="flex flex-col space-y-1">
-              <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">CSV Raw Data</label>
-              <textarea
-                required
-                rows={6}
-                value={csvText}
-                onChange={(e) => setCsvText(e.target.value)}
-                className="erp-input font-mono text-xs"
-                placeholder="Paste CSV rows here (including header)..."
-              />
-            </div>
+              <div className="flex flex-col space-y-1">
+                <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">Category</label>
+                <CustomSelect
+                  value={categoryId}
+                  onChange={setCategoryId}
+                  options={[
+                    { value: "", label: "Select Category" },
+                    ...categories.map((cat) => ({
+                      value: String(cat.id),
+                      label: cat.name,
+                    })),
+                  ]}
+                />
+              </div>
 
-            <button type="submit" disabled={loading} className="erp-btn-primary w-full">
-              {loading ? "Importing..." : "Process and Import Assets"}
-            </button>
-          </form>
-        </div>
-      )}
+              <div className="flex flex-col space-y-1">
+                <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">Acquisition Cost (USD)</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  required
+                  value={acquisitionCost}
+                  onChange={(e) => setAcquisitionCost(e.target.value)}
+                  className="erp-input"
+                  placeholder="e.g. 1200.00"
+                />
+              </div>
 
-      {/* Registration Form Panel */}
-      {showRegForm && (
-        <div className="erp-card space-y-4">
-          <div className="flex justify-between items-center border-b border-(--border) pb-2">
-            <h3 className="text-sm font-semibold text-(--fg)">Register New Asset</h3>
-            <button onClick={() => setShowRegForm(false)} className="text-xs text-(--muted) hover:text-(--foreground)">
-              Cancel
-            </button>
-          </div>
-          <form onSubmit={handleRegister} className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="flex flex-col space-y-1">
-              <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">Asset Name</label>
-              <input
-                type="text"
-                required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="erp-input"
-                placeholder="e.g. ThinkPad L14"
-              />
-            </div>
+              <div className="flex flex-col space-y-1">
+                <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">Initial Condition</label>
+                <CustomSelect
+                  value={condition}
+                  onChange={(val) => setCondition(val as any)}
+                  options={[
+                    { value: "New", label: "New" },
+                    { value: "Good", label: "Good" },
+                    { value: "Fair", label: "Fair" },
+                    { value: "Poor", label: "Poor" },
+                  ]}
+                />
+              </div>
 
-            <div className="flex flex-col space-y-1">
-              <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">Serial Number</label>
-              <input
-                type="text"
-                required
-                value={serialNumber}
-                onChange={(e) => setSerialNumber(e.target.value)}
-                className="erp-input"
-                placeholder="e.g. SN-88220194"
-              />
-            </div>
+              <div className="flex flex-col space-y-1">
+                <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">Primary Location</label>
+                <input
+                  type="text"
+                  required
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  className="erp-input"
+                  placeholder="e.g. IT Storage Locker B"
+                />
+              </div>
 
-            <div className="flex flex-col space-y-1">
-              <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">Category</label>
-              <CustomSelect
-                value={categoryId}
-                onChange={setCategoryId}
-                options={[
-                  { value: "", label: "Select Category" },
-                  ...categories.map((cat) => ({
-                    value: String(cat.id),
-                    label: cat.name,
-                  })),
-                ]}
-              />
-            </div>
-
-            <div className="flex flex-col space-y-1">
-              <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">Acquisition Cost (USD)</label>
-              <input
-                type="number"
-                step="0.01"
-                required
-                value={acquisitionCost}
-                onChange={(e) => setAcquisitionCost(e.target.value)}
-                className="erp-input"
-                placeholder="e.g. 1200.00"
-              />
-            </div>
-
-            <div className="flex flex-col space-y-1">
-              <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">Initial Condition</label>
-              <CustomSelect
-                value={condition}
-                onChange={(val) => setCondition(val as any)}
-                options={[
-                  { value: "New", label: "New" },
-                  { value: "Good", label: "Good" },
-                  { value: "Fair", label: "Fair" },
-                  { value: "Poor", label: "Poor" },
-                ]}
-              />
-            </div>
-
-            <div className="flex flex-col space-y-1">
-              <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">Primary Location</label>
-              <input
-                type="text"
-                required
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                className="erp-input"
-                placeholder="e.g. IT Storage Locker B"
-              />
-            </div>
-
-            {/* Photo & PDF Upload fields */}
-            <div className="flex flex-col space-y-1">
-              <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">Asset Photo upload</label>
+              <div className="flex flex-col space-y-1">
+                <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">Asset Photo upload</label>
               <input
                 type="file"
                 accept="image/*"
@@ -690,7 +688,7 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
               </button>
             </div>
           </form>
-        </div>
+        </Modal>
       )}
 
       {/* Filter and Search Panel */}
@@ -808,12 +806,12 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
       
       {/* Slide-out Advanced Filters Drawer */}
       {showAdvFilters && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[400] flex items-center justify-center p-4">
-          <div className="erp-card w-full max-w-md space-y-4 max-h-[85vh] overflow-y-auto bg-(--surface) border border-(--border) text-(--foreground)">
-            <div className="flex justify-between items-center border-b border-(--border) pb-3 mb-2">
-              <h3 className="text-sm font-semibold text-(--fg)">Advanced Filters</h3>
-              <button onClick={() => setShowAdvFilters(false)} className="text-xs text-(--muted) hover:text-(--foreground) font-semibold">Close</button>
-            </div>
+        <Modal
+          title="Advanced Filters"
+          subtitle="Filter inventory by valuation price or acquisition date range"
+          size="sm"
+          onClose={() => setShowAdvFilters(false)}
+        >
             
             <div className="space-y-4">
               <div className="flex flex-col space-y-1">
@@ -838,31 +836,17 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
                 <button onClick={() => { setShowAdvFilters(false); loadAssets(1); }} className="erp-btn-primary flex-1">Apply</button>
               </div>
             </div>
-          </div>
-        </div>
+        </Modal>
       )}
 
 
       {selectedAsset && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[400] flex items-center justify-center p-4">
-          <div className="erp-card w-full max-w-lg space-y-4 max-h-[85vh] overflow-y-auto bg-(--surface) border border-(--border) text-(--foreground)">
-            <div className="flex justify-between items-center border-b border-(--border) pb-3 mb-2">
-              <div>
-                <h3 className="text-sm font-semibold text-(--fg)">Asset Details & Lifecycle</h3>
-                <p className="text-xs text-(--muted)">History logs for {selectedAsset.name} ({selectedAsset.tag})</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <button onClick={() => setAssetToPrint({ tag: selectedAsset.tag, name: selectedAsset.name })} className="erp-btn-secondary text-[10px] px-2 py-1">
-                  <QrCode size={12} className="mr-1" /> Print QR
-                </button>
-                <button
-                  onClick={() => setSelectedAsset(null)}
-                  className="text-xs text-(--muted) hover:text-(--foreground) font-semibold ml-2"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
+        <Modal
+          title="Asset Details & Lifecycle"
+          subtitle={`History logs for ${selectedAsset.name} (${selectedAsset.tag})`}
+          size="md"
+          onClose={() => setSelectedAsset(null)}
+        >
 
             {/* Display Photos / Documents if attached */}
             <div className="mb-6 space-y-4">
@@ -958,20 +942,17 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
                 )}
               </div>
             </div>
-          </div>
-        </div>
+        </Modal>
       )}
 
       {/* QR Code Scanner Simulation Pop-up Modal */}
       {showScanSim && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[500] flex items-center justify-center p-4">
-          <div className="erp-card w-full max-w-sm space-y-4">
-            <div className="flex justify-between items-center border-b border-(--border) pb-2">
-              <h3 className="text-sm font-semibold text-(--fg)">QR Code Scanner Simulator</h3>
-              <button onClick={() => setShowScanSim(false)} className="text-xs text-(--muted) hover:text-(--foreground)">
-                Cancel
-              </button>
-            </div>
+        <Modal
+          title="QR Code Scanner Simulator"
+          subtitle="Choose an asset tag to simulate barcode sticker scanning"
+          size="sm"
+          onClose={() => setShowScanSim(false)}
+        >
             <form onSubmit={handleScanSimulateSubmit} className="space-y-4">
               <p className="text-xs text-(--muted) leading-relaxed">
                 Scan simulation: Choose an asset tag from the dropdown below to simulate scanning the physical asset's QR sticker.
@@ -999,8 +980,7 @@ export default function AssetDirectory({ user }: AssetDirectoryProps) {
                 </button>
               </div>
             </form>
-          </div>
-        </div>
+        </Modal>
       )}
 
       {/* QR Code Printing Modal */}

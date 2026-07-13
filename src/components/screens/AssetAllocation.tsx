@@ -273,7 +273,7 @@ export default function AssetAllocation({ user }: AssetAllocationProps) {
   ];
 
   return (
-    <div className="space-y-6 animate-slide-up">
+    <div className="space-y-6 animate-slide-up p-6">
       {/* Header */}
       <div>
         <h1 className="text-xl sm:text-3xl font-extrabold tracking-tight text-(--fg) mb-1">Asset Allocation & Transfers</h1>

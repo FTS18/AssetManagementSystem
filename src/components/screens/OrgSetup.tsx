@@ -5,6 +5,7 @@ import { UserPlus, UserCog, UserX, Check, Search, Filter } from "lucide-react";
 import { CustomSelect } from "@/components/ui/CustomSelect";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
 import { exportToCSV } from "@/lib/export";
+import { Modal } from "@/components/ui/Modal";
 
 interface OrgSetupProps {
   user: any;
@@ -308,7 +309,7 @@ export default function OrgSetup({ user }: OrgSetupProps) {
   };
 
   return (
-    <div className="space-y-6 animate-slide-up">
+    <div className="space-y-6 animate-slide-up p-6">
       {/* Header section */}
       <div>
         <h1 className="text-3xl font-extrabold tracking-tight text-(--fg)">Organization Setup</h1>
@@ -688,14 +689,7 @@ export default function OrgSetup({ user }: OrgSetupProps) {
 
       {/* Department Edit Dialog Popup */}
       {editingDept && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[400] flex items-center justify-center p-4">
-          <div className="erp-card w-full max-w-md space-y-4">
-            <div className="flex justify-between items-center border-b border-(--border) pb-2">
-              <h3 className="text-sm font-semibold text-(--fg)">Edit Department</h3>
-              <button onClick={() => setEditingDept(null)} className="text-xs text-(--muted) hover:text-(--foreground)">
-                Cancel
-              </button>
-            </div>
+        <Modal title="Edit Department" subtitle="Update head, parent department, and status" size="md" onClose={() => setEditingDept(null)}>
             <form onSubmit={handleEditDepartmentSubmit} className="space-y-3.5">
               <div className="flex flex-col space-y-1">
                 <label className="text-xs font-semibold text-(--muted)">Department Name</label>
@@ -763,20 +757,12 @@ export default function OrgSetup({ user }: OrgSetupProps) {
                 </button>
               </div>
             </form>
-          </div>
-        </div>
+        </Modal>
       )}
 
       {/* Employee Edit Dialog Popup */}
       {editingEmp && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[400] flex items-center justify-center p-4">
-          <div className="erp-card w-full max-w-md space-y-4">
-            <div className="flex justify-between items-center border-b border-(--border) pb-2">
-              <h3 className="text-sm font-semibold text-(--fg)">Edit Employee Directory Record</h3>
-              <button onClick={() => setEditingEmp(null)} className="text-xs text-(--muted) hover:text-(--foreground)">
-                Cancel
-              </button>
-            </div>
+        <Modal title="Edit Employee Directory Record" subtitle="Modify user assignments and permissions" size="md" onClose={() => setEditingEmp(null)}>
             <form onSubmit={handleEditEmployeeSubmit} className="space-y-3.5">
               <div className="flex flex-col space-y-1">
                 <label className="text-xs font-semibold text-(--muted)">Full Name</label>
@@ -847,8 +833,7 @@ export default function OrgSetup({ user }: OrgSetupProps) {
                 </button>
               </div>
             </form>
-          </div>
-        </div>
+        </Modal>
       )}
     </div>
   );

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, LineChart, Line } from "recharts";
+import { Modal } from "@/components/ui/Modal";
 
 const COLORS: Record<string, string> = {
   Available: "var(--success-text)",
@@ -271,7 +272,7 @@ export default function DashboardOverview({ user, setActiveScreen }: DashboardOv
 
   return (
     <div
-      className="space-y-8"
+      className="space-y-8 p-6"
     >
       {/* Heading */}
       <div>
@@ -478,22 +479,17 @@ export default function DashboardOverview({ user, setActiveScreen }: DashboardOv
 
       {/* QR Code Scanner Simulator Modal */}
       {showScanner && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[400] flex items-center justify-center p-4">
-          <div className="erp-card w-full max-w-md space-y-4">
-            <div className="flex justify-between items-center border-b border-(--border) pb-2">
-              <h3 className="text-sm font-semibold text-(--fg)">Scan Asset QR Code</h3>
-              <button
-                onClick={() => {
-                  setShowScanner(false);
-                  setScannedAsset(null);
-                  setScannerActionMsg("");
-                  setScannerErrorMsg("");
-                }}
-                className="text-xs text-(--muted) hover:text-(--foreground)"
-              >
-                Close
-              </button>
-            </div>
+        <Modal
+          title="Scan Asset QR Code"
+          subtitle="Simulate camera scanning to load asset lifecycle actions"
+          size="sm"
+          onClose={() => {
+            setShowScanner(false);
+            setScannedAsset(null);
+            setScannerActionMsg("");
+            setScannerErrorMsg("");
+          }}
+        >
 
             {/* Stylized Scanner Frame */}
             {!scannedAsset && (
@@ -640,8 +636,7 @@ export default function DashboardOverview({ user, setActiveScreen }: DashboardOv
                 </button>
               </div>
             )}
-          </div>
-        </div>
+        </Modal>
       )}
     </div>
   );

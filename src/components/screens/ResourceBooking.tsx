@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Check } from "lucide-react";
 import { CustomSelect } from "@/components/ui/CustomSelect";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
+import { Modal } from "@/components/ui/Modal";
 
 interface ResourceBookingProps {
   user: any;
@@ -233,7 +234,7 @@ export default function ResourceBooking({ user }: ResourceBookingProps) {
   };
 
   return (
-    <div className="space-y-6 animate-slide-up">
+    <div className="space-y-6 animate-slide-up p-6">
       {/* Header */}
       <div>
         <h1 className="text-3xl font-extrabold tracking-tight text-(--fg) mb-1">Resource Booking Scheduler</h1>
@@ -541,14 +542,7 @@ export default function ResourceBooking({ user }: ResourceBookingProps) {
 
       {/* Reschedule Modal popup */}
       {reschedulingBooking && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[500] flex items-center justify-center p-4">
-          <div className="erp-card w-full max-w-sm space-y-4 bg-(--surface) z-[500]">
-            <div className="flex justify-between items-center border-b border-(--border) pb-2">
-              <h3 className="text-sm font-semibold text-(--fg)">Reschedule Booking</h3>
-              <button onClick={() => setReschedulingBooking(null)} className="text-xs text-(--muted) hover:text-(--foreground)">
-                Cancel
-              </button>
-            </div>
+        <Modal title="Reschedule Booking" subtitle="Adjust booking date and time slot" size="sm" onClose={() => setReschedulingBooking(null)}>
             <form onSubmit={handleRescheduleSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-2">
                 <div className="flex flex-col space-y-1">
@@ -605,8 +599,7 @@ export default function ResourceBooking({ user }: ResourceBookingProps) {
                 </button>
               </div>
             </form>
-          </div>
-        </div>
+        </Modal>
       )}
     </div>
   );

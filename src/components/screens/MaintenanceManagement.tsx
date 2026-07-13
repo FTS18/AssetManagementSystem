@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { CustomSelect } from "@/components/ui/CustomSelect";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
+import { Modal } from "@/components/ui/Modal";
 
 interface MaintenanceManagementProps {
   user: any;
@@ -241,7 +242,7 @@ export default function MaintenanceManagement({ user }: MaintenanceManagementPro
   };
 
   return (
-    <div className="space-y-6 animate-slide-up">
+    <div className="space-y-6 animate-slide-up p-6">
       {/* Header */}
       <div className="flex justify-between items-start">
         <div>
@@ -327,47 +328,41 @@ export default function MaintenanceManagement({ user }: MaintenanceManagementPro
         </div>
       )}
 
-      {/* Raise Request Form Panel */}
+      {/* Raise Request Form Modal */}
       {showForm && (
-        <div className="erp-card space-y-4">
-          <div className="flex justify-between items-center border-b border-(--border) pb-2">
-            <h3 className="text-sm font-semibold text-(--fg)">Raise Maintenance Request</h3>
-            <button onClick={() => setShowForm(false)} className="text-xs text-(--muted) hover:text-(--foreground)">
-              Cancel
-            </button>
-          </div>
-          <form onSubmit={handleRaiseRequest} className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="flex flex-col space-y-1">
-              <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">Select Asset</label>
-              <CustomSelect
-                value={selectedAssetId}
-                onChange={setSelectedAssetId}
-                options={[
-                  { value: "", label: "Select Asset" },
-                  ...assets.map((a) => ({
-                    value: String(a.id),
-                    label: `${a.name} (${a.tag})`,
-                  })),
-                ]}
-              />
-            </div>
+        <Modal title="Raise Maintenance Request" subtitle="Submit repair ticket details for equipment issues" size="lg" onClose={() => setShowForm(false)}>
+            <form onSubmit={handleRaiseRequest} className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="flex flex-col space-y-1">
+                <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">Select Asset</label>
+                <CustomSelect
+                  value={selectedAssetId}
+                  onChange={setSelectedAssetId}
+                  options={[
+                    { value: "", label: "Select Asset" },
+                    ...assets.map((a) => ({
+                      value: String(a.id),
+                      label: `${a.name} (${a.tag})`,
+                    })),
+                  ]}
+                />
+              </div>
 
-            <div className="flex flex-col space-y-1">
-              <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">Priority Level</label>
-              <CustomSelect
-                value={priority}
-                onChange={(val) => setPriority(val as any)}
-                options={[
-                  { value: "Low", label: "Low" },
-                  { value: "Medium", label: "Medium" },
-                  { value: "High", label: "High" },
-                  { value: "Critical", label: "Critical" },
-                ]}
-              />
-            </div>
+              <div className="flex flex-col space-y-1">
+                <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">Priority Level</label>
+                <CustomSelect
+                  value={priority}
+                  onChange={(val) => setPriority(val as any)}
+                  options={[
+                    { value: "Low", label: "Low" },
+                    { value: "Medium", label: "Medium" },
+                    { value: "High", label: "High" },
+                    { value: "Critical", label: "Critical" },
+                  ]}
+                />
+              </div>
 
-            <div className="md:col-span-3 flex flex-col space-y-1">
-              <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">Problem Description</label>
+              <div className="md:col-span-3 flex flex-col space-y-1">
+                <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">Problem Description</label>
               <textarea
                 required
                 value={description}
@@ -383,7 +378,7 @@ export default function MaintenanceManagement({ user }: MaintenanceManagementPro
               </button>
             </div>
           </form>
-        </div>
+        </Modal>
       )}
 
       {/* Kanban Layout Columns Container */}
@@ -396,9 +391,7 @@ export default function MaintenanceManagement({ user }: MaintenanceManagementPro
 
       {/* Assign Tech Pop-up Overlay Card */}
       {activeRequestForTech && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[400] flex items-center justify-center p-4">
-          <div className="erp-card w-full max-w-sm space-y-4">
-            <h3 className="text-sm font-semibold text-(--fg)">Assign Technician</h3>
+        <Modal title="Assign Technician" subtitle="Select personnel responsible for work order" size="sm" onClose={() => { setActiveRequestForTech(null); setTechId(""); }}>
             <div className="flex flex-col space-y-3">
               <CustomSelect
                 value={techId}
@@ -438,15 +431,12 @@ export default function MaintenanceManagement({ user }: MaintenanceManagementPro
                 </button>
               </div>
             </div>
-          </div>
-        </div>
+        </Modal>
       )}
 
       {/* Resolution Notes Pop-up Overlay Card */}
       {activeRequestForResolve && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[400] flex items-center justify-center p-4">
-          <div className="erp-card w-full max-w-sm space-y-4">
-            <h3 className="text-sm font-semibold text-(--fg)">Submit Resolution Details</h3>
+        <Modal title="Submit Resolution Details" subtitle="Describe work done to complete maintenance" size="sm" onClose={() => { setActiveRequestForResolve(null); setResolutionNotes(""); }}>
             <div className="flex flex-col space-y-3">
               <textarea
                 required
@@ -479,8 +469,7 @@ export default function MaintenanceManagement({ user }: MaintenanceManagementPro
                 </button>
               </div>
             </div>
-          </div>
-        </div>
+        </Modal>
       )}
     </div>
   );

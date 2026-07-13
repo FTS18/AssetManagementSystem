@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { exportToCSV } from "@/lib/export";
 import { CustomSelect } from "@/components/ui/CustomSelect";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
+import { Modal } from "@/components/ui/Modal";
 
 interface AssetAuditProps {
   user: any;
@@ -172,7 +173,7 @@ export default function AssetAudit({ user }: AssetAuditProps) {
   };
 
   return (
-    <div className="space-y-6 animate-slide-up">
+    <div className="space-y-6 animate-slide-up p-6">
       {/* Header */}
       <div className="flex justify-between items-start">
         <div>
@@ -282,55 +283,48 @@ export default function AssetAudit({ user }: AssetAuditProps) {
         </div>
       )}
 
-      {/* Create Audit Form */}
+      {/* Create Audit Form Modal */}
       {showCreateForm && (
-        <div className="erp-card space-y-4">
-          <div className="flex justify-between items-center border-b border-(--border) pb-2">
-            <h3 className="text-sm font-semibold text-(--fg)">Initialize Audit Cycle</h3>
-            <button onClick={() => setShowCreateForm(false)} className="text-xs text-(--muted) hover:text-(--foreground)">
-              Cancel
-            </button>
-          </div>
-          <form onSubmit={handleCreateCycle} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="flex flex-col space-y-1">
-                <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">Cycle Name</label>
-                <input
-                  type="text"
-                  required
-                  value={cycleName}
-                  onChange={(e) => setCycleName(e.target.value)}
-                  className="erp-input"
-                  placeholder="e.g. Q3 IT Hardware Audit"
-                />
-              </div>
-              <div className="flex flex-col space-y-1">
-                <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">Start Date</label>
-                <input
-                  type="date"
-                  required
-                  value={startDateStr}
-                  onChange={(e) => setStartDateStr(e.target.value)}
-                  className="erp-input text-xs"
-                />
-              </div>
-              <div className="flex flex-col space-y-1">
-                <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">End Date</label>
-                <input
-                  type="date"
-                  required
-                  value={endDateStr}
-                  onChange={(e) => setEndDateStr(e.target.value)}
-                  className="erp-input text-xs"
-                />
-              </div>
-              <div className="flex flex-col space-y-1">
-                <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">Assigned Auditor</label>
-                <CustomSelect
-                  value={auditorId}
-                  onChange={setAuditorId}
-                  options={[
-                    { value: "", label: "Choose Auditor" },
+        <Modal title="Initialize Audit Cycle" subtitle="Configure scope, assign auditor, and set timeline" size="lg" onClose={() => setShowCreateForm(false)}>
+            <form onSubmit={handleCreateCycle} className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="flex flex-col space-y-1">
+                  <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">Cycle Name</label>
+                  <input
+                    type="text"
+                    required
+                    value={cycleName}
+                    onChange={(e) => setCycleName(e.target.value)}
+                    className="erp-input"
+                    placeholder="e.g. Q3 IT Hardware Audit"
+                  />
+                </div>
+                <div className="flex flex-col space-y-1">
+                  <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">Start Date</label>
+                  <input
+                    type="date"
+                    required
+                    value={startDateStr}
+                    onChange={(e) => setStartDateStr(e.target.value)}
+                    className="erp-input text-xs"
+                  />
+                </div>
+                <div className="flex flex-col space-y-1">
+                  <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">End Date</label>
+                  <input
+                    type="date"
+                    required
+                    value={endDateStr}
+                    onChange={(e) => setEndDateStr(e.target.value)}
+                    className="erp-input text-xs"
+                  />
+                </div>
+                <div className="flex flex-col space-y-1">
+                  <label className="text-[10px] font-semibold text-(--muted) uppercase tracking-wider">Assigned Auditor</label>
+                  <CustomSelect
+                    value={auditorId}
+                    onChange={setAuditorId}
+                    options={[
                     ...employees.map((emp) => ({
                       value: String(emp.id),
                       label: `${emp.name} (${emp.role})`,
@@ -375,7 +369,7 @@ export default function AssetAudit({ user }: AssetAuditProps) {
               </button>
             </div>
           </form>
-        </div>
+        </Modal>
       )}
 
       {/* Select active audit selector */}
